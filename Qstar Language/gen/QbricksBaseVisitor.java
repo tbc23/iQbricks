@@ -1,4 +1,4 @@
-// Generated from /home/tbc23/Desktop/QbricksLanguage/QbricksANTLR/Qbricks.g4 by ANTLR 4.9.2
+// Generated from /home/tomas/Desktop/qstar/Qstar Language/Qbricks.g4 by ANTLR 4.9.2
 
         import java.util.*;
 
@@ -349,6 +349,13 @@ public class QbricksBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitGeqExpr(QbricksParser.GeqExprContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitParenExpr(QbricksParser.ParenExprContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

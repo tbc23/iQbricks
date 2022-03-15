@@ -1,4 +1,4 @@
-// Generated from /home/tbc23/Desktop/QbricksLanguage/QbricksANTLR/Qbricks.g4 by ANTLR 4.9.2
+// Generated from /home/tomas/Desktop/qstar/Qstar Language/Qbricks.g4 by ANTLR 4.9.2
 
         import java.util.*;
 

@@ -131,6 +131,7 @@ expr   :
         | left=expr op=GEQ right=expr       #geqExpr
         | left=expr op=LEQ right=expr       #leqExpr
         | left=expr op=NEQ right=expr       #neqExpr
+        | OP expr CL                        #parenExpr
         ;
 
 term :

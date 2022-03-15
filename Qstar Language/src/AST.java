@@ -35,10 +35,6 @@ class MainNode extends ProgramNode {
     public void setPos(PosNode pos) { this.pos = pos; }
 
     public void setHasParams(Boolean hasParams) { this.hasParams = hasParams; }
-
-    public void printID(){
-        System.out.println("Function name: "  + id);
-    }
 }
 
 class AuxNode extends ProgramNode {
@@ -64,84 +60,50 @@ class AuxNode extends ProgramNode {
 
     public void setHasParams(Boolean hasParams) { this.hasParams = hasParams; }
 
-    public void printID(){
-        System.out.println("Function name: "  + id);
-    }
 }
 
 class PreNode extends MainNode {
     private List<String> conds;
     public List<String> get() { return conds; }
     public void set(List<String> newConds){ this.conds = newConds; }
-    public void printPre(){
-        System.out.println("Pre-condition: "  + Arrays.toString(conds.toArray()));
-    }
 }
 
 class PosNode extends MainNode {
     private List<String> conds;
     public List<String> get(){ return conds; }
     public void set(List<String> newConds){ this.conds = newConds; }
-    public void printPos(){
-        System.out.println("Post-condition: "  + Arrays.toString(conds.toArray()) + "\n");
-    }
 }
 
 class ParamsNode extends MainNode {
-    private HashMap<String,String> params;
     private List<String> ps;
 
     public List<String> getPs() { return ps; }
 
-    public HashMap<String,String> get(){
-        return params;
-    }
-
     public void setPs(List<String> ps) { this.ps = ps; }
 
-    public void set(HashMap<String,String> cparams){
-        this.params = cparams;
-    }
-    public void printParams(int np) {
-        if (params.size()==np) {
-            System.out.print("Function parameters: ");
-            for (String id : params.keySet()) {
-                String type = params.get(id);
-                System.out.print(type + " " + id + " | ");
-            }
-            System.out.print("\n");
-        }
-    }
 }
 
 class CircNode extends ProgramNode {
     private CircIds ids;
     private BodyNode body;
-    private boolean circBody;
 
     public CircIds getIds() { return ids; }
     public BodyNode getBody() { return body; }
-    public boolean isCircBody() { return circBody;}
 
     public void setIds(CircIds ids) { this.ids = ids; }
     public void setBody(BodyNode body) { this.body = body; }
-    public void setCircBody(boolean circBody) { this.circBody = circBody; }
 }
 
 class CircIds extends CircNode {
     private List<QregNode> regs;
     public List<QregNode> getRegs (){ return regs; }
     public void setRegs(List<QregNode> newRegs) { this.regs = newRegs; }
-    public void printRegs(){
-        //System.out.println("Circuit registers: "  + Arrays.toString(regs.toArray()));
-    }
 }
 
 // Onde encaixar os bodyNodes de cada instruction? Fazer cada um dos bodies individualmente?
 // e.g. IfBody, ElseBody, ForBody, etc
 
 class BodyNode extends CircNode {
-    private String bodyID;
     private List<InstrNode> bodyInstr;
     private AssertNode assertion;
 
@@ -149,17 +111,12 @@ class BodyNode extends CircNode {
 
     public void setAssertion(AssertNode assertion) { this.assertion = assertion; }
 
-    public String getID() { return bodyID; }
-
     public List<InstrNode> getBodyInstr() { return bodyInstr; }
-
-    public void setID(String newID) { this.bodyID = newID; }
 
     public void setBodyInstr(List<InstrNode> bodyInstr) {
         this.bodyInstr = bodyInstr;
     }
 
-    public void print() { System.out.println("circ's body:"); }
 }
 
 class AssertNode extends BodyNode {
@@ -219,20 +176,12 @@ class ForIter extends ForNode {
             iterQr = true;
         }
     }
-
-    public void printForIter () {
-        //if (range) System.out.println("\tVariable "+iterator+" iterating in range "+iterable);
-        //else System.out.println("\tVariable "+iterator+" iterating "+iterable);
-    }
 }
 
 class InvariantNode extends ForNode {
     private List<String> conds;
     public List<String> get(){ return conds; }
     public void set(List<String> newConds){ this.conds = newConds; }
-    public void printPos(){
-        System.out.println("Invariant: "  + Arrays.toString(conds.toArray()) + "\n");
-    }
 }
 
 class IfNode extends InstrNode {
@@ -265,7 +214,6 @@ class IfCond extends IfNode {
     public void setExpr (ExpressionNode ncond) {
         this.cond = ncond;
     }
-    public void printCond () { System.out.println("\tIf condition: "+cond); }
 }
 
 
@@ -273,7 +221,6 @@ class ApplyNode extends InstrNode {}
 
 class FunApply extends ApplyNode {
     private String funID;
-    private List<String> args;
     public List<TermNode> termArgs;
     private AssertNode assertion;
 
@@ -284,30 +231,19 @@ class FunApply extends ApplyNode {
     public String getFunID () {
         return funID;
     }
-    public List<String> getArgs () {
-        return args;
-    }
     public List<TermNode> getTermArgs() {
         return termArgs;
     }
     public void setFunID (String id) {
         this.funID = id;
     }
-    public void setArgs(List<String> args) {
-        this.args = args;
-    }
     public void setTermArgs(List<TermNode> termArgs) {
         this.termArgs = termArgs;
-    }
-
-    public void print(){
-        System.out.println("Function apply: "+funID+Arrays.toString(args.toArray()));
     }
 }
 
 class RevApply extends ApplyNode {
     private String funID;
-    private List<String> args;
     public List<TermNode> termArgs;
     private AssertNode assertion;
 
@@ -318,23 +254,15 @@ class RevApply extends ApplyNode {
     public String getFunID () {
         return funID;
     }
-    public List<String> getArgs () {
-        return args;
-    }
+
     public List<TermNode> getTermArgs() {
         return termArgs;
     }
     public void setFunID (String id) {
         this.funID = id;
     }
-    public void setArgs(List<String> args) {
-        this.args = args;
-    }
     public void setTermArgs(List<TermNode> termArgs) {
         this.termArgs = termArgs;
-    }
-    public void print(){
-        System.out.println("Reverse function apply: "+funID+Arrays.toString(args.toArray()));
     }
 }
 
@@ -351,7 +279,6 @@ class HadApply extends ApplyNode {
     public void setQreg(QregNode nqreg) {
         this.qreg = nqreg;
     }
-    public void print() { System.out.println("Hadamard apply to: "+qreg); }
 }
 
 class RzApply extends ApplyNode {
@@ -374,7 +301,6 @@ class RzApply extends ApplyNode {
     public void setAngle (TermNode nangle) {
         this.angle = nangle;
     }
-    public void print() { System.out.println("RZ apply to: "+qreg+" with angle "+angle); }
 }
 
 class RxApply extends ApplyNode {
@@ -397,7 +323,6 @@ class RxApply extends ApplyNode {
     public void setAngle (TermNode nangle) {
         this.angle = nangle;
     }
-    public void print() { System.out.println("RX apply to: "+qreg+" with angle "+angle); }
 }
 
 class RyApply extends ApplyNode {
@@ -420,7 +345,6 @@ class RyApply extends ApplyNode {
     public void setAngle (TermNode nangle) {
         this.angle = nangle;
     }
-    public void print() { System.out.println("RY apply to: "+qreg+" with angle "+angle); }
 }
 
 class XApply extends ApplyNode {
@@ -436,7 +360,6 @@ class XApply extends ApplyNode {
     public void setQreg(QregNode nqreg) {
         this.qreg = nqreg;
     }
-    public void print() { System.out.println("X gate apply to: "+qreg); }
 }
 
 class YApply extends ApplyNode {
@@ -452,7 +375,6 @@ class YApply extends ApplyNode {
     public void setQreg(QregNode nqreg) {
         this.qreg = nqreg;
     }
-    public void print() { System.out.println("Y gate apply to: "+qreg); }
 }
 
 class ZApply extends ApplyNode {
@@ -468,7 +390,6 @@ class ZApply extends ApplyNode {
     public void setQreg(QregNode nqreg) {
         this.qreg = nqreg;
     }
-    public void print() { System.out.println("Z gate apply to: "+qreg); }
 }
 
 class SwapApply extends ApplyNode {
@@ -489,7 +410,6 @@ class SwapApply extends ApplyNode {
         this.qleft = lqreg;
         this.qright = rqreg;
     }
-    public void print() { System.out.println("SWAP gate apply to qregs: "+qleft+" and "+qright); }
 }
 
 class PhApply extends ApplyNode {
@@ -512,7 +432,6 @@ class PhApply extends ApplyNode {
     public void setAngle (TermNode nangle) {
         this.angle = nangle;
     }
-    public void print() { System.out.println("Phase-gate apply to: "+qreg+" with angle "+angle); }
 }
 
 class CtlNode extends InstrNode {}
@@ -540,8 +459,6 @@ class WithCtlNode extends CtlNode {
     public void setCtlGate(ApplyNode ctlGate) {
         this.ctlGate = ctlGate;
     }
-
-    public void print() { System.out.println("With-control gate with controls "+Arrays.toString(this.ctlArgs.toArray())+" and target "); }
 }
 
 class CnotNode extends CtlNode {
@@ -562,9 +479,6 @@ class CnotNode extends CtlNode {
         this.ctl = nctl;
         this.target = ntarget;
     }
-    public void print () {
-        System.out.println("CNOT gate with control "+ctl+" and target "+target);
-    }
 }
 
 class RetNode extends InstrNode {
@@ -582,10 +496,6 @@ class RetNode extends InstrNode {
 
     public void setArgBool(Boolean argBool) { this.argBool = argBool; }
 
-    /*public void printRet() {
-        if(!Objects.equals(args, "")) System.out.println("return " + args);
-        else System.out.println("Empty return");
-    }*/
 }
 
 ////////////////// Expression Nodes //////////////////
@@ -643,7 +553,6 @@ class UnOpNode extends TermNode {
     public void setInnerTerm (TermNode Value) { this.InnerTerm = Value; }
 
     public void setOp(String op) { this.op = op; }
-    public void print() { System.out.println(op + InnerTerm); }
 }
 
 class LenNode extends TermNode {
@@ -657,7 +566,6 @@ class AtomNode extends TermNode {
     public String Value;
     public String getValue() { return Value; }
     public void setValue(String value) { Value = value; }
-    public void print () { System.out.println(Value); }
 }
 
 class QregNode extends AST {

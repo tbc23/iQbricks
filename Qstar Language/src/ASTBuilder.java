@@ -8,11 +8,6 @@ import java.util.*;
 
 public class ASTBuilder extends QbricksBaseVisitor<AST>{
 
-    // auxiliary structures
-    public static List<Integer> rangeList = new ArrayList<>(); //list of range to iterate
-
-    public static int np;
-
     @Override
     public AST visitProgram(QbricksParser.ProgramContext ctx) {
         ProgramNode node = new ProgramNode();
@@ -87,8 +82,6 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
             nodeList.add(instr);
         }
         node.setBodyInstr(nodeList);
-        //System.out.println("NODE: "+node);
-        //System.out.println("List of instr "+nodeList);
         node.setAssertion((AssertNode) visit(ctx.assert_()));
         return node;
     }
@@ -116,21 +109,12 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
 
     @Override public AST visitFunParams(QbricksParser.FunParamsContext ctx) {
         ParamsNode Params = new ParamsNode();
-        HashMap<String,String> params = new HashMap<>(); // key=id, value=type
         List <String> ps = new ArrayList<>();
-        String id, type;
         for (int c=0; c < ctx.param().size(); ++c){
             ps.add(ctx.param(c).getChild(0).getText()+" "+ctx.param(c).getChild(1).getText());
         }
-        np = (ctx.getChildCount()-1)/2;
-        for(int c = 0; c < ctx.param().size(); ++c){
-            id = ctx.param(c).getChild(0).getText();
-            type = ctx.param(c).getChild(1).getText();
-            params.put(id,type);
-        }
-        Params.set(params); // hashmaps dont work very well
+
         Params.setPs(ps); // list of strings is being used (works!!)
-        //Params.printParams(np);
 
         return Params;
     }
@@ -194,7 +178,6 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
         CircNode node = new CircNode();
         CircIds ids = new CircIds();
         List<QregNode> circQrs = new ArrayList<>(); //list of circ qrs
-        List<String> circIDS = new ArrayList<>(); //list of circuit registers
 
         BodyNode body = (BodyNode) visit(ctx.circbody);
         QregNode qr;
@@ -203,12 +186,8 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
         for (int c = 0; c < id_list.getChildCount(); c+=2){
             qr = (QregNode) visit(id_list.getChild(c));
             circQrs.add(qr);
-            circIDS.add(id_list.getChild(c).getText());
         }
         ids.setRegs(circQrs);
-        //ids.printRegs();
-        circIDS.clear();
-
         node.setIds(ids);
         node.setBody(body);
         return node;
@@ -248,9 +227,6 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
         node.setInvariant(invariant);
         node.setBody(body);
         node.setIter(iter);
-        //iter.printForIter();
-        //body.printInvariant();
-        //body.print();
         return node;
     }
 
@@ -258,16 +234,9 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
     @Override public AST visitCondIf(QbricksParser.CondIfContext ctx) {
         IfNode node = new IfNode();
         IfCond cond = new IfCond();
-        node.setAssertion((AssertNode) visit(ctx.getParent().getChild(1)));        BodyNode ifBody = (BodyNode) visit(ctx.ifbody);
-        //System.out.println("Ifbody"+ifBody.getBodyInstr()); //works
-        ExpressionNode expr;
+        node.setAssertion((AssertNode) visit(ctx.getParent().getChild(1)));
+        BodyNode ifBody = (BodyNode) visit(ctx.ifbody);
 
-        /*
-        if (ctx.cond.isEmpty()) {
-            expr = (ExpressionNode) visit(ctx.pcond);
-        } else {
-            expr = (ExpressionNode) visit(ctx.cond);
-        }*/
         cond.setExpr((ExpressionNode) visit(ctx.cond));
         node.setCond(cond);
         node.setIfBody(ifBody);
@@ -278,8 +247,7 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
             node.setElseBody(null);
             node.setWithElse(false);
         }
-        //System.out.println("Conditional if:");
-        //cond.printCond();
+
         return node;
     }
 
@@ -293,7 +261,6 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
         else
             funApply.setAssertion((AssertNode) visit(ctx.getParent().getParent().getChild(1)));
         TermNode arg = (TermNode) visit(args.getChild(0));
-        List<String> funArgs = new ArrayList<>(); //list of function arguments
         List<TermNode> termArgs = new ArrayList<>(); //list of term arguments
 
         termArgs.add(arg);
@@ -301,15 +268,11 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
             for (int c = 2; c < args.getChildCount(); c+=2) {
                 arg = (TermNode) visit(args.getChild(c));
                 termArgs.add(arg);
-                funArgs.add(args.getChild(c).getText());
             }
         }
-        funArgs.add(args.getChild(0).getText());
 
         funApply.setFunID(ctx.fun.getText());
-        funApply.setArgs(funArgs);
         funApply.setTermArgs(termArgs);
-        //funApply.print();
 
         return funApply;
     }
@@ -323,7 +286,6 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
         else
             revApply.setAssertion((AssertNode) visit(ctx.getParent().getParent().getChild(1)));
         TermNode arg = (TermNode) visit(args.getChild(0));
-        List<String> funArgs = new ArrayList<>(); //list of function arguments
         List<TermNode> termArgs = new ArrayList<>(); //list of term arguments
 
         termArgs.add(arg);
@@ -332,15 +294,9 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
             for (int c = 2; c < args.getChildCount(); c+=2) {
                 arg = (TermNode) visit(args.getChild(c));
                 termArgs.add(arg);
-                funArgs.add(args.getChild(c).getText());
             }
         }
-        funArgs.add(args.getChild(0).getText());
-
-        revApply.setArgs(funArgs);
         revApply.setTermArgs(termArgs);
-        //revApply.print();
-        funArgs.clear();
         return revApply;
     }
 
@@ -478,7 +434,6 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
         ApplyNode apply = (ApplyNode) visit(ctx.ctlgate);
         ParseTree ctls = ctx.ctlqrs;
         QregNode qr = (QregNode) visit(ctls.getChild(0));
-        List<String> ctlArgs = new ArrayList<>(); //list of control qregs
         List<QregNode> ctlNodes = new ArrayList<>(); //list of control qubits
 
         ctlNodes.add(qr);
@@ -487,13 +442,9 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
             for (int c = 2; c < ctls.getChildCount(); c += 2) {
                 qr = (QregNode) visit(ctls.getChild(c));
                 ctlNodes.add(qr);
-                ctlArgs.add(ctls.getChild(c).getText());
             }
-        } ctlArgs.add(ctls.getChild(0).getText());
-
+        }
         node.setCtlArgs(ctlNodes);
-        //node.print();
-        ctlArgs.clear();
         return node;
     }
 
@@ -503,7 +454,6 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
         QregNode ctl = (QregNode) visit(ctx.ctlqr);
         QregNode target = (QregNode) visit(ctx.tqr);
         cnot.setQregs(ctl,target);
-        //cnot.print();
         return cnot;
     }
 
@@ -520,11 +470,6 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
         TermNode end = (TermNode) visit(ctx.term());
 
         node.set(null,end);
-        /*for (int c = 0; c < limit; c++) {
-            rangeList.add(c);
-        }
-        range.set(rangeList);
-        range.clear();*/
         return node;
     }
 
@@ -534,16 +479,6 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
         TermNode start = (TermNode) visit(ctx.term());
 
         node.set(start,null);
-        /*
-        RangeNode range = new RangeNode();
-        start = visit(ctx.getChild(0));
-        qrsize = ...
-        for (int c = start; c < qrsize; c++) {
-            rangeList.add(c);
-        }
-        range.set(rangeList);
-        range.clear();
-        */
         return node;
     }
 
@@ -555,13 +490,6 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
         TermNode end = (TermNode) visit(ctx.getChild(3));
 
         node.set(start,end);
-        /*  qrsize = ...
-        for (int c = start; c < end; c++) {
-            rangeList.add(c);
-        }
-        range.set(rangeList);
-        range.clear();
-        */
         return node;
     }
 
@@ -614,6 +542,9 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
         node.setRight((ExpressionNode) visit(ctx.right));
         return node;
     }
+
+    @Override public AST visitParenExpr(QbricksParser.ParenExprContext ctx) { return visit(ctx.expr()); }
+
 
     @Override public AST visitPowTerm(QbricksParser.PowTermContext ctx) {
         InfixTermNode node = new PowerNode();

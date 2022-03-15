@@ -1,7 +1,7 @@
 || qft ||
 pre {some-expression}
 	circ qr ->
-		if len(qr) == 0 {
+		if (len(qr) == 0) {
 			assert { |qr> = |qr'> }
 			return
 		}

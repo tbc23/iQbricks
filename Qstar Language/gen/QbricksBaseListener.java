@@ -1,4 +1,4 @@
-// Generated from /home/tbc23/Desktop/QbricksLanguage/QbricksANTLR/Qbricks.g4 by ANTLR 4.9.2
+// Generated from /home/tomas/Desktop/qstar/Qstar Language/Qbricks.g4 by ANTLR 4.9.2
 
         import java.util.*;
 
@@ -589,6 +589,18 @@ public class QbricksBaseListener implements QbricksListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitGeqExpr(QbricksParser.GeqExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterParenExpr(QbricksParser.ParenExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitParenExpr(QbricksParser.ParenExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

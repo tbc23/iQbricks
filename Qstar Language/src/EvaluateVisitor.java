@@ -42,12 +42,6 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
 
     @Override
     public String Visit(ParamsNode node) {
-        //StringBuilder r = new StringBuilder();
-        /*for (String id : node.get().keySet()) {
-            String type = node.get().get(id);
-            System.out.print(type + " " + id + " | ");
-            r.append(type).append(" ").append(id).append(" | ");
-        }*/
         return Arrays.toString(node.getPs().toArray());
     }
 
@@ -106,10 +100,10 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
     public String Visit(ForIter node) {
         if(node.getRange() && node.getIterQr())
             return "variable "+node.getIterator()+" iterating in range "+
-                    Visit(node.getIterableQr());
+                    Visit(node.getIterableQr()); // for i in range(expr)
         else if (node.getRange() && !node.getIterQr())
             return "variable "+node.getIterator()+" iterating in range "+
-                    Visit(node.getIterableExpr());
+                    Visit(node.getIterableExpr()); // for i in range(qr)
         else if(node.getIterQr())
             return "variable "+node.getIterator()+" iterating "+
                 Visit(node.getIterableQr());
@@ -124,7 +118,6 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
 
     @Override
     public String Visit(IfNode node) {
-        //System.out.println("Ifbody??"+node.getIfBody().getBodyInstr());
         if(!node.getWithElse())
             return "if instruction with condition: "+Visit(node.getCond())+"\n"+
                 "if's body:\n"+Visit(node.getIfBody())+"if's assertion: "+
@@ -262,10 +255,10 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         } else if (end==null) { //from
             s = Visit(start);
             r = "["+s+",...,N]";
-        } else if (start.equals(end)){ //interval
+        } else if (start.equals(end)){ //term
             s = Visit(start);
             r = "["+s+"]";
-        } else { //term
+        } else { //interval
             s = Visit(start);
             e = Visit(end);
             r = "["+s+",...,"+e+"]";

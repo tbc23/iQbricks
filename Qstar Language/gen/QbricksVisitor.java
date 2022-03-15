@@ -1,4 +1,4 @@
-// Generated from /home/tbc23/Desktop/QbricksLanguage/QbricksANTLR/Qbricks.g4 by ANTLR 4.9.2
+// Generated from /home/tomas/Desktop/qstar/Qstar Language/Qbricks.g4 by ANTLR 4.9.2
 
         import java.util.*;
 
@@ -347,6 +347,13 @@ public interface QbricksVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitGeqExpr(QbricksParser.GeqExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code parenExpr}
+	 * labeled alternative in {@link QbricksParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParenExpr(QbricksParser.ParenExprContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code neqExpr}
 	 * labeled alternative in {@link QbricksParser#expr}.
