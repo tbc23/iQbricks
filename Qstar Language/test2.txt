@@ -1,0 +1,16 @@
+|| main || (qreg q, int N)
+pre {vazio}
+    circ qr ->
+        for q in qr[:-1] {
+            invariant { }
+            H(q)
+            assert { }
+            with control qr[0],qr[1] (X(qr[2]))
+            assert { }
+        }
+        assert{vazio}
+        aux(qr)
+        X(qr)
+        cnot(qr[0],qr[1])
+        return
+pos {vazio}
