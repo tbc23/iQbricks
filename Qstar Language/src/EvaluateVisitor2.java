@@ -2,7 +2,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class EvaluateVisitor extends MyASTVisitor<String>{
+/*
+public class EvaluateVisitor2 extends MyASTVisitor<String>{
     @Override
     public String Visit(ProgramNode node) {
         List<String> auxs = new ArrayList<>();
@@ -332,13 +333,9 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
     }
 
     @Override
-    public String Visit(ParenNode node) {
-        return "(" + Visit(node.getTerm()) + ")";
-    }
-
-    @Override
     public String Visit(AtomNode node) {
         return node.getValue();
     }
 
-}
+}*/
+

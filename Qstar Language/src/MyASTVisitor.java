@@ -94,6 +94,7 @@ public abstract class MyASTVisitor <T> {
     public abstract T Visit(SubNode node);
     public abstract T Visit(UnOpNode node);
     public abstract T Visit(LenNode node);
+    public abstract T Visit(ParenNode node);
     public abstract T Visit(AtomNode node);
 
     public T Visit(TermNode node) {
@@ -111,6 +112,8 @@ public abstract class MyASTVisitor <T> {
            return Visit((UnOpNode) node);
        } else if (node instanceof LenNode) {
            return Visit((LenNode) node);
+       } else if (node instanceof ParenNode) {
+           return Visit((ParenNode) node);
        } else {
            return Visit((AtomNode) node);
        }

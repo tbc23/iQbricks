@@ -583,7 +583,9 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
 
 
     @Override public AST visitParenTerm(QbricksParser.ParenTermContext ctx) {
-        return visit(ctx.term());
+        ParenNode node = new ParenNode();
+        node.setTerm((TermNode) visit(ctx.term()));
+        return node;
     }
 
     @Override public AST visitUnaryTerm(QbricksParser.UnaryTermContext ctx) {
@@ -611,11 +613,31 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
     }
 
     @Override public AST visitAtomTerm(QbricksParser.AtomTermContext ctx) {
+        return visit(ctx.atom());
+    }
+
+    @Override public AST visitNumAtom(QbricksParser.NumAtomContext ctx) {
         AtomNode node = new AtomNode();
-        node.setValue(ctx.atom().getText());
-        //value.print();
+        node.setValue(ctx.value.getText());
+        node.setType("num");
+
         return node;
     }
+
+    @Override public AST visitPiAtom(QbricksParser.PiAtomContext ctx) {
+        AtomNode node = new AtomNode();
+        node.setValue(String.valueOf(Math.PI));
+        node.setType("num");
+        return node;
+    }
+
+    @Override public AST visitVarAtom(QbricksParser.VarAtomContext ctx) {
+        AtomNode node = new AtomNode();
+        node.setValue(ctx.var.getText());
+        node.setType("var");
+        return node;
+    }
+
 
 }
 

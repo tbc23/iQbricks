@@ -5,6 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="51950d2f-e0a2-4e54-a47f-0db7ffbc82fd" name="Changes" comment="Make visit functions return Nodes (almost complete)">
+      <change afterPath="$PROJECT_DIR$/src/EvaluateVisitor2.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test2_test.ml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Qbricks/AST.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/AST.class" afterDir="false" />
@@ -161,15 +163,18 @@
       <change beforePath="$PROJECT_DIR$/out/production/Qbricks/SubNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/SubNode.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Qbricks/SwapApply.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/SwapApply.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Qbricks/TermNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/TermNode.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/TreeNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/TreeNode.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/TreeNodeIter$ProcessStages.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/TreeNodeIter$ProcessStages.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/TreeNodeIter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/TreeNodeIter.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Qbricks/UnOpNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/UnOpNode.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Qbricks/WithCtlNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/WithCtlNode.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Qbricks/XApply.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/XApply.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Qbricks/YApply.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/YApply.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Qbricks/ZApply.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/ZApply.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qft.txt" beforeDir="false" afterPath="$PROJECT_DIR$/qft.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/AST.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/AST.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ASTBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ASTBuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/EvaluateVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/EvaluateVisitor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MyASTVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MyASTVisitor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/test2.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

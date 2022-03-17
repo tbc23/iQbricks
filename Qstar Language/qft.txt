@@ -9,7 +9,7 @@ pre {some-expression}
 			for q in range(len(qr)-1) {  # use while , sequence of instr
 				invariant { inv1 } , { inv2 }
 				assert { formula2 }
-				H(qr[q])
+				H(qr[q])  # keep track of registers!! (place hadamard q n)
 				assert { |qr> = ps_had |qr'> q}
 				for i in range(qr[q..-1]) {
 					invariant { inv1 }

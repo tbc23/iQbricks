@@ -562,10 +562,19 @@ class LenNode extends TermNode {
     public QregNode getQrTerm() { return QrTerm; }
 }
 
+class ParenNode extends TermNode {
+    public TermNode term;
+    public TermNode getTerm() { return term; }
+    public void setTerm(TermNode term) { this.term = term; }
+}
+
 class AtomNode extends TermNode {
     public String Value;
+    public String Type;
+    public String getType() { return Type; }
     public String getValue() { return Value; }
-    public void setValue(String value) { Value = value; }
+    public void setType(String Type) { this.Type = Type;}
+    public void setValue(String value) { this.Value = value; }
 }
 
 class QregNode extends AST {
