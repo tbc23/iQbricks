@@ -1,0 +1,55 @@
+module Qft_rev
+
+         use export binary.Bit_vector
+         use wired_circuits.Circuit_c
+         use export p_int.Int_comp
+         use ref.Ref
+
+val crz (c t a s:int):circuit
+
+let qft ( n:int) (c:circuit):circuit
+           requires{true}
+           ensures{true}
+  =
+  if (n=0)
+  then
+    begin
+      assert{true};
+      c
+    end
+  else
+    begin
+      let q = ref 0
+      in let c' = ref (place (rz 0) 0 n)
+         in
+           while (!q < n)
+           do
+             invariant{true}
+               variant{n-!q}
+               assert{true};
+             begin
+               c':= !c' -- (place hadamard (!q) n);
+               assert{true};
+               let i = ref !q
+               in
+                 while (!i < n)
+                 do
+                   invariant{true}
+                     variant{n-!i}
+                     assert{true};
+                   c' := !c' -- (crz (!i+1) (!q)  (n-(!i)) n);
+                   assert{true};
+                   i := !i +1
+                 done;
+               assert{true};
+               q := !q+1
+             end
+           done;
+           c' := !c' -- (place hadamard (n-1) n);
+           assert{true};
+           return (!c')
+    end
+end
+
+
+

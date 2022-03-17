@@ -1,4 +1,4 @@
-|| qft ||
+|| qft || (qreg qr, int N)
 pre {some-expression}
 	circ qr ->
 		if (len(qr) == 0) {
@@ -6,7 +6,7 @@ pre {some-expression}
 			return
 		}
 		else {
-			for q in range(len(qr)-1) {
+			for q in range(len(qr)-1) {  # use while , sequence of instr
 				invariant { inv1 } , { inv2 }
 				assert { formula2 }
 				H(qr[q])
