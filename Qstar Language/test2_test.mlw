@@ -17,7 +17,7 @@ let main (n:int) (c:circuit) : circuit
         end
     else
         begin
-        	let c' = ref (place (rz 0) 0 n)
+        	let c' = ref (m_skip n)
             in
             c':= !c' -- (place hadamard 0 n);
             assert {true};

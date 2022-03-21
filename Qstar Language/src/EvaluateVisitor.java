@@ -85,12 +85,14 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
 
     @Override
     public String Visit(BodyNode node) {
-        List<String> instrs = new ArrayList<>();
+        //List<String> instrs = new ArrayList<>();
+        StringBuilder r = new StringBuilder("assert" + Visit(node.getAssertion()) + ";\n");
         for(InstrNode c:node.getBodyInstr()){
-            instrs.add(Visit(c));
+            r.append(Visit(c));
+            //instrs.add(Visit(c));
         }
-        return "body assertion: "+Visit(node.getAssertion())+"\nbody instructions {\n"
-                + Arrays.toString(instrs.toArray())+"\n}";
+        return  r + "\n";
+                //+ Arrays.toString(instrs.toArray())+"\n}";
     }
 
     @Override
@@ -113,7 +115,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
     public String Visit(AssertNode node) {
         if (node!=null)
             return Arrays.toString(node.getAssertions().toArray());
-        else return "";
+        else return "{true}";
     }
 
     @Override
@@ -147,9 +149,8 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
     @Override
     public String Visit(IfNode node) {
         if(!node.getWithElse())
-            return "if instruction with condition: "+Visit(node.getCond())+"\n"+
-                "if's body:\n"+Visit(node.getIfBody())+"if's assertion: "+
-                    Visit(node.getAssertion());
+            return "if ("+Visit(node.getCond())+")\nthen begin\nassert"+
+                    Visit(node.getAssertion())+ Visit(node.getIfBody());
         else return "if instruction with condition: "+Visit(node.getCond())+"\n"+
                 "if's body:\n"+Visit(node.getIfBody())+"\nelse's body:\n"+
                 Visit(node.getElseBody())+"if's assertion: "+
@@ -296,7 +297,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
 
     @Override
     public String Visit(EqualNode node) {
-        return Visit(node.getLeft()) + "==" + Visit(node.getRight());
+        return Visit(node.getLeft()) + "=" + Visit(node.getRight());
     }
 
     @Override
@@ -351,12 +352,12 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
 
     @Override
     public String Visit(UnOpNode node) {
-        return node.getOp() +"("+ Visit(node.getInnerTerm())+")";
+        return node.getOp() + Visit(node.getInnerTerm());
     }
 
     @Override
     public String Visit(LenNode node) {
-        return "length("+ Visit(node.getQrTerm())+")";
+        return  Visit(node.getQrTerm());
     }
 
     @Override

@@ -6,7 +6,7 @@ pre {vazio}
             return
         }
         else {
-            H(qr[0])
+            H(qr[0]) # notificar que existem gates a ser aplicadas (criar variavel global e verificar estado?)
             assert { had assert }
             X(qr[0])
             assert { X assert }
