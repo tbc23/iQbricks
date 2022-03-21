@@ -76,11 +76,26 @@ class PosNode extends MainNode {
 
 class ParamsNode extends MainNode {
     private List<String> ps;
+    private List<SingleParam> params;
+    //public List<String> getPs() { return ps; }
+    public List<SingleParam> getPs() { return params; }
+    //public void setPs(List<String> ps) { this.ps = ps; }
+    public void setPs(List<SingleParam> params) {
+        this.params = params;
+    }
+}
 
-    public List<String> getPs() { return ps; }
+class SingleParam extends ParamsNode {
+    private String type;
+    private String id;
+    public void setParam (String type, String id){
+        this.type = type;
+        this.id = id;
+    }
 
-    public void setPs(List<String> ps) { this.ps = ps; }
+    public String getId() { return id; }
 
+    public String getType() { return type; }
 }
 
 class CircNode extends ProgramNode {

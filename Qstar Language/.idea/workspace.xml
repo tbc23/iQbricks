@@ -5,8 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="51950d2f-e0a2-4e54-a47f-0db7ffbc82fd" name="Changes" comment="Make visit functions return Nodes (almost complete)">
-      <change afterPath="$PROJECT_DIR$/src/EvaluateVisitor2.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test2_test.ml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Qbricks/AST.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/AST.class" afterDir="false" />
@@ -46,113 +44,12 @@
       <change beforePath="$PROJECT_DIR$/out/production/Qbricks/MyASTVisitor.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/MyASTVisitor.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Qbricks/NEqualNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/NEqualNode.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Qbricks/ParamsNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/ParamsNode.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/ParenNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/ParenNode.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Qbricks/PhApply.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/PhApply.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Qbricks/PosNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/PosNode.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Qbricks/PowerNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/PowerNode.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Qbricks/PreNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/PreNode.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Qbricks/ProgramNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/ProgramNode.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksBaseListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksBaseListener.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksBaseVisitor.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksBaseVisitor.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksLexer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksLexer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksListener.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$AddTermContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$AddTermContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$AngContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$AngContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$AngTermContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$AngTermContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$ApplyContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$ApplyContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$ApplyControlContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$ApplyControlContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$ArgsContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$ArgsContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$AssertSpecContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$AssertSpecContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$Assert_Context.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$Assert_Context.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$AtomContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$AtomContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$AtomTermContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$AtomTermContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$AuxContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$AuxContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$AuxFunContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$AuxFunContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$BodyContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$BodyContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$BoolTypeContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$BoolTypeContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$CircContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$CircContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$CircTypeContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$CircTypeContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$CnotControlContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$CnotControlContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$CondIfContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$CondIfContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$ControlContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$ControlContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$DivTermContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$DivTermContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$Else_Context.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$Else_Context.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$ElsebodyContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$ElsebodyContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$EmptyAssertContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$EmptyAssertContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$EqExprContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$EqExprContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$ExprContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$ExprContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$FloatTypeContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$FloatTypeContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$ForLoopContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$ForLoopContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$For_Context.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$For_Context.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$FromRangeContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$FromRangeContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$FunApplyContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$FunApplyContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$FunArgsContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$FunArgsContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$FunIdContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$FunIdContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$FunParamsContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$FunParamsContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$GeqExprContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$GeqExprContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$GtExprContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$GtExprContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$HadApplyContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$HadApplyContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$IdFunContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$IdFunContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$Id_listContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$Id_listContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$If_Context.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$If_Context.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$InstrContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$InstrContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$IntTypeContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$IntTypeContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$IntervalRangeContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$IntervalRangeContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$InvSpecContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$InvSpecContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$InvariantContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$InvariantContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$IterContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$IterContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$LenUnaryContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$LenUnaryContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$LeqExprContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$LeqExprContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$LtExprContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$LtExprContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$MainContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$MainContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$MainFunContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$MainFunContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$MulTermContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$MulTermContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$NegUnaryContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$NegUnaryContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$NeqExprContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$NeqExprContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$NumAtomContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$NumAtomContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$ParamContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$ParamContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$ParamsContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$ParamsContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$ParenExprContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$ParenExprContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$ParenTermContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$ParenTermContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$PhApplyContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$PhApplyContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$PiAtomContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$PiAtomContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$PosContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$PosContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$PosSpecContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$PosSpecContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$PowTermContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$PowTermContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$PreContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$PreContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$PreSpecContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$PreSpecContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$ProgramContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$ProgramContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$QRegContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$QRegContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$QrContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$QrContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$QrIterContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$QrIterContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$QrListContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$QrListContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$QrTypeContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$QrTypeContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$RangeContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$RangeContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$RangeIterContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$RangeIterContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$RegBodyContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$RegBodyContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$RegCircContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$RegCircContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$RegInstContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$RegInstContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$RetInstContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$RetInstContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$RevApplyContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$RevApplyContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$RxApplyContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$RxApplyContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$RyApplyContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$RyApplyContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$RzApplyContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$RzApplyContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$SingleParContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$SingleParContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$SqrtUnaryContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$SqrtUnaryContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$SubTermContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$SubTermContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$SwapApplyContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$SwapApplyContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$TermContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$TermContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$TermExprContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$TermExprContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$TermRangeContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$TermRangeContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$TypeContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$TypeContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$UnOpContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$UnOpContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$UnaryTermContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$UnaryTermContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$UptoRangeContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$UptoRangeContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$VarAtomContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$VarAtomContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$XApplyContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$XApplyContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$YApplyContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$YApplyContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$ZApplyContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser$ZApplyContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksVisitor.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksVisitor.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QregNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QregNode.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Qbricks/RangeNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/RangeNode.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Qbricks/RetNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/RetNode.class" afterDir="false" />
@@ -168,13 +65,9 @@
       <change beforePath="$PROJECT_DIR$/out/production/Qbricks/XApply.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/XApply.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Qbricks/YApply.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/YApply.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Qbricks/ZApply.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/ZApply.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qft.txt" beforeDir="false" afterPath="$PROJECT_DIR$/qft.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/AST.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/AST.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ASTBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ASTBuilder.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/EvaluateVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/EvaluateVisitor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MyASTVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MyASTVisitor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/test2.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -189,6 +82,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/.." value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="GitSEFilterConfiguration">
@@ -241,6 +139,8 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Main" />
+        <item itemvalue="Application.Main" />
         <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
@@ -303,7 +203,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="develop" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>

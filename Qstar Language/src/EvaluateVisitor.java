@@ -14,6 +14,22 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
 
     @Override
     public String Visit(MainNode node) {
+        String r = "module " + node.getID().toUpperCase() +
+                """
+
+                        use export binary.Bit_vector
+                        use wired_circuits.Circuit_c
+                        use export p_int.Int_comp
+                        use ref.Ref
+                        
+                        """ +
+                "let main (" + Visit(node.getParams()) + ":int)"
+                + "(c:circuit) : circuit\n"+
+                "requires "+ Visit(node.getPre())+
+                "\nensures "+ Visit(node.getPos())
+                +"\n=\n"+Visit(node.getCirc());
+
+        System.out.println(r);
         if(node.getHasParams())
             return "Main function id: "+node.getID()+
                     "\nmain parameters: "+Visit(node.getParams())+
@@ -42,17 +58,29 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
 
     @Override
     public String Visit(ParamsNode node) {
-        return Arrays.toString(node.getPs().toArray());
+        StringBuilder r = new StringBuilder();
+        for (SingleParam c: node.getPs()) {
+            r.append(c.getId()).append(" ");
+        }
+        return r.toString();
     }
 
     @Override
     public String Visit(PreNode node) {
-        return Arrays.toString(node.get().toArray());
+        StringBuilder r = new StringBuilder();
+        for (String c: node.get()){
+            r.append(c);
+        }
+        return r.toString();
     }
 
     @Override
     public String Visit(PosNode node) {
-        return Arrays.toString(node.get().toArray())+"\n\n";
+        StringBuilder r = new StringBuilder();
+        for (String c: node.get()){
+            r.append(c);
+        }
+        return r.toString();
     }
 
     @Override
