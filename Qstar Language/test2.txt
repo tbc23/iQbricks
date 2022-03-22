@@ -1,14 +1,10 @@
 || main || (qreg qr)
-pre {vazio}
+pre {n>0}
     circ qr ->
-        if (len(qr)==0) {
-            assert { qr_size is zero }
-            return
-        }
-        else {
+        if (n>0){
             H(qr[0]) # notificar que existem gates a ser aplicadas (criar variavel global e verificar estado?)
-            assert { had assert }
+            assert { true }
             X(qr[0])
-            assert { X assert }
+            assert { true }
         }
 pos {vazio}

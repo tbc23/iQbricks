@@ -607,12 +607,17 @@ class QregNode extends AST {
 }
 
 class RangeNode extends QregNode {
+    public String iterator;
     public TermNode start;
     public TermNode end;
+
+    public String getIterator() { return iterator; }
 
     public TermNode getStart() { return start; }
 
     public TermNode getEnd() { return end; }
+
+    public void setIterator(String iterator) { this.iterator = iterator; }
 
     public void set (TermNode start, TermNode end) {
         this.start = start;
