@@ -11,10 +11,11 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
     @Override
     public String Visit(ProgramNode node) {
         StringBuilder r = new StringBuilder();
+        r.append(Visit(node.getMain()));
         for (AuxNode c: node.getAuxList()){
             r.append(Visit(c));
         }
-        return Visit(node.getMain())+r+"end";
+        return r+"end";
     }
 
     @Override
@@ -33,7 +34,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                 +": circuit\n"+
                 "requires "+ Visit(node.getPre())+
                 "\nensures "+ Visit(node.getPos())
-                +"\n=\n"+Visit(node.getCirc());
+                +"\n=\n"+Visit(node.getCirc())+"\n";
 
         return r;
         /*if(node.getHasParams())
@@ -50,11 +51,12 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
 
     @Override
     public String Visit(AuxNode node) {
-        String r = "let" +node.getID()+ "(n:int)"
+        //circs.push("c");
+        String r = "let " +node.getID()+ "(n:int)"
                     +": circuit\n"+
                     "requires "+ Visit(node.getPre())+
                     "\nensures "+ Visit(node.getPos())
-                    +"\n=\n"+Visit(node.getCirc());
+                    +"\n=\n"+Visit(node.getCirc())+"\n";
         return r;
         /*if(node.getHasParams())
             return "Aux function id: "+node.getID()+
