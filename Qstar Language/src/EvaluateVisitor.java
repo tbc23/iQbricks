@@ -10,11 +10,11 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
 
     @Override
     public String Visit(ProgramNode node) {
-        List<String> auxs = new ArrayList<>();
+        StringBuilder r = new StringBuilder();
         for (AuxNode c: node.getAuxList()){
-            auxs.add(Visit(c));
+            r.append(Visit(c));
         }
-        return Visit(node.getMain())+Arrays.toString(auxs.toArray())+"\nend";
+        return Visit(node.getMain())+r+"\nend";
     }
 
     @Override
@@ -50,7 +50,13 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
 
     @Override
     public String Visit(AuxNode node) {
-        if(node.getHasParams())
+        String r = "let" +node.getID()+ "(n:int)"
+                    +": circuit\n"+
+                    "requires "+ Visit(node.getPre())+
+                    "\nensures "+ Visit(node.getPos())
+                    +"\n=\n"+Visit(node.getCirc());
+        return r;
+        /*if(node.getHasParams())
             return "Aux function id: "+node.getID()+
                     "\n"+node.getID()+" parameters: "+Visit(node.getParams())+
                     "\npre-condition:"+Visit(node.getPre())+
@@ -59,7 +65,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         else return "Main function id: "+node.getID()+
                 "\npre-condition:"+Visit(node.getPre())+
                 "\n"+node.getID()+" circ: "+Visit(node.getCirc())+
-                "\npos-condition:"+Visit(node.getPos())+"\n";
+                "\npos-condition:"+Visit(node.getPos())+"\n";*/
     }
 
     @Override
@@ -131,18 +137,20 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
     public String Visit(ForNode node) {
         //  FALTA INCREMENTAR O VALOR DO ITERATOR NO FIM DO WHILE
         // FALTA NO FINAL DO WHILE ATRIBUIR AO CIRCUITO ANTERIOR O VALOR DO ATUAL
-        // String new = circs.pop();
-        // circs.peek()+":= !"+circs.peek()+" -- !"+new+";";
+        String old;
         // something like this for updating circ
         String r;
+        ForIter iter = node.getIter();
+        String iterator = iter.getIterator();
         circs.push("c"+circs.size());
         r = "let "+circs.peek()+" = ref (m_skip n)\n"
                 + Visit(node.getIter())
                 + Visit(node.getInvariant())
                 + Visit(node.getBody())
-                + "done;\n"
+                + iterator +" := !" + iterator + " + 1\ndone;\n"
                 + Visit(node.getAssertion());
-        circs.pop();
+        old = circs.pop();
+        r += circs.peek()+":= !"+circs.peek()+" -- !"+old+";\n";
         return r;
     }
 
