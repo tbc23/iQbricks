@@ -1,12 +1,12 @@
-|| qft || (qreg qr, int N)
+|| qft || (qreg qr, qreg aux)
 pre {some-expression}
-	circ qr ->
+	circ qr,aux ->
 		if (len(qr) == 0) {
 			assert { |qr> = |qr'> }
 			return
 		}
 		else {
-			for q in range(len(qr)-1) {  # use while , sequence of instr
+			for q in range(len(qr)) {  # use while , sequence of instr
 				invariant { inv1 } , { inv2 }
 				assert { formula2 }
 				H(qr[q])  # keep track of registers!! (place hadamard q n)
@@ -16,10 +16,7 @@ pre {some-expression}
 					with control qr[i+1] (ph(pi/2^(n-i), qr[q]))
 					assert { |qr> = ps_rot(pi/2^(n-i)) |qr'> q }
 				}
-				assert { after inner loop }
             }
-            assert { after outer loop }
-			H(qr[-1])
 			assert { |qr> = ps_had |qr'> (len(qr')-1)}
             return
         }

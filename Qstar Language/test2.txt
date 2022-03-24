@@ -2,9 +2,10 @@
 pre {n>0}
     circ qr ->
         if (n>0){
-            H(qr[0]) # notificar que existem gates a ser aplicadas (criar variavel global e verificar estado?)
+            H(qr[0])
             assert { true }
             X(qr[0])
             assert { true }
         }
+        return
 pos {vazio}

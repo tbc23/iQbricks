@@ -14,7 +14,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         for (AuxNode c: node.getAuxList()){
             r.append(Visit(c));
         }
-        return Visit(node.getMain())+r+"\nend";
+        return Visit(node.getMain())+r+"end";
     }
 
     @Override
@@ -135,15 +135,11 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
 
     @Override
     public String Visit(ForNode node) {
-        //  FALTA INCREMENTAR O VALOR DO ITERATOR NO FIM DO WHILE
-        // FALTA NO FINAL DO WHILE ATRIBUIR AO CIRCUITO ANTERIOR O VALOR DO ATUAL
-        String old;
-        // something like this for updating circ
-        String r;
+        String old, r;
         ForIter iter = node.getIter();
         String iterator = iter.getIterator();
         circs.push("c"+circs.size());
-        r = "let "+circs.peek()+" = ref (m_skip n)\n"
+        r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                 + Visit(node.getIter())
                 + Visit(node.getInvariant())
                 + Visit(node.getBody())
@@ -198,15 +194,16 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
 
     @Override
     public String Visit(IfNode node) {
-        String r;
-        //circs.push("c"+circs.size());
+        String old, r;
+        circs.push("c"+circs.size());
         if(!node.getWithElse())
             r = "if ("+Visit(node.getCond())+")\nthen begin\n"+
                     Visit(node.getAssertion())+ Visit(node.getIfBody())+"end\n";
         else r = "if ("+Visit(node.getCond())+")\nthen begin\n"+
                 Visit(node.getAssertion())+ Visit(node.getIfBody())+"end\n"+"else begin\n"+
                 Visit(node.getElseBody())+"end\n";
-        //circs.pop();
+        old = circs.pop();
+        r += circs.peek()+":= !"+circs.peek()+" -- !"+old+";\n";
         return r;
     }
 
@@ -245,7 +242,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
     @Override
     public String Visit(HadApply node) {
         String r;
-        r = circs.peek()+":= !"+circs.peek()+" -- (place hadamard "
+        r = circs.peek()+":= !"+circs.peek()+" -- (place_hadamard "
                 +Visit(node.getQreg())+" n);\n"
                 +Visit(node.getAssertion());
         return r;
