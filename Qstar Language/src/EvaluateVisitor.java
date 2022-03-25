@@ -6,7 +6,7 @@ import java.util.Stack;
 public class EvaluateVisitor extends MyASTVisitor<String>{
 
     public Stack<String> circs = new Stack<>();
-    public String size = "";
+    // public String size = "";
 
     @Override
     public String Visit(ProgramNode node) {
@@ -21,7 +21,8 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
     @Override
     public String Visit(MainNode node) {
         circs.push("c");
-        String r = "module " + node.getID().toUpperCase() +
+
+        return "module " + node.getID().toUpperCase() +
                 """
 
                         use export binary.Bit_vector
@@ -35,8 +36,6 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                 "requires "+ Visit(node.getPre())+
                 "\nensures "+ Visit(node.getPos())
                 +"\n=\n"+Visit(node.getCirc())+"\n";
-
-        return r;
         /*if(node.getHasParams())
             return "Main function id: "+node.getID()+
                     "\nmain parameters: "+Visit(node.getParams())+
@@ -52,12 +51,11 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
     @Override
     public String Visit(AuxNode node) {
         //circs.push("c");
-        String r = "let " +node.getID()+ "(n:int)"
+        return "let " +node.getID()+ "(n:int)"
                     +": circuit\n"+
                     "requires "+ Visit(node.getPre())+
                     "\nensures "+ Visit(node.getPos())
                     +"\n=\n"+Visit(node.getCirc())+"\n";
-        return r;
         /*if(node.getHasParams())
             return "Aux function id: "+node.getID()+
                     "\n"+node.getID()+" parameters: "+Visit(node.getParams())+
@@ -112,7 +110,8 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
     @Override
     public String Visit(CircNode node) {
 
-        return "begin\nlet "+circs.peek()+"= ref (m_skip n) in \n"+Visit(node.getBody())+"end\n";
+        return "begin\nlet "+circs.peek()+"= ref (m_skip n) in \n"
+                +Visit(node.getBody())+"end\n";
     }
 
     @Override
@@ -252,23 +251,32 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
 
     @Override
     public String Visit(RxApply node) {
-
-        return "Rx apply to: "+Visit(node.getQreg())+" with angle "+Visit(node.getAngle())
-                + " assertion: "+Visit(node.getAssertion())+"\n";
+        String r;
+        r = circs.peek()+":= !"+circs.peek()+" -- (place (rx "
+                + Visit(node.getAngle())+") "
+                +Visit(node.getQreg())+" n);\n"
+                +Visit(node.getAssertion());
+        return r;
     }
 
     @Override
     public String Visit(RyApply node) {
-
-        return "Ry apply to: "+Visit(node.getQreg())+" with angle "+Visit(node.getAngle())
-                + " assertion: "+Visit(node.getAssertion())+"\n";
+        String r;
+        r = circs.peek()+":= !"+circs.peek()+" -- (place (ry "
+                + Visit(node.getAngle())+") "
+                +Visit(node.getQreg())+" n);\n"
+                +Visit(node.getAssertion());
+        return r;
     }
 
     @Override
     public String Visit(RzApply node) {
-
-        return "Rz apply to: "+Visit(node.getQreg())+" with angle "+Visit(node.getAngle())
-                + " assertion: "+Visit(node.getAssertion())+"\n";
+        String r;
+        r = circs.peek()+":= !"+circs.peek()+" -- (place (rz "
+                + Visit(node.getAngle())+") "
+                +Visit(node.getQreg())+" n);\n"
+                +Visit(node.getAssertion());
+        return r;
     }
 
     @Override
@@ -298,32 +306,88 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
 
     @Override
     public String Visit(SwapApply node) {
-
-        return "Swap apply to: "+Visit(node.getLQreg())+" and "+Visit(node.getRQreg())
-                + " assertion: "+Visit(node.getAssertion())+"\n";
+        String r;
+        r = circs.peek()+":= !"+circs.peek()+" -- (place (swap "
+                + Visit(node.getLQreg())+" "
+                +Visit(node.getRQreg())+") n);\n"
+                +Visit(node.getAssertion());
+        return r;
     }
 
     @Override
     public String Visit(PhApply node) {
-        return "Ph apply to: "+Visit(node.getQreg())+" with angle "+Visit(node.getAngle())
-                + " assertion: "+Visit(node.getAssertion())+"\n";
+        String r;
+        r = circs.peek()+":= !"+circs.peek()+" -- (place (ph "
+                + Visit(node.getAngle())+") "
+                +Visit(node.getQreg())+" n);\n"
+                +Visit(node.getAssertion());
+        return r;
     }
 
     @Override
     public String Visit(WithCtlNode node) {
         List<String> controls = new ArrayList<>();
+        String aux,angle,r,target = null;
+        ApplyNode gate = node.getCtlGate();
+        if (gate instanceof FunApply) // not defined
+            aux = ((FunApply) gate).getFunID()+(((FunApply) gate).getTermArgs());
+        else if (gate instanceof RevApply) // not defined
+            aux = ((RevApply) gate).getFunID()+(((RevApply) gate).getTermArgs());
+        else if (gate instanceof HadApply) {
+            target = Visit(((HadApply) gate).getQreg());
+            aux = " hadamard ";
+        }
+        else if (gate instanceof RxApply) {
+            target = Visit(((RxApply) gate).getQreg());
+            angle = Visit(((RxApply) gate).getAngle());
+            aux = " (rx "+ angle +") ";
+        }
+        else if (gate instanceof RyApply) {
+            target = Visit(((RyApply) gate).getQreg());
+            angle = Visit(((RyApply) gate).getAngle());
+            aux = " (ry "+ angle +") ";
+        }
+        else if (gate instanceof RzApply){
+            target = Visit(((RzApply) gate).getQreg());
+            angle = Visit(((RzApply) gate).getAngle());
+            aux = " (rz "+ angle +") ";
+        }
+        else if (gate instanceof XApply){
+            target = Visit(((XApply) gate).getQreg());
+            aux = " xx ";
+        }
+        else if (gate instanceof YApply){
+            target = Visit(((YApply) gate).getQreg());
+            aux = " yy ";
+        }
+        else if (gate instanceof ZApply){
+            target = Visit(((ZApply) gate).getQreg());
+            aux = " zz ";
+        }
+        else if (gate instanceof SwapApply){
+            target = Visit(((SwapApply) gate).getLQreg());
+            aux = " swap "; //not yet defined
+        }
+        else{
+            target = Visit(((PhApply) gate).getQreg());
+            angle = Visit(((PhApply) gate).getAngle());
+            aux = " (ph "+ angle +") ";
+        }
         for (QregNode qr:node.getCtlArgs()){
             controls.add(Visit(qr));
         }
-        return "multi-control(controls:"+Arrays.toString(controls.toArray())+","+Visit(node.getCtlGate())
-                + ") assertion: "+Visit(node.getAssertion())+"\n";
+        r = circs.peek()+":= !"+circs.peek()+" -- cont"+aux+controls.get(0)
+            +" "+ target + " n;\n"+Visit(node.getAssertion());
+        return r;
     }
 
     @Override
     public String Visit(CnotNode node) {
-
-        return "cnot("+Visit(node.getCtl())+","+Visit(node.getTarget())+")\n"
-                + " assertion: "+Visit(node.getAssertion());
+        String r;
+        r = circs.peek()+":= !"+circs.peek()+" -- (cnot "
+                +Visit(node.getCtl())+" "+Visit(node.getTarget())+" n);\n"
+                +Visit(node.getAssertion());
+        return r;
     }
 
     @Override
@@ -335,7 +399,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
 
     @Override
     public String Visit(RangeNode node) {
-        List<String> iterList = new ArrayList<>();
+        // List<String> iterList = new ArrayList<>();
         String r, s, e;
         TermNode start = node.getStart();
         TermNode end = node.getEnd();

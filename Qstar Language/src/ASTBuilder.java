@@ -635,7 +635,7 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
 
     @Override public AST visitPiAtom(QbricksParser.PiAtomContext ctx) {
         AtomNode node = new AtomNode();
-        node.setValue(String.valueOf(Math.PI));
+        node.setValue("pi");
         node.setType("num");
         return node;
     }
