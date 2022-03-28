@@ -153,31 +153,38 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
 
     @Override
     public String Visit(ForIter node) {
-        String r,s,e;
+        String r,s,e,iterator=node.getIterator();
         String[] limits;
         if(node.getRange() && node.getIterQr()) {
             limits = Visit(node.getIterableQr()).split(" ");
             s = limits[0];
             e = limits[1];
-            r = "let " + node.getIterator() + " = ref (!"+s+")\n" +
-                    "in while (!" + node.getIterator() + "<"
+            r = "let " + iterator + " = ref (!"+s+")\n" +
+                    "in while (!" + iterator + "<"
                     + e +") do\n";
-            //return "variable " + node.getIterator() + " iterating in range " + Visit(node.getIterableQr()); // for i in range(expr)
+            //return "variable " + iterator + " iterating in range " + Visit(node.getIterableQr()); // for i in range(expr)
         }
         else if (node.getRange() && !node.getIterQr()) {
-            r = "let " + node.getIterator() + " = ref 0\n" +
-                    "in while (!" + node.getIterator() + "<"
-                    + Visit(node.getIterableExpr())+") do\n";
-            //return "variable " + node.getIterator() + " iterating in range " + Visit(node.getIterableExpr()); // for i in range(qr)
+            s = "0";
+            e = Visit(node.getIterableExpr());
+            r = "let " + iterator + " = ref 0\n" +
+                    "in while (!" + iterator + "<"
+                    + e +") do\n";
+            //return "variable " + iterator + " iterating in range " + Visit(node.getIterableExpr()); // for i in range(qr)
         }
         else if(node.getIterQr()){
-            r = "let " + node.getIterator() + " = ref 0\n" +
-                    "in while (!" + node.getIterator() + "<"
-                    + Visit(node.getIterableQr())+") do\n";
-            //return "variable "+node.getIterator()+" iterating "+ Visit(node.getIterableQr());
+            s = "0";
+            e = Visit(node.getIterableQr());
+            r = "let " + iterator + " = ref 0\n" +
+                    "in while (!" + iterator + "<"
+                    + e +") do\n";
+            //return "variable "+iterator+" iterating "+ Visit(node.getIterableQr());
         }
-        else r = "Can only iterate qreg or range operator";
-            //return "variable "+node.getIterator()+" iterating "+Visit(node.getIterableExpr());
+        else return "Can only iterate qreg or range operator\n";
+            //return "variable "+iterator+" iterating "+Visit(node.getIterableExpr());
+        r +=    "variant{"+e+" - !"+iterator+"}\n" +
+                "invariant{"+s+" <= !"+iterator+" <= "+e+"}\n"+
+                "invariant{width !"+circs.peek()+" = n}\n";
         return r;
     }
 
@@ -198,9 +205,11 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         String old, r;
         circs.push("c"+circs.size());
         if(!node.getWithElse())
-            r = "if ("+Visit(node.getCond())+")\nthen begin\n"+
+            r = "let "+circs.peek()+" = ref (m_skip n)\nin "+
+                    "if ("+Visit(node.getCond())+")\nthen begin\n"+
                     Visit(node.getAssertion())+ Visit(node.getIfBody())+"end\n";
-        else r = "if ("+Visit(node.getCond())+")\nthen begin\n"+
+        else r = "let "+circs.peek()+" = ref (m_skip n)\nin "+
+                "if ("+Visit(node.getCond())+")\nthen begin\n"+
                 Visit(node.getAssertion())+ Visit(node.getIfBody())+"end\n"+"else begin\n"+
                 Visit(node.getElseBody())+"end\n";
         old = circs.pop();
