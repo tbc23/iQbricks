@@ -1,4 +1,4 @@
-|| grover || (int N, circ oracle)
+|| grover || (qreg qr, qreg aux)
 pre {some pre expression} , {yet another expression}
 	circ qr, aux ->
 		if len(qr) == 0 {

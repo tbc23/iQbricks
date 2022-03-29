@@ -1,23 +1,21 @@
-|| qft || (qreg qr, qreg aux)
-pre {some-expression}
-	circ qr,aux ->
-		if (len(qr) == 0) {
-			assert { |qr> = |qr'> }
-			return
-		}
-		else {
-			for q in range(len(qr)) {  # use while , sequence of instr
-				invariant { inv1 } , { inv2 }
-				assert { formula2 }
-				H(qr[q])  # keep track of registers!! (place hadamard q n)
-				assert { |qr> = ps_had |qr'> q}
-				for i in range(qr[q..-1]) {
-					invariant { inv1 }
-					with control qr[i+1] (ph(pi/2^(n-i), qr[q]))
-					assert { |qr> = ps_rot(pi/2^(n-i)) |qr'> q }
-				}
+|| qft || (qreg qr)
+pre {true}
+	circ qr ->
+        for q in range(len(qr)) {  # use while , sequence of instr
+            invariant { true }
+            # multiple formulas are not working...
+            assert { true }
+            H(qr[q])  # keep track of registers!! (place hadamard q n)
+            # assert { |qr> = ps_had |qr'> q}
+            assert {true}
+            for i in range(qr[q..-1]) {
+                invariant { true }
+                with control qr[i+1] (ph(pi/2^(n-i), qr[q]))
+                #assert { |qr> = ps_rot(pi/2^(n-i)) |qr'> q }
+                assert {true}
             }
-			assert { |qr> = ps_had |qr'> (len(qr')-1)}
-            return
         }
-pos {some-expressions}
+        #assert { |qr> = ps_had |qr'> (len(qr')-1)}
+        assert {true}
+        return
+pos {true}
