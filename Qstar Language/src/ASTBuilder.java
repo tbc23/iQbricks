@@ -108,16 +108,25 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
     }
 
     @Override public AST visitFunParams(QbricksParser.FunParamsContext ctx) {
-        ParamsNode Params = new ParamsNode();
+        ParamsNode node = new ParamsNode();
+        List<SingleParam> params = new ArrayList<>();
         List <String> ps = new ArrayList<>();
         for (int c=0; c < ctx.param().size(); ++c){
+            params.add((SingleParam) visit(ctx.param(c)));
             ps.add(ctx.param(c).getChild(0).getText()+" "+ctx.param(c).getChild(1).getText());
         }
 
-        Params.setPs(ps); // list of strings is being used (works!!)
+        node.setPs(params); // list of strings is being used (works!!)
 
-        return Params;
+        return node;
     }
+
+    @Override public AST visitSinglePar(QbricksParser.SingleParContext ctx) {
+        SingleParam node = new SingleParam();
+        node.setParam(ctx.ptype.getText(),ctx.id.getText());
+        return node;
+    }
+
 
     @Override public AST visitPreSpec(QbricksParser.PreSpecContext ctx) {
         PreNode pre = new PreNode();
@@ -626,7 +635,7 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
 
     @Override public AST visitPiAtom(QbricksParser.PiAtomContext ctx) {
         AtomNode node = new AtomNode();
-        node.setValue(String.valueOf(Math.PI));
+        node.setValue("pi");
         node.setType("num");
         return node;
     }

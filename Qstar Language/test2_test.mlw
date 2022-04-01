@@ -5,23 +5,17 @@ use wired_circuits.Circuit_c
 use export p_int.Int_comp
 use ref.Ref
 
-let main (n:int) (c:circuit) : circuit
-    requires {true}
+let main (n:int): circuit
+    requires {n>0}
     ensures {true}
     =
-    if (n=0)
-    then
-        begin
-        	assert{true};
-            c
-        end
-    else
-        begin
-        	let c' = ref (place (rz 0) 0 n)
-            in
-            c':= !c' -- (place hadamard 0 n);
-            assert {true};
-            c':= !c' -- (place x 0 n);
-            assert {true};
-        end
+    begin
+        let c' = ref (m_skip n)
+        in
+        c':= !c' -- (place hadamard 0 n);
+        assert {true};
+        c':= !c' -- (place xx 0 n);
+        assert {true};
+        return !c'
+    end
 end

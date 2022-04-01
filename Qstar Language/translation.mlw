@@ -1,0 +1,46 @@
+module QFT
+use export binary.Bit_vector
+use wired_circuits.Circuit_c
+use export p_int.Int_comp
+use ref.Ref
+
+let main (qr n:int): circuit
+requires {n > 0}
+requires {qr = n}
+requires {true}
+ensures {true}
+ensures {width result = n}
+ensures {range result = n}
+=
+begin
+let c = ref (m_skip n) in 
+let c1 = ref (m_skip n)
+in let ref q = 0
+in while (q<n) do
+variant{n - q}
+invariant{0 <= q <= n}
+invariant{width !c1 = n}
+invariant{ true }
+assert{ true };
+c1:= !c1 -- (place_hadamard (q) n);
+assert{true};
+let c2 = ref (m_skip n)
+in let ref i = q
+in while (i<n-1) do
+variant{n-1 - i}
+invariant{q <= i <= n-1}
+invariant{width !c2 = n}
+invariant{ true }
+c2:= !c2 -- cont (phase (pi/power 2 (n-i))) (i+1) (q) n;
+assert{true};
+i := i + 1
+done;
+c1:= !c1 -- !c2;
+q := q + 1
+done;
+assert{true};
+c:= !c -- !c1;
+return (!c)
+end
+
+end

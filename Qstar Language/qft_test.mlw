@@ -1,54 +1,93 @@
-module Qft_rev
+module Qft
 
          use export binary.Bit_vector
          use wired_circuits.Circuit_c
          use export p_int.Int_comp
          use ref.Ref
 
-val crz (c t a s:int):circuit
-
-let qft ( n:int) (c:circuit):circuit
-           requires{true}
-           ensures{true}
+let qft ( n:int) :circuit
+                    requires{0<n}
   =
-  if (n=0)
-  then
-    begin
-      assert{true};
-      c
-    end
-  else
-    begin
-      let q = ref 0
-      in let c' = ref (place (rz 0) 0 n)
-         in
-           while (!q < n)
-           do
-             invariant{true}
-               variant{n-!q}
-               assert{true};
-             begin
-               c':= !c' -- (place hadamard (!q) n);
-               assert{true};
-               let i = ref !q
-               in
-                 while (!i < n)
-                 do
-                   invariant{true}
-                     variant{n-!i}
-                     assert{true};
-                   c' := !c' -- (crz (!i+1) (!q)  (n-(!i)) n);
-                   assert{true};
-                   i := !i +1
-                 done;
-               assert{true};
-               q := !q+1
-             end
-           done;
-           c' := !c' -- (place hadamard (n-1) n);
-           assert{true};
-           return (!c')
-    end
+  begin
+    let q = ref 0
+    in let c = ref (m_skip n)
+       in while (!q < n) do
+            invariant{width !c = n}
+              invariant{0<= !q<=n}
+              invariant{range !c = !q}
+              invariant{forall x y i. 0<= i < n -> basis_ket !c x y i = if 0<= i < !q then y i else x i}
+              invariant{forall x y. ang_ind !c x y = (ind_isum(fun k -> (ind_isum (fun l -> x l * y k * power 2 (n-l - 1+k)) k n))0 !q) /./ n}
+              variant{n- !q}
+              begin
+                let i = ref (!q+1)
+                in let cl = ref (m_skip n)
+                   in while (!i < n) do
+                        invariant{width !cl = n}
+                          invariant{!q< !i<=n}
+                          invariant{range !cl = 0}
+                          invariant{forall x y i. 0<= i < n -> basis_ket !cl x y i = x i}
+                          invariant{forall x y. ang_ind !cl x y = (ind_isum (fun l -> x l * x !q * power 2 (n- l -1+ !q)) (!q+1) !i) /./n}
+                          variant{n- !i}
+                          cl := !cl -- (crz !i (!q) (!i - !q+1) n );
+                        i := !i +1
+                      done;
+                      cl:=  place_hadamard (!q) n -- !cl;
+                      assert{forall x y i. 0<= i < n -> basis_ket !cl x y i = if i = !q then y 0 else x i};
+                      assert{forall x y. ang_ind !cl x y = (ind_isum (fun l -> x l * y 0 * power 2 (n-l - 1+ !q)) !q n) /./ n};
+                      c:= !c -- !cl;
+                      q := !q+1
+              end
+          done;
+          return (!c)
+            ensures{width result = n}
+            ensures{range result = n}
+            ensures{forall x y i. 0<= i < n -> basis_ket result x y i = y i}
+            ensures{forall x y. ang_ind result x y  = (ind_isum(fun k -> (ind_isum (fun l -> x l * y k * power 2 (n-l - 1+k)) k n))0 n) /./ n}
+          
+  end
+
+let qft_d ( n:int) :circuit
+                      requires{0<n}
+  =
+  begin
+    let q = ref 0
+    in let c = ref (m_skip n)
+       in while (!q < n) do
+            invariant{width !c = n}
+              invariant{0<= !q<=n}
+              invariant{range !c = !q}
+              invariant{forall x y i. 0<= i < n -> basis_ket !c x y i = if 0<= i < !q then y i else x i}
+              invariant{forall x y. ang_ind !c x y = (ind_isum(fun k -> (ind_isum (fun l -> x l * y k * power 2 (n-l - 1+k)) k n))0 !q) /./ n}
+              variant{n- !q}
+              begin
+                let i = ref (!q+1)
+                in let cl = ref (m_skip n)
+                   in while (!i < n) do
+                        invariant{width !cl = n}
+                          invariant{!q< !i<=n}
+                          invariant{range !cl = 0}
+                          invariant{forall x y i. 0<= i < n -> basis_ket !cl x y i = x i}
+                          invariant{forall x y. ang_ind !cl x y = (ind_isum (fun l -> x l * x !q * power 2 (n- l -1+ !q)) (!q+1) !i) /./n}
+                          variant{n- !i}
+                          cl := seq_diag !cl  (crz !i (!q) (!i - !q+1) n );
+                        i := !i +1
+                      done;
+                      cl:=  seq_diag_right (place_hadamard (!q) n)  !cl;
+                      assert{forall x y i. 0<= i < n -> basis_ket !cl x y i = if i = !q then y 0 else x i};
+                      assert{forall x y. ang_ind !cl x y = (ind_isum (fun l -> x l * y 0 * power 2 (n-l - 1+ !q)) !q n) /./ n};
+                      c:= !c -- !cl;
+                      q := !q+1
+              end
+          done;
+          return (!c)
+            ensures{width result = n}
+            ensures{range result = n}
+            ensures{forall x y i. 0<= i < n -> basis_ket result x y i = y i}
+            ensures{forall x y. ang_ind result x y  = (ind_isum(fun k -> (ind_isum (fun l -> x l * y k * power 2 (n-l - 1+k)) k n))0 n) /./ n}
+          
+  end
+
+  
 end
 
 

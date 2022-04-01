@@ -1,0 +1,804 @@
+<changelist name="Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]" date="1648054263344" recycled="true" deleted="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/shelved.patch" />
+  <option name="DESCRIPTION" value="Uncommitted changes before Checkout at 23/03/2022, 17:50 [Changes]" />
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$HadApplyContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$HadApplyContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$HadApplyContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$SubTermContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$SubTermContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$SubTermContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$ApplyControlContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$ApplyControlContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$ApplyControlContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$ElsebodyContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$ElsebodyContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$ElsebodyContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$RangeContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$RangeContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$RangeContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/ParamsNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/ParamsNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/ParamsNode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$QrTypeContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$QrTypeContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$QrTypeContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/IfNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/IfNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/IfNode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/TermNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/TermNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/TermNode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$QrListContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$QrListContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$QrListContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/BodyNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/BodyNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/BodyNode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/ExpressionNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/ExpressionNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/ExpressionNode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$ControlContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$ControlContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$ControlContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$UnOpContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$UnOpContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$UnOpContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$ApplyContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$ApplyContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$ApplyContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$If_Context.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$If_Context.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$If_Context.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/EvaluateVisitor.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/EvaluateVisitor.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/EvaluateVisitor.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$FloatTypeContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$FloatTypeContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$FloatTypeContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksLexer.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksLexer.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksLexer.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$FunApplyContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$FunApplyContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$FunApplyContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/WithCtlNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/WithCtlNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/WithCtlNode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$SingleParContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$SingleParContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$SingleParContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksListener.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksListener.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksListener.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/GEQNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/GEQNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/GEQNode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$Id_listContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$Id_listContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$Id_listContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$RegInstContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$RegInstContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$RegInstContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$CircTypeContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$CircTypeContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$CircTypeContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksBaseVisitor.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksBaseVisitor.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksBaseVisitor.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$ParenExprContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$ParenExprContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$ParenExprContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$ParamsContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$ParamsContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$ParamsContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$PosContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$PosContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$PosContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$IdFunContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$IdFunContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$IdFunContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/RzApply.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/RzApply.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/RzApply.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/AddNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/AddNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/AddNode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/GTNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/GTNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/GTNode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$InstrContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$InstrContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$InstrContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$AngContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$AngContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$AngContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$LtExprContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$LtExprContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$LtExprContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$GeqExprContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$GeqExprContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$GeqExprContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$IntTypeContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$IntTypeContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$IntTypeContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$CondIfContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$CondIfContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$CondIfContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$IntervalRangeContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$IntervalRangeContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$IntervalRangeContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$AuxFunContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$AuxFunContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$AuxFunContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/AST.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/AST.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/AST.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$IterContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$IterContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$IterContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$MainContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$MainContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$MainContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/CnotNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/CnotNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/CnotNode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$FromRangeContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$FromRangeContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$FromRangeContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$NumAtomContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$NumAtomContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$NumAtomContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$ProgramContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$ProgramContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$ProgramContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/ZApply.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/ZApply.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/ZApply.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$EqExprContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$EqExprContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$EqExprContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/CircIds.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/CircIds.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/CircIds.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$SqrtUnaryContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$SqrtUnaryContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$SqrtUnaryContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$LeqExprContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$LeqExprContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$LeqExprContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$PiAtomContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$PiAtomContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$PiAtomContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/Main.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/Main.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/Main.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$AtomContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$AtomContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$AtomContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$RegBodyContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$RegBodyContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$RegBodyContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/RevApply.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/RevApply.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/RevApply.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/MainNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/MainNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/MainNode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$RetInstContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$RetInstContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$RetInstContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/XApply.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/XApply.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/XApply.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$CnotControlContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$CnotControlContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$CnotControlContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$ExprContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$ExprContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$ExprContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$PowTermContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$PowTermContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$PowTermContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$UnaryTermContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$UnaryTermContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$UnaryTermContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$QRegContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$QRegContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$QRegContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/CircNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/CircNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/CircNode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$CircContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$CircContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$CircContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$ParenTermContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$ParenTermContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$ParenTermContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$DivTermContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$DivTermContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$DivTermContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$InvariantContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$InvariantContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$InvariantContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/InfixExpressionNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/InfixExpressionNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/InfixExpressionNode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QregNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QregNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QregNode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/RxApply.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/RxApply.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/RxApply.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/HadApply.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/HadApply.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/HadApply.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/LEQNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/LEQNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/LEQNode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/AtomNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/AtomNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/AtomNode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$Assert_Context.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$Assert_Context.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$Assert_Context.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$GtExprContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$GtExprContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$GtExprContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/ForNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/ForNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/ForNode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$InvSpecContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$InvSpecContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$InvSpecContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/YApply.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/YApply.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/YApply.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$MulTermContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$MulTermContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$MulTermContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/PowerNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/PowerNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/PowerNode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$RevApplyContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$RevApplyContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$RevApplyContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$NegUnaryContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$NegUnaryContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$NegUnaryContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$BoolTypeContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$BoolTypeContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$BoolTypeContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/InstrNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/InstrNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/InstrNode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$ParamContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$ParamContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$ParamContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$TermExprContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$TermExprContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$TermExprContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$RegCircContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$RegCircContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$RegCircContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$BodyContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$BodyContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$BodyContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$NeqExprContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$NeqExprContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$NeqExprContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$TermRangeContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$TermRangeContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$TermRangeContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$EmptyAssertContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$EmptyAssertContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$EmptyAssertContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$For_Context.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$For_Context.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$For_Context.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/ProgramNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/ProgramNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/ProgramNode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/DivNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/DivNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/DivNode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/ParenNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/ParenNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/ParenNode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$AddTermContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$AddTermContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$AddTermContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$PosSpecContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$PosSpecContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$PosSpecContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/AssertNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/AssertNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/AssertNode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$RzApplyContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$RzApplyContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$RzApplyContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$VarAtomContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$VarAtomContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$VarAtomContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/ASTBuilder.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/ASTBuilder.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/ASTBuilder.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$RangeIterContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$RangeIterContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$RangeIterContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$TermContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$TermContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$TermContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/RangeNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/RangeNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/RangeNode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$PreContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$PreContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$PreContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/SubNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/SubNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/SubNode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/IfCond.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/IfCond.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/IfCond.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksBaseListener.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksBaseListener.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksBaseListener.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$ForLoopContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$ForLoopContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$ForLoopContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksVisitor.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksVisitor.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksVisitor.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/PosNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/PosNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/PosNode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/SwapApply.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/SwapApply.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/SwapApply.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$Else_Context.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$Else_Context.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$Else_Context.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$FunArgsContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$FunArgsContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$FunArgsContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$LenUnaryContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$LenUnaryContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$LenUnaryContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/ApplyNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/ApplyNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/ApplyNode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$FunIdContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$FunIdContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$FunIdContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$SwapApplyContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$SwapApplyContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$SwapApplyContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$ArgsContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$ArgsContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$ArgsContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/MulNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/MulNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/MulNode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/PhApply.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/PhApply.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/PhApply.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$QrIterContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$QrIterContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$QrIterContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/RetNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/RetNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/RetNode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/ForIter.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/ForIter.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/ForIter.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$RyApplyContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$RyApplyContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$RyApplyContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/RyApply.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/RyApply.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/RyApply.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/InfixTermNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/InfixTermNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/InfixTermNode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$AtomTermContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$AtomTermContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$AtomTermContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$PhApplyContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$PhApplyContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$PhApplyContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/AuxNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/AuxNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/AuxNode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$AngTermContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$AngTermContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$AngTermContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/EqualNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/EqualNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/EqualNode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$XApplyContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$XApplyContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$XApplyContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/CtlNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/CtlNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/CtlNode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/MyASTVisitor.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/MyASTVisitor.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/MyASTVisitor.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/InvariantNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/InvariantNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/InvariantNode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$UptoRangeContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$UptoRangeContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$UptoRangeContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$ZApplyContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$ZApplyContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$ZApplyContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/NEqualNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/NEqualNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/NEqualNode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/PreNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/PreNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/PreNode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$FunParamsContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$FunParamsContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$FunParamsContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$TypeContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$TypeContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$TypeContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/LTNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/LTNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/LTNode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$YApplyContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$YApplyContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$YApplyContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$AssertSpecContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$AssertSpecContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$AssertSpecContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$QrContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$QrContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$QrContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/UnOpNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/UnOpNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/UnOpNode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$MainFunContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$MainFunContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$MainFunContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$AuxContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$AuxContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$AuxContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$RxApplyContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$RxApplyContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$RxApplyContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/FunApply.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/FunApply.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/FunApply.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/QbricksParser$PreSpecContext.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/QbricksParser$PreSpecContext.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$PreSpecContext.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/Qbricks/LenNode.class" />
+    <option name="AFTER_PATH" value="out/production/Qbricks/LenNode.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/LenNode.class" />
+  </binary>
+</changelist>
