@@ -11,28 +11,27 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
     @Override
     public String Visit(ProgramNode node) {
         StringBuilder r = new StringBuilder();
-        r.append(Visit(node.getMain()));
+        r.append("module ").append(node.getMain().getID().toUpperCase()).append("""
+
+                use export binary.Bit_vector
+                use wired_circuits.Circuit_c
+                use export p_int.Int_comp
+                use ref.Ref
+                                        
+                """);
+        circs.push("c");
         for (AuxNode c: node.getAuxList()){
             r.append(Visit(c));
         }
+        r.append(Visit(node.getMain()));
         return r+"end";
     }
 
     @Override
     public String Visit(MainNode node) {
-        circs.push("c");
         CircNode circ = node.getCirc();
         String qregs = Visit(circ.getIds());
-        return "module " + node.getID().toUpperCase() +
-                """
-
-                        use export binary.Bit_vector
-                        use wired_circuits.Circuit_c
-                        use export p_int.Int_comp
-                        use ref.Ref
-                        
-                        """ +
-                "let main ("+Visit(node.getParams())+"n:int)"
+        return "let main ("+Visit(node.getParams())+"n:int)"
                 +": circuit\n"+
                 "requires {n > 0}\n"+
                 "requires {"+qregs+" = n}\n"+
@@ -64,8 +63,8 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                     "requires {"+qregs+" = n}\n"+
                     "requires "+ Visit(node.getPre())+
                     "\nensures "+ Visit(node.getPos())+
-                    "\nensures {width result = n}\n"+
-                    "\nensures {range result = n}\n"
+                    "\nensures {width result = n}"+
+                    "\nensures {range result = n}"
                     +"\n=\n"+Visit(node.getCirc())+"\n";
         /*if(node.getHasParams())
             return "Aux function id: "+node.getID()+
@@ -187,8 +186,15 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             // for i in range(expr)
         }
         else if(node.getIterQr()){
-            s = "0";
-            e = Visit(node.getIterableQr());
+            limits = Visit(node.getIterableQr()).split(" ");
+            if (limits.length>1) {
+                s = limits[0];
+                e = limits[1];
+            }
+            else {
+                s = "0";
+                e = limits[0];
+            }
             r = "let ref " + iterator + " = 0\n" +
                     "in while (" + iterator + "<"
                     + e +") do\n";
@@ -245,12 +251,12 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
 
     @Override
     public String Visit(FunApply node) {
-        List<String> args = new ArrayList<>();
+        StringBuilder args = new StringBuilder();
         for(TermNode arg:node.getTermArgs()){
-            args.add(Visit(arg));
+            args.append(Visit(arg)).append(" ");
         }
         String r;
-        r = circs.peek()+":= !"+circs.peek()+" -- "+node.getFunID()+"(n);\n"
+        r = circs.peek()+":= !"+circs.peek()+" -- ("+node.getFunID()+" "+args+"n);\n"
             + Visit(node.getAssertion());
         /*return "Function apply: "+node.getFunID() + Arrays.toString(args.toArray())
                 + " assertion: "+Visit(node.getAssertion())+"\n";*/
@@ -451,6 +457,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                 e = "n-1";
             }
             r = s + " " + e;
+            //r = e;
         } else if (end==null) { //from
             s = Visit(start);
             e = "n";
@@ -530,6 +537,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
     @Override
     public String Visit(UnOpNode node) {
         String r;
+        Integer n;
         if (node.getOp().equals("sqrt"))
             r = node.getOp() + "("+Visit(node.getInnerTerm())+")";
         else r = node.getOp() + Visit(node.getInnerTerm());

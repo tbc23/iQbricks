@@ -10,7 +10,7 @@ pre {true}
             assert {true}
             for i in range(qr[q..-1]) {
                 invariant { true }
-                with control qr[i+1] (ph(pi/2^(n-i), qr[q]))
+                with control qr[i+1] (RZ(n-i-1, qr[q]))
                 #assert { |qr> = ps_rot(pi/2^(n-i)) |qr'> q }
                 assert {true}
             }
