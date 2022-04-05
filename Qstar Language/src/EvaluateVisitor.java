@@ -6,12 +6,61 @@ import java.util.Stack;
 public class EvaluateVisitor extends MyASTVisitor<String>{
 
     public Stack<String> circs = new Stack<>();
+    public List<String> auxIds = new ArrayList<>();
     // public String size = "";
 
     @Override
     public String Visit(ProgramNode node) {
         StringBuilder r = new StringBuilder();
-        r.append("module ").append(node.getMain().getID().toUpperCase()).append("""
+        List<String> auxs = new ArrayList<>();
+        List<String> undeclared_funs = new ArrayList<>();
+        List<String> declared_funs = new ArrayList<>();
+        List<Integer> index = new ArrayList<>();
+
+        circs.push("c");
+        String main = Visit(node.getMain());
+
+        if (!node.getAuxList().isEmpty()) {
+            for (AuxNode c : node.getAuxList()) {
+                auxs.add(Visit(c));
+                declared_funs.add(c.getID());
+            }
+            // System.out.println("\n"+auxIds+"\n");
+            // auxIds list can be checked for seeing if function
+            // is declared in this file...
+            // should be careful because auxIds contains IDs for every
+            // function call -> maybe check size of getAuxList and compare to
+            // auxIds
+            if (node.getAuxList().size() < auxIds.size()){
+                for (String s : auxIds) {
+                    if (!declared_funs.contains(s))  // check which functions to import
+                        undeclared_funs.add(s);
+                }
+                for (String s: undeclared_funs) auxIds.remove(s);
+            }
+
+            r.append("module ").append(node.getMain().getID().toUpperCase()).append("""
+
+                use export binary.Bit_vector
+                use wired_circuits.Circuit_c
+                use export p_int.Int_comp
+                use ref.Ref
+                                        
+                """); // make imports here
+            for (AuxNode c : node.getAuxList())  // fill index list with final destination
+                index.add(auxIds.indexOf(c.getID()));
+            for (int n, i = 0; i < index.size(); ++i) {
+                n = index.indexOf(i);
+                r.append(auxs.get(n));
+                // n will take the value of the aux funs index
+                // e.g. index = [2,3,1,0]; auxs = [aux0,aux1,aux2,aux3];
+                // aux functions will be appended on this order:
+                // aux3->aux2->aux0->aux1
+            }
+        } else {
+            undeclared_funs = auxIds;   // in case there are no aux functions, all auxIDS
+                                        // will have to be imported
+            r.append("module ").append(node.getMain().getID().toUpperCase()).append("""
 
                 use export binary.Bit_vector
                 use wired_circuits.Circuit_c
@@ -19,11 +68,8 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                 use ref.Ref
                                         
                 """);
-        circs.push("c");
-        for (AuxNode c: node.getAuxList()){
-            r.append(Visit(c));
         }
-        r.append(Visit(node.getMain()));
+        r.append(main);
         return r+"end";
     }
 
@@ -57,7 +103,9 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         //circs.push("c");
         CircNode circ = node.getCirc();
         String qregs = Visit(circ.getIds());
-        return "let " +node.getID()+ "("+Visit(node.getParams())+"n:int)"
+        String r;
+        if (!auxIds.contains(node.getID())) auxIds.add(node.getID());
+        r = "let " +node.getID()+ "("+Visit(node.getParams())+"n:int)"
                     +": circuit\n"+
                     "requires {n > 0}\n"+
                     "requires {"+qregs+" = n}\n"+
@@ -66,6 +114,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                     "\nensures {width result = n}"+
                     "\nensures {range result = n}"
                     +"\n=\n"+Visit(node.getCirc())+"\n";
+        return r;
         /*if(node.getHasParams())
             return "Aux function id: "+node.getID()+
                     "\n"+node.getID()+" parameters: "+Visit(node.getParams())+
@@ -252,12 +301,19 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
     @Override
     public String Visit(FunApply node) {
         StringBuilder args = new StringBuilder();
+        String r;
         for(TermNode arg:node.getTermArgs()){
             args.append(Visit(arg)).append(" ");
         }
-        String r;
+        if (!auxIds.contains(node.getFunID()))
+            auxIds.add(0,node.getFunID());
+        else {
+            auxIds.remove(node.getFunID());
+            auxIds.add(0, node.getFunID());
+        }
         r = circs.peek()+":= !"+circs.peek()+" -- ("+node.getFunID()+" "+args+"n);\n"
-            + Visit(node.getAssertion());
+                    + Visit(node.getAssertion());
+
         /*return "Function apply: "+node.getFunID() + Arrays.toString(args.toArray())
                 + " assertion: "+Visit(node.getAssertion())+"\n";*/
         return r;
@@ -412,13 +468,13 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         }
         // has to be done in a loop for iterating the controls
         // but how to know which controls must be applied in the loop??
-        // do single intructions with each control instead?
+        // do single instructions with each control instead? NO
         /*circs.push("c"+circs.size());
         r = "let "+circs.peek()+" = ref (m_skip n)\nin\n"
-                + "let ctl = ref 0\n"
+                + "let ref ctl = 0\n"
                 + "in while (!ctl < "+controls.size()+") do\n"
                 +
-                + iterator +" := !" + iterator + " + 1\ndone;\n"
+                + "ctl := ctl + 1\ndone;\n"
                 + Visit(node.getAssertion());
         old = circs.pop();
         r += circs.peek()+":= !"+circs.peek()+" -- !"+old+";\n";*/

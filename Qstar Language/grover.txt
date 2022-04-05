@@ -14,15 +14,9 @@ pos {true}
 | grover_iter | (qreg qr, qreg aux)
 pre {true}
 	circ qr ->
-		if len(qr) == 0 {
-			assert {true}
-			return
-		}
-		else {
-            oracle(qr,aux)
-            diffusor(qr)
-            assert{true}
-        }
+        oracle(qr,aux)
+        diffusor(qr,aux)
+        assert{true}
         return
 pos {true}
 

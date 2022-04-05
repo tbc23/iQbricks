@@ -4,73 +4,6 @@ use wired_circuits.Circuit_c
 use export p_int.Int_comp
 use ref.Ref
 
-let grover_iter(qr aux n:int): circuit
-requires {n > 0}
-requires {qr = n}
-requires {true}
-ensures {true}
-ensures {width result = n}
-ensures {range result = n}
-=
-begin
-let c = ref (m_skip n) in 
-let c1 = ref (m_skip n)
-in if (n=0)
-then begin
-assert{true};
-return (!c1)
-end
-else begin
-c1:= !c1 -- (oracle qr aux n);
-c1:= !c1 -- (diffusor qr n);
-assert{true};
-end
-c:= !c -- !c1;
-return (!c)
-end
-
-let init(qr aux n:int): circuit
-requires {n > 0}
-requires {qr+aux = n}
-requires {true}
-ensures {true}
-ensures {width result = n}
-ensures {range result = n}
-=
-begin
-let c = ref (m_skip n) in 
-let c1 = ref (m_skip n)
-in let ref q = 0
-in while (q<n-1) do
-variant{n-1 - q}
-invariant{0 <= q <= n-1}
-invariant{width !c1 = n}
-invariant{true}
-c1:= !c1 -- (place_hadamard (q) n);
-assert{true};
-q := q + 1
-done;
-c:= !c -- !c1;
-c:= !c -- (place xx (aux) n);
-assert{true};
-c:= !c -- (place_hadamard (aux) n);
-assert{true};
-return (!c)
-end
-
-let oracle(qr aux n:int): circuit
-requires {n > 0}
-requires {qr = n}
-requires {true}
-ensures {true}
-ensures {width result = n}
-ensures {range result = n}
-=
-begin
-let c = ref (m_skip n) in 
-return (!c)
-end
-
 let diffusor(qr aux n:int): circuit
 requires {n > 0}
 requires {qr+aux = n}
@@ -135,6 +68,64 @@ assert{ true};
 q := q + 1
 done;
 c:= !c -- !c1;
+return (!c)
+end
+
+let oracle(qr aux n:int): circuit
+requires {n > 0}
+requires {qr = n}
+requires {true}
+ensures {true}
+ensures {width result = n}
+ensures {range result = n}
+=
+begin
+let c = ref (m_skip n) in 
+return (!c)
+end
+
+let grover_iter(qr aux n:int): circuit
+requires {n > 0}
+requires {qr = n}
+requires {true}
+ensures {true}
+ensures {width result = n}
+ensures {range result = n}
+=
+begin
+let c = ref (m_skip n) in 
+c:= !c -- (oracle qr aux n);
+c:= !c -- (diffusor qr aux n);
+assert{true};
+return (!c)
+end
+
+let init(qr aux n:int): circuit
+requires {n > 0}
+requires {qr+aux = n}
+requires {true}
+ensures {true}
+ensures {width result = n}
+ensures {range result = n}
+=
+begin
+let c = ref (m_skip n) in 
+let c1 = ref (m_skip n)
+in let ref q = 0
+in while (q<n-1) do
+variant{n-1 - q}
+invariant{0 <= q <= n-1}
+invariant{width !c1 = n}
+invariant{true}
+c1:= !c1 -- (place_hadamard (q) n);
+assert{true};
+q := q + 1
+done;
+c:= !c -- !c1;
+c:= !c -- (place xx (aux) n);
+assert{true};
+c:= !c -- (place_hadamard (aux) n);
+assert{true};
 return (!c)
 end
 
