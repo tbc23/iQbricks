@@ -416,7 +416,8 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
     @Override
     public String Visit(WithCtlNode node) {
         List<String> controls = new ArrayList<>();
-        String aux,angle,r,old,target = null;
+        String[] limits;
+        String aux,angle,r,start,end,old,qr,target = null;
         ApplyNode gate = node.getCtlGate();
         if (gate instanceof FunApply) // not defined
             aux = ((FunApply) gate).getFunID()+(((FunApply) gate).getTermArgs());
@@ -463,24 +464,29 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             aux = " (phase ("+ angle +")) ";
         }
 
-        for (QregNode qr:node.getCtlArgs()){
-            controls.add(Visit(qr));
+        for (QregNode n:node.getCtlArgs()){
+            controls.add(Visit(n));
         }
-        // has to be done in a loop for iterating the controls
-        // but how to know which controls must be applied in the loop??
-        // do single instructions with each control instead? NO
-        /*circs.push("c"+circs.size());
-        r = "let "+circs.peek()+" = ref (m_skip n)\nin\n"
-                + "let ref ctl = 0\n"
-                + "in while (!ctl < "+controls.size()+") do\n"
-                +
-                + "ctl := ctl + 1\ndone;\n"
-                + Visit(node.getAssertion());
-        old = circs.pop();
-        r += circs.peek()+":= !"+circs.peek()+" -- !"+old+";\n";*/
+        if (controls.get(0).contains(" ")) { // this means it's NOT a qreg[term] or qreg
+            limits = controls.get(0).split(" ");
+            start = limits[0]; end = limits[1];
 
-        r = circs.peek()+":= !"+circs.peek()+" -- cont"+aux+"("+controls.get(0)
+            circs.push("c"+circs.size());
+            r = "let "+circs.peek()+" = ref (m_skip n)\nin\n"
+                    + "let ref ctl = "+start+" \n"
+                    + "in while (ctl < "+end+") do\n"
+                    + circs.peek()+":= !"+circs.peek()
+                    +" -- cont"+aux+"ctl ("+ target + ") n;\n"+Visit(node.getAssertion())
+                    + "ctl := ctl + 1\ndone;\n"
+                    + Visit(node.getAssertion());
+            old = circs.pop();
+            r += circs.peek()+":= !"+circs.peek()+" -- !"+old+";\n";
+        } else {
+            qr = controls.get(0); // be careful here because a whole register can't be used as controls
+            r = circs.peek()+":= !"+circs.peek()+" -- cont"+aux+"("+qr
             +") ("+ target + ") n;\n"+Visit(node.getAssertion());
+        }
+
         return r;
     }
 

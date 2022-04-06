@@ -5,10 +5,172 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="51950d2f-e0a2-4e54-a47f-0db7ffbc82fd" name="Changes" comment="Make visit functions return Nodes (almost complete)">
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/AST.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/ASTBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/AddNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/ApplyNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/AssertNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/AtomNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/AuxNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/BodyNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/CircIds.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/CircNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/CnotNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/CtlNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/DivNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/EqualNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/EvaluateVisitor.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/ExpressionNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/ForIter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/ForNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/FunApply.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/GEQNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/GTNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/HadApply.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/IfCond.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/IfNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/InfixExpressionNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/InfixTermNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/InstrNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/InvariantNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/LEQNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/LTNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/LenNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/Main.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/MainNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/MulNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/MyASTVisitor.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/NEqualNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/ParamsNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/ParenNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/PhApply.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/PosNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/PowerNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/PreNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/ProgramNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksBaseListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksBaseVisitor.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksLexer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$AddTermContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$AngContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$AngTermContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$ApplyContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$ApplyControlContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$ArgsContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$AssertSpecContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$Assert_Context.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$AtomContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$AtomTermContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$AuxContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$AuxFunContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$BodyContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$BoolTypeContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$CircContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$CircTypeContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$CnotControlContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$CondIfContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$ControlContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$DivTermContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$Else_Context.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$ElsebodyContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$EmptyAssertContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$EqExprContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$ExprContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$FloatTypeContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$ForLoopContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$For_Context.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$FromRangeContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$FunApplyContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$FunArgsContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$FunIdContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$FunParamsContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$GeqExprContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$GtExprContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$HadApplyContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$IdFunContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$Id_listContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$If_Context.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$InstrContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$IntTypeContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$IntervalRangeContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$InvSpecContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$InvariantContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$IterContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$LenUnaryContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$LeqExprContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$LtExprContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$MainContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$MainFunContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$MulTermContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$NegUnaryContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$NeqExprContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$NumAtomContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$ParamContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$ParamsContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$ParenExprContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$ParenTermContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$PhApplyContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$PiAtomContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$PosContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$PosSpecContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$PowTermContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$PreContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$PreSpecContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$ProgramContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$QRegContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$QrContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$QrIterContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$QrListContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$QrTypeContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$RangeContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$RangeIterContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$RegBodyContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$RegCircContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$RegInstContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$RetInstContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$RevApplyContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$RxApplyContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$RyApplyContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$RzApplyContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$SingleParContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$SqrtUnaryContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$SubTermContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$SwapApplyContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$TermContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$TermExprContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$TermRangeContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$TypeContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$UnOpContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$UnaryTermContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$UptoRangeContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$VarAtomContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$XApplyContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$YApplyContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser$ZApplyContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksParser.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QbricksVisitor.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/QregNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/RangeNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/RetNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/RevApply.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/RxApply.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/RyApply.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/RzApply.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/SubNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/SwapApply.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/TermNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/UnOpNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/WithCtlNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/XApply.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/YApply.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/ZApply.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022,_17_50_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_23_03_2022__17_50__Changes_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/grover.txt" beforeDir="false" afterPath="$PROJECT_DIR$/grover.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Qbricks/EvaluateVisitor.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/EvaluateVisitor.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qft.txt" beforeDir="false" afterPath="$PROJECT_DIR$/qft.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksLexer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksLexer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/QbricksParser.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/EvaluateVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/EvaluateVisitor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/translation.mlw" beforeDir="false" afterPath="$PROJECT_DIR$/translation.mlw" afterDir="false" />
     </list>
@@ -63,7 +225,7 @@
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.javacompiler" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">

@@ -40,8 +40,16 @@ done;
 c:= !c -- !c1;
 c:= !c -- (place_hadamard (n-1) n);
 assert{true};
-c:= !c -- cont xx (0 n-1) (n-1) n;
+let c1 = ref (m_skip n)
+in
+let ref ctl = 0 
+in while (ctl < n-1) do
+c1:= !c1 -- cont xx ctl (n-1) n;
 assert{true};
+ctl := ctl + 1
+done;
+assert{true};
+c:= !c -- !c1;
 c:= !c -- (place_hadamard (n-1) n);
 assert{ true};
 let c1 = ref (m_skip n)
