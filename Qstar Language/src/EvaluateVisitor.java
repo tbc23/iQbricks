@@ -7,7 +7,6 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
 
     public Stack<String> circs = new Stack<>();
     public List<String> auxIds = new ArrayList<>();
-    // public String size = "";
 
     @Override
     public String Visit(ProgramNode node) {
@@ -20,6 +19,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         circs.push("c");
         String main = Visit(node.getMain());
 
+        r.append("module ").append(node.getMain().getID().toUpperCase()).append("\n\n");
         if (!node.getAuxList().isEmpty()) {
             for (AuxNode c : node.getAuxList()) {
                 auxs.add(Visit(c));
@@ -36,10 +36,13 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                     if (!declared_funs.contains(s))  // check which functions to import
                         undeclared_funs.add(s);
                 }
-                for (String s: undeclared_funs) auxIds.remove(s);
+                for (String s: undeclared_funs) {
+                    auxIds.remove(s);
+                    r.append("use export ").append(s.toUpperCase()).append("\n");
+                }
             }
 
-            r.append("module ").append(node.getMain().getID().toUpperCase()).append("""
+            r.append("""
 
                 use export binary.Bit_vector
                 use wired_circuits.Circuit_c
@@ -60,8 +63,10 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         } else {
             undeclared_funs = auxIds;   // in case there are no aux functions, all auxIDS
                                         // will have to be imported
-            r.append("module ").append(node.getMain().getID().toUpperCase()).append("""
-
+            for (String s: undeclared_funs) {
+                r.append("use export ").append(s.toUpperCase()).append("\n");
+            }
+            r.append("""
                 use export binary.Bit_vector
                 use wired_circuits.Circuit_c
                 use export p_int.Int_comp
@@ -86,16 +91,6 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                 "\nensures {width result = n}"+
                 "\nensures {range result = n}"
                 +"\n=\n"+Visit(node.getCirc())+"\n";
-        /*if(node.getHasParams())
-            return "Main function id: "+node.getID()+
-                    "\nmain parameters: "+Visit(node.getParams())+
-                    "\npre-condition:"+Visit(node.getPre())+
-                    "\nmain circ: "+Visit(node.getCirc())+
-                    "\npos-condition:"+Visit(node.getPos());
-        else return "Main function id: "+node.getID()+
-                    "\npre-condition:"+Visit(node.getPre())+
-                    "\nmain circ: "+Visit(node.getCirc())+
-                    "\npos-condition:"+Visit(node.getPos())+"\n";*/
     }
 
     @Override
@@ -115,16 +110,6 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                     "\nensures {range result = n}"
                     +"\n=\n"+Visit(node.getCirc())+"\n";
         return r;
-        /*if(node.getHasParams())
-            return "Aux function id: "+node.getID()+
-                    "\n"+node.getID()+" parameters: "+Visit(node.getParams())+
-                    "\npre-condition:"+Visit(node.getPre())+
-                    "\n"+node.getID()+" circ: "+Visit(node.getCirc())+
-                    "\npos-condition:"+Visit(node.getPos());
-        else return "Main function id: "+node.getID()+
-                "\npre-condition:"+Visit(node.getPre())+
-                "\n"+node.getID()+" circ: "+Visit(node.getCirc())+
-                "\npos-condition:"+Visit(node.getPos())+"\n";*/
     }
 
     @Override
