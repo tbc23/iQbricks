@@ -13,7 +13,7 @@ pre {true}
                 with control qr[i+1] (RZ(n-i-1, qr[q]))
                 #assert { |qr> = ps_rot(pi/2^(n-i)) |qr'> q }
                 assert {true}
-                aux_fun(qr)
+
             }
         }
         #assert { |qr> = ps_had |qr'> (len(qr')-1)}

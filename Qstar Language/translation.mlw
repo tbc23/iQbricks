@@ -1,13 +1,80 @@
-module MAIN
+module GROVER
 
-use export AUX2
 
 use export binary.Bit_vector
 use wired_circuits.Circuit_c
 use export p_int.Int_comp
 use ref.Ref
 
-let aux1(qr n:int): circuit
+let diffusor(qr aux n:int): circuit
+requires {n > 0}
+requires {qr+aux = n}
+requires {true}
+ensures {true}
+ensures {width result = n}
+ensures {range result = n}
+=
+begin
+let c = ref (m_skip n) in 
+let c1 = ref (m_skip n)
+in let ref i = 0 
+in while (i < qr) do
+variant{qr - i}
+invariant{0 <= i <= qr}
+invariant{range !c1 = i}
+invariant{width !c1 = qr}
+c1:= !c1 -- (place_hadamard i n);
+i := i + 1
+done;
+c:= !c -- !c1;
+let c1 = ref (m_skip n)
+in let ref i = 0 
+in while (i < qr) do
+variant{qr - i}
+invariant{0 <= i <= qr}
+invariant{width !c1 = qr}
+c1:= !c1 -- (place xx i n);
+i := i + 1
+done;
+assert{true};
+c:= !c -- !c1;
+let c1 = ref zz 
+in let ref ctl = 0 
+in while (ctl < n-1) do
+variant{n-1 - ctl}
+invariant{0 <= ctl <= n-1}
+invariant{range !c1 = 0}
+c1:= diag_cont !c1 ctl (n-1) n;
+assert{true};
+ctl := ctl + 1
+done;
+assert{true};
+c:= !c -- !c1;
+let c1 = ref (m_skip n)
+in let ref i = 0 
+in while (i < qr) do
+variant{qr - i}
+invariant{0 <= i <= qr}
+invariant{width !c1 = qr}
+c1:= !c1 -- (place xx i n);
+i := i + 1
+done;
+c:= !c -- !c1;
+let c1 = ref (m_skip n)
+in let ref i = 0 
+in while (i < qr) do
+variant{qr - i}
+invariant{0 <= i <= qr}
+invariant{range !c1 = i}
+invariant{width !c1 = qr}
+c1:= !c1 -- (place_hadamard i n);
+i := i + 1
+done;
+c:= !c -- !c1;
+return (!c)
+end
+
+let oracle(qr aux n:int): circuit
 requires {n > 0}
 requires {qr = n}
 requires {true}
@@ -20,26 +87,92 @@ let c = ref (m_skip n) in
 return (!c)
 end
 
-let main (qr n:int): circuit
+let grover_iter(qr aux n:int): circuit
 requires {n > 0}
 requires {qr = n}
-requires {n>0}
-ensures {vazio}
+requires {true}
+ensures {true}
+ensures {width result = n}
+ensures {range result = n}
+=
+begin
+let c = ref (m_skip n) in 
+c:= !c -- (oracle qr aux n);
+c:= !c -- (diffusor qr aux n);
+assert{true};
+return (!c)
+end
+
+let init(qr aux n:int): circuit
+requires {n > 0}
+requires {qr+aux = n}
+requires {true}
+ensures {true}
 ensures {width result = n}
 ensures {range result = n}
 =
 begin
 let c = ref (m_skip n) in 
 let c1 = ref (m_skip n)
-in if (n>0)
-then begin
-c1:= !c1 -- (place_hadamard (0) n);
-assert{ true };
-c1:= !c1 -- (place xx (0) n);
-assert{ true };
-c1:= !c1 -- (aux1 qr n);
-c1:= !c1 -- (aux2 qr n);
+in let ref i = 0
+in while (i < n-1) do
+variant{n-1 - i}
+invariant{0 <= i <= n-1}
+invariant{range !c1 = i}
+invariant{width !c1 = n-1 - 0}
+c1:= !c1 -- (place_hadamard i n);
+i := i + 1
+done;
+c:= !c -- !c1;
+let c1 = ref (m_skip n)
+in let ref i = 0 
+in while (i < aux) do
+variant{aux - i}
+invariant{0 <= i <= aux}
+invariant{width !c1 = aux}
+c1:= !c1 -- (place xx i n);
+i := i + 1
+done;
+assert{true};
+c:= !c -- !c1;
+let c1 = ref (m_skip n)
+in let ref i = 0 
+in while (i < aux) do
+variant{aux - i}
+invariant{0 <= i <= aux}
+invariant{range !c1 = i}
+invariant{width !c1 = aux}
+c1:= !c1 -- (place_hadamard i n);
+i := i + 1
+done;
+assert{true};
+c:= !c -- !c1;
+return (!c)
 end
+
+let main (qr aux iters n:int): circuit
+requires {n > 0}
+requires {qr+aux = n}
+requires {true}
+ensures {true}
+ensures {width result = n}
+ensures {range result = n}
+=
+begin
+let c = ref (m_skip n) in 
+c:= !c -- (init qr aux n);
+assert{true};
+let c1 = ref (m_skip n)
+in let ref i = 0
+in while (i<iters) do
+variant{iters - i}
+invariant{0 <= i <= iters}
+invariant{width !c1 = n}
+invariant{true}
+c1:= !c1 -- (grover_iter qr aux n);
+assert{true};
+i := i + 1
+done;
 c:= !c -- !c1;
 return (!c)
 end

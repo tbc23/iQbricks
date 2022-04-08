@@ -23,11 +23,7 @@ pos {true}
 | init | (qreg qr, qreg aux)
 pre {true}
     circ qr, aux ->
-        for q in qr[:-1] {
-            invariant {true}
-            H(q)
-            assert {true}
-        }
+        H(qr[:-1])
         X(aux)
         assert {true}
         H(aux)
@@ -39,6 +35,7 @@ pos {true}
 | oracle | (qreg qr, qreg aux)
 pre {true}
     circ qr -> # DEFINE P /\ (neg Q \/ R)
+
         return
 pos {true}
 
@@ -46,31 +43,12 @@ pos {true}
 | diffusor | (qreg qr, qreg aux)
 pre {true}
     circ qr, aux ->
-        for q in qr {
-            invariant {true}
-            H(q)
-            assert {true}
-        }
-        for q in qr {
-            invariant {true}
-            X(q)
-            assert {true}
-        }
-        H(qr[-1])
+        H(qr)
+        X(qr)
         assert {true}
-        with control qr[:-1] (X(qr[-1]))
+        with control qr[:-1] (Z(qr[-1]))
         assert {true}
-        H(qr[-1])
-        assert { true}
-        for q in qr {
-            invariant {true}
-            X(q)
-            assert {true}
-        }
-        for q in qr {
-            invariant {true}
-            H(q)
-            assert { true}
-        }
+        X(qr)
+        H(qr)
         return
 pos {true}
