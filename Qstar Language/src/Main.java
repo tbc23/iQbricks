@@ -10,7 +10,7 @@ public class Main {
     public static void main(String[] args)
     {
         try {
-            QbricksLexer lexer = new QbricksLexer(CharStreams.fromFileName("grover.txt"));
+            QbricksLexer lexer = new QbricksLexer(CharStreams.fromFileName("test2.txt"));
             CommonTokenStream stream = new CommonTokenStream(lexer);
             QbricksParser parser = new QbricksParser(stream);
             ParseTree tree = parser.program();

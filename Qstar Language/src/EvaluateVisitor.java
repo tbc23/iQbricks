@@ -619,12 +619,95 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         return r;    }
 
     @Override
+    public String Visit(SApply node) {
+        String r, old, qr = Visit(node.getQreg());
+        diag = true;
+        if (global_qrs.contains(qr)) {
+            circs.push("c"+circs.size());
+            r = "let "+circs.peek()+" = ref (m_skip n)\nin "
+                    + "let ref i = 0 \n"
+                    + "in while (i < "+qr+") do\n"
+                    + "variant{"+qr+" - i}\n"
+                    + "invariant{0 <= i <= " +qr+"}\n"
+                    + "invariant{range !"+circs.peek()+" = 0}\n"
+                    + "invariant{width !"+circs.peek()+" = "+qr+"}\n"
+                    + circs.peek()+":= seq_diag !" + circs.peek()+" (place s i n);\n"
+                    + "i := i + 1\ndone;\n"
+                    + Visit(node.getAssertion());
+            old = circs.pop();
+            r += circs.peek()+":= !"+circs.peek()+" -- !"+old+";\n";
+        }
+        else if (qr.contains(" ")) {
+            String [] limits = qr.split(" ");
+            String start = limits[0];
+            String end = limits[1];
+            circs.push("c"+circs.size());
+            r = "let "+circs.peek()+" = ref (m_skip n)\nin "
+                    + "let ref i = "+start+"\n"
+                    + "in while (i < "+end+") do\n"
+                    + "variant{"+end+" - i}\n"
+                    + "invariant{"+start+" <= i <= " +end+"}\n"
+                    + "invariant{range !"+circs.peek()+" = i}\n"
+                    + "invariant{width !"+circs.peek()+" = "+end+" - "+start+"}\n"
+                    + circs.peek()+":= seq_diag !"+circs.peek()+" (place s i n);\n"
+                    + "i := i + 1\ndone;\n"
+                    + Visit(node.getAssertion());
+            old = circs.pop();
+            r += circs.peek()+":= !"+circs.peek()+" -- !"+old+";\n";
+        }
+        else r = circs.peek()+":= seq_diag !"+circs.peek()+" (place s ("
+                    +qr+") n);\n" +Visit(node.getAssertion());
+        return r;
+    }
+
+    @Override
+    public String Visit(TApply node) {
+        String r, old, qr = Visit(node.getQreg());
+        diag = true;
+        if (global_qrs.contains(qr)) {
+            circs.push("c"+circs.size());
+            r = "let "+circs.peek()+" = ref (m_skip n)\nin "
+                    + "let ref i = 0 \n"
+                    + "in while (i < "+qr+") do\n"
+                    + "variant{"+qr+" - i}\n"
+                    + "invariant{0 <= i <= " +qr+"}\n"
+                    + "invariant{range !"+circs.peek()+" = 0}\n"
+                    + "invariant{width !"+circs.peek()+" = "+qr+"}\n"
+                    + circs.peek()+":= seq_diag !" + circs.peek()+" (place t i n);\n"
+                    + "i := i + 1\ndone;\n"
+                    + Visit(node.getAssertion());
+            old = circs.pop();
+            r += circs.peek()+":= !"+circs.peek()+" -- !"+old+";\n";
+        }
+        else if (qr.contains(" ")) {
+            String [] limits = qr.split(" ");
+            String start = limits[0];
+            String end = limits[1];
+            circs.push("c"+circs.size());
+            r = "let "+circs.peek()+" = ref (m_skip n)\nin "
+                    + "let ref i = "+start+"\n"
+                    + "in while (i < "+end+") do\n"
+                    + "variant{"+end+" - i}\n"
+                    + "invariant{"+start+" <= i <= " +end+"}\n"
+                    + "invariant{range !"+circs.peek()+" = i}\n"
+                    + "invariant{width !"+circs.peek()+" = "+end+" - "+start+"}\n"
+                    + circs.peek()+":= seq_diag !"+circs.peek()+" (place t i n);\n"
+                    + "i := i + 1\ndone;\n"
+                    + Visit(node.getAssertion());
+            old = circs.pop();
+            r += circs.peek()+":= !"+circs.peek()+" -- !"+old+";\n";
+        }
+        else r = circs.peek()+":= seq_diag !"+circs.peek()+" (place t ("
+                    +qr+") n);\n" +Visit(node.getAssertion());
+        return r;
+    }
+
     public String Visit(SwapApply node) {
         String r;
         diag = false;
-        r = circs.peek()+":= !"+circs.peek()+" -- (place (swap ("
+        r = circs.peek()+":= !"+circs.peek()+" -- (swap ("
                 + Visit(node.getLQreg())+") ("
-                +Visit(node.getRQreg())+")) n);\n"
+                +Visit(node.getRQreg())+") n);\n"
                 +Visit(node.getAssertion());
         return r;
     }
@@ -786,6 +869,26 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         String r;
         r = circs.peek()+":= !"+circs.peek()+" -- (cnot ("
                 +Visit(node.getCtl())+") ("+Visit(node.getTarget())+") n);\n"
+                +Visit(node.getAssertion());
+        return r;
+    }
+
+    @Override
+    public String Visit(ToffNode node) {
+        String r;
+        r = circs.peek()+":= !"+circs.peek()+" -- (toffoli ("
+                +Visit(node.getCtl1())+") ("+Visit(node.getCtl2())+") ("
+                +Visit(node.getTarget())+") n);\n"
+                +Visit(node.getAssertion());
+        return r;
+    }
+
+    @Override
+    public String Visit(FredNode node) {
+        String r;
+        r = circs.peek()+":= !"+circs.peek()+" -- (fredkin ("
+                +Visit(node.getCtl1())+") ("+Visit(node.getCtl2())+") ("
+                +Visit(node.getTarget())+") n);\n"
                 +Visit(node.getAssertion());
         return r;
     }

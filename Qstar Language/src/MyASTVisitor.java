@@ -39,16 +39,24 @@ public abstract class MyASTVisitor <T> {
     public abstract T Visit(XApply node);
     public abstract T Visit(YApply node);
     public abstract T Visit(ZApply node);
+    public abstract T Visit(SApply node);
+    public abstract T Visit(TApply node);
     public abstract T Visit(SwapApply node);
     public abstract T Visit(PhApply node);
 
     public abstract T Visit(WithCtlNode node);
     public abstract T Visit(CnotNode node);
+    public abstract T Visit(ToffNode node);
+    public abstract T Visit(FredNode node);
 
     public T Visit(CtlNode node) {
         if (node instanceof WithCtlNode)
             return Visit((WithCtlNode) node);
-        else return Visit((CnotNode) node);
+        else if (node instanceof CnotNode)
+            return Visit((CnotNode) node);
+        else if (node instanceof ToffNode)
+            return Visit((ToffNode) node);
+        else return Visit((FredNode) node);
     }
 
     public T Visit(ApplyNode node) {
@@ -70,6 +78,10 @@ public abstract class MyASTVisitor <T> {
             return Visit((YApply) node);
         else if (node instanceof ZApply)
             return Visit((ZApply) node);
+        else if (node instanceof SApply)
+            return Visit((SApply) node);
+        else if (node instanceof TApply)
+            return Visit((TApply) node);
         else if (node instanceof SwapApply)
             return Visit((SwapApply) node);
         else

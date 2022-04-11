@@ -231,6 +231,7 @@ class IfCond extends IfNode {
     }
 }
 
+////////////////// Gate-Apply Nodes //////////////////
 
 class ApplyNode extends InstrNode {}
 
@@ -407,6 +408,36 @@ class ZApply extends ApplyNode {
     }
 }
 
+class TApply extends ApplyNode {
+    private QregNode qreg;
+    private AssertNode assertion;
+
+    public AssertNode getAssertion() { return assertion; }
+
+    public void setAssertion(AssertNode assertion) { this.assertion = assertion; }
+    public QregNode getQreg (){
+        return qreg;
+    }
+    public void setQreg(QregNode nqreg) {
+        this.qreg = nqreg;
+    }
+}
+
+class SApply extends ApplyNode {
+    private QregNode qreg;
+    private AssertNode assertion;
+
+    public AssertNode getAssertion() { return assertion; }
+
+    public void setAssertion(AssertNode assertion) { this.assertion = assertion; }
+    public QregNode getQreg (){
+        return qreg;
+    }
+    public void setQreg(QregNode nqreg) {
+        this.qreg = nqreg;
+    }
+}
+
 class SwapApply extends ApplyNode {
     private QregNode qleft;
     private QregNode qright;
@@ -492,6 +523,56 @@ class CnotNode extends CtlNode {
     }
     public void setQregs(QregNode nctl, QregNode ntarget) {
         this.ctl = nctl;
+        this.target = ntarget;
+    }
+}
+
+class ToffNode extends CtlNode {
+    private QregNode ctl1;
+    private QregNode ctl2;
+    private QregNode target;
+    private AssertNode assertion;
+
+    public AssertNode getAssertion() { return assertion; }
+
+    public void setAssertion(AssertNode assertion) { this.assertion = assertion; }
+    public QregNode getCtl1 (){
+        return ctl1;
+    }
+    public QregNode getCtl2 (){
+        return ctl2;
+    }
+    public QregNode getTarget (){
+        return target;
+    }
+    public void setQregs(QregNode ctl1, QregNode ctl2, QregNode ntarget) {
+        this.ctl1 = ctl1;
+        this.ctl2 = ctl2;
+        this.target = ntarget;
+    }
+}
+
+class FredNode extends CtlNode {
+    private QregNode ctl1;
+    private QregNode ctl2;
+    private QregNode target;
+    private AssertNode assertion;
+
+    public AssertNode getAssertion() { return assertion; }
+
+    public void setAssertion(AssertNode assertion) { this.assertion = assertion; }
+    public QregNode getCtl1 (){
+        return ctl1;
+    }
+    public QregNode getCtl2 (){
+        return ctl2;
+    }
+    public QregNode getTarget (){
+        return target;
+    }
+    public void setQregs(QregNode ctl1, QregNode ctl2, QregNode ntarget) {
+        this.ctl1 = ctl1;
+        this.ctl2 = ctl2;
         this.target = ntarget;
     }
 }

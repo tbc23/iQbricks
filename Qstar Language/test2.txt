@@ -15,5 +15,9 @@ pos {vazio}
 | aux1 | (qreg qr)
 pre {true}
     circ qr ->
+        S(qr)
+        T(qr[-1])
+        fred(qr[1],qr[2],qr[0])
+        toff(qr[1],qr[2],qr[0])
         return
 pos {true}

@@ -1,4 +1,4 @@
-// Generated from /home/tomas/Desktop/qstar/Qstar Language/Qbricks.g4 by ANTLR 4.9.2
+// Generated from /home/tbc23/Desktop/qstar/Qstar Language/Qbricks.g4 by ANTLR 4.9.2
 
         import java.util.*;
 
@@ -476,6 +476,30 @@ public interface QbricksListener extends ParseTreeListener {
 	 */
 	void exitPhApply(QbricksParser.PhApplyContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code tApply}
+	 * labeled alternative in {@link QbricksParser#apply}.
+	 * @param ctx the parse tree
+	 */
+	void enterTApply(QbricksParser.TApplyContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code tApply}
+	 * labeled alternative in {@link QbricksParser#apply}.
+	 * @param ctx the parse tree
+	 */
+	void exitTApply(QbricksParser.TApplyContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code sApply}
+	 * labeled alternative in {@link QbricksParser#apply}.
+	 * @param ctx the parse tree
+	 */
+	void enterSApply(QbricksParser.SApplyContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code sApply}
+	 * labeled alternative in {@link QbricksParser#apply}.
+	 * @param ctx the parse tree
+	 */
+	void exitSApply(QbricksParser.SApplyContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code angTerm}
 	 * labeled alternative in {@link QbricksParser#ang}.
 	 * @param ctx the parse tree
@@ -511,6 +535,30 @@ public interface QbricksListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCnotControl(QbricksParser.CnotControlContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code toffControl}
+	 * labeled alternative in {@link QbricksParser#control}.
+	 * @param ctx the parse tree
+	 */
+	void enterToffControl(QbricksParser.ToffControlContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code toffControl}
+	 * labeled alternative in {@link QbricksParser#control}.
+	 * @param ctx the parse tree
+	 */
+	void exitToffControl(QbricksParser.ToffControlContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code fredControl}
+	 * labeled alternative in {@link QbricksParser#control}.
+	 * @param ctx the parse tree
+	 */
+	void enterFredControl(QbricksParser.FredControlContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code fredControl}
+	 * labeled alternative in {@link QbricksParser#control}.
+	 * @param ctx the parse tree
+	 */
+	void exitFredControl(QbricksParser.FredControlContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code eqExpr}
 	 * labeled alternative in {@link QbricksParser#expr}.

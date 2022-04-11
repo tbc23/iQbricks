@@ -1,4 +1,4 @@
-// Generated from /home/tomas/Desktop/qstar/Qstar Language/Qbricks.g4 by ANTLR 4.9.2
+// Generated from /home/tbc23/Desktop/qstar/Qstar Language/Qbricks.g4 by ANTLR 4.9.2
 
         import java.util.*;
 
@@ -486,6 +486,30 @@ public class QbricksBaseListener implements QbricksListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterTApply(QbricksParser.TApplyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTApply(QbricksParser.TApplyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterSApply(QbricksParser.SApplyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSApply(QbricksParser.SApplyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAngTerm(QbricksParser.AngTermContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -517,6 +541,30 @@ public class QbricksBaseListener implements QbricksListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCnotControl(QbricksParser.CnotControlContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterToffControl(QbricksParser.ToffControlContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitToffControl(QbricksParser.ToffControlContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterFredControl(QbricksParser.FredControlContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFredControl(QbricksParser.FredControlContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

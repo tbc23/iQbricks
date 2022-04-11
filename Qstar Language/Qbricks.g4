@@ -111,6 +111,8 @@ apply   :
         | ZGATE OP qr=qReg CL                           #zApply
         | SWAP OP qrL=qReg VG qrR=qReg CL               #swapApply
         | PHASE OP angle=ang VG qr=qReg CL              #phApply
+        | TGATE OP qr=qReg CL                           #tApply
+        | SGATE OP qr=qReg CL                           #sApply
         ;
 
 ang     :
@@ -119,8 +121,10 @@ ang     :
 
 
 control :
-        WITHCTL ctlqrs=id_list OP ctlgate=apply CL  #applyControl      // with control qreg[-1] (RX(ang,qreg[q]))
-        | CNOT OP ctlqr=qReg VG tqr=qReg CL         #cnotControl       // cnot(target_qubit,control_qubit)
+        WITHCTL ctlqrs=id_list OP ctlgate=apply CL      #applyControl      // with control qreg[-1] (RX(ang,qreg[q]))
+        | CNOT OP ctlqr=qReg VG tqr=qReg CL             #cnotControl       // cnot(target_qubit,control_qubit)
+        | TOFF OP ctl1=qReg VG ctl2=qReg VG tg=qReg CL  #toffControl
+        | FRED OP ctl1=qReg VG ctl2=qReg VG tg=qReg CL  #fredControl
         ;
 
 expr   :
@@ -199,6 +203,8 @@ RY   : 'RY';
 XGATE: 'X' ;
 YGATE: 'Y' ;
 ZGATE: 'Z' ;
+SGATE: 'S' ;
+TGATE: 'T' ;
 PI   : 'pi';
 IN   : 'in';
 IF   : 'if';
@@ -213,6 +219,8 @@ BOOL : 'bool';
 QREG : 'qreg';
 CNOT : 'cnot';
 SWAP : 'swap';
+TOFF : 'toff';
+FRED : 'fred';
 SQRT : 'sqrt';
 ELSE : 'else';
 CIRC : 'circ';
