@@ -1,13 +1,11 @@
-module MAIN
-
-use export AUX2
-
+module QFT
+use qbricks.Circuit_macros
 use export binary.Bit_vector
 use wired_circuits.Circuit_c
 use export p_int.Int_comp
 use ref.Ref
 
-let aux1(qr n:int): circuit
+let main (qr n:int): circuit
 requires {n > 0}
 requires {qr = n}
 requires {true}
@@ -18,42 +16,33 @@ ensures {range result = n}
 begin
 let c = ref (m_skip n) in 
 let c1 = ref (m_skip n)
-in let ref i = 0 
-in while (i < qr) do
-variant{qr - i}
-invariant{0 <= i <= qr}
+in let ref q = 0
+in while (q<n) do
+variant{n - q}
+invariant{0 <= q <= n}
+invariant{width !c1 = n}
+invariant{ true }
+invariant{true}
 invariant{range !c1 = 0}
-invariant{width !c1 = qr}
-c1:= seq_diag !c1 (place s i n);
+assert{ true };
+c1:= !c1 -- (place_hadamard (q) n);
+assert{true};
+let c2 = ref (m_skip n)
+in let ref i = q
+in while (i<n-1) do
+variant{n-1 - i}
+invariant{q <= i <= n-1}
+invariant{width !c2 = n}
+invariant{ true }
+invariant{range !c2 = 0}
+c2:= seq_diag !c2 (cont (rz (n-i-1)) (i+1) (q) n);
+assert{true};
 i := i + 1
 done;
-c:= !c -- !c1;
-c:= seq_diag !c (place t (n-1) n);
-c:= !c -- (fredkin (1) (2) (0) n);
-c:= !c -- (toffoli (1) (2) (0) n);
-return (!c)
-end
-
-let main (qr n:int): circuit
-requires {n > 0}
-requires {qr = n}
-requires {n>0}
-ensures {vazio}
-ensures {width result = n}
-ensures {range result = n}
-=
-begin
-let c = ref (m_skip n) in 
-let c1 = ref (m_skip n)
-in if (n>0)
-then begin
-c1:= !c1 -- (place_hadamard (0) n);
-assert{ true };
-c1:= !c1 -- (place xx (0) n);
-assert{ true };
-c1:= !c1 -- (aux1 qr n);
-c1:= !c1 -- (aux2 qr n);
-end
+c1:= !c1 -- !c2;
+q := q + 1
+done;
+assert{true};
 c:= !c -- !c1;
 return (!c)
 end

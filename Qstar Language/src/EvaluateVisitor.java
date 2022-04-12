@@ -21,7 +21,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         circs.push("c");
         String main = Visit(node.getMain());
 
-        r.append("module ").append(node.getMain().getID().toUpperCase()).append("\n\n");
+        r.append("module ").append(node.getMain().getID().toUpperCase()).append("\n");
         if (!node.getAuxList().isEmpty()) {
             for (AuxNode c : node.getAuxList()) {
                 auxs.add(Visit(c));
@@ -43,7 +43,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             }
 
             r.append("""
-
+                use qbricks.Circuit_macros
                 use export binary.Bit_vector
                 use wired_circuits.Circuit_c
                 use export p_int.Int_comp
@@ -67,6 +67,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                 r.append("use export ").append(s.toUpperCase()).append("\n");
             }
             r.append("""
+                use qbricks.Circuit_macros
                 use export binary.Bit_vector
                 use wired_circuits.Circuit_c
                 use export p_int.Int_comp
@@ -649,7 +650,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                     + "invariant{"+start+" <= i <= " +end+"}\n"
                     + "invariant{range !"+circs.peek()+" = i}\n"
                     + "invariant{width !"+circs.peek()+" = "+end+" - "+start+"}\n"
-                    + circs.peek()+":= seq_diag !"+circs.peek()+" (place s i n);\n"
+                    + circs.peek()+":= seq_diag (!"+circs.peek()+" (place s i n));\n"
                     + "i := i + 1\ndone;\n"
                     + Visit(node.getAssertion());
             old = circs.pop();
@@ -838,6 +839,17 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                     + "ctl := ctl + 1\ndone;\n"
                     + Visit(node.getAssertion());
             } else {
+                /*
+                invariant{ true }
+                invariant{range !c2 = 0}
+                let ref aux = (cont (rz (n-i-1)) (i+1) (q) n) in
+                assert {forall x y i. 0<= i < width aux ->basis_ket aux x y i = x i};
+                c2:= seq_diag !c2 aux;
+                assert{true};
+                i := i + 1
+                done;
+                 */
+
                 r = "let "+circs.peek()+" = ref"+aux+"\nin "
                         + "let ref ctl = "+start+" \n"
                         + "in while (ctl < "+end+") do\n"
@@ -855,10 +867,10 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         } else {
             qr = controls.get(0); // be careful here because a whole register can't be used as controls
             if (!diag) {
-                r = circs.peek()+":= !"+circs.peek()+" -- cont"+aux+"("+qr
-                +") ("+ target + ") n;\n"+Visit(node.getAssertion());
-            } else r = circs.peek()+":= seq_diag !"+circs.peek()+" cont"+aux+"("+qr
-                    +") ("+ target + ") n;\n"+Visit(node.getAssertion());
+                r = circs.peek()+":= !"+circs.peek()+" -- (cont"+aux+"("+qr
+                +") ("+ target + ") n);\n"+Visit(node.getAssertion());
+            } else r = circs.peek()+":= seq_diag !"+circs.peek()+" (cont"+aux+"("+qr
+                    +") ("+ target + ") n);\n"+Visit(node.getAssertion());
         }
 
         return r;

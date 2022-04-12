@@ -1,4 +1,4 @@
-// Generated from /home/tbc23/Desktop/qstar/Qstar Language/Qbricks.g4 by ANTLR 4.9.2
+// Generated from /home/tomas/Desktop/qstar/Qstar Language/Qbricks.g4 by ANTLR 4.9.2
 
         import java.util.*;
 
@@ -23,8 +23,8 @@ public class QbricksParser extends Parser {
 		EQ=12, NEQ=13, GEQ=14, LEQ=15, GT=16, LT=17, PLUS=18, MINUS=19, MUL=20, 
 		DIV=21, POW=22, ARROW=23, BB=24, HAD=25, RZ=26, RX=27, RY=28, XGATE=29, 
 		YGATE=30, ZGATE=31, SGATE=32, TGATE=33, PI=34, IN=35, IF=36, INT=37, DEF=38, 
-		LEN=39, FOR=40, ROT=41, PRE=42, POS=43, BOOL=44, QREG=45, CNOT=46, SWAP=47, 
-		TOFF=48, FRED=49, SQRT=50, ELSE=51, CIRC=52, APPLY=53, FLOAT=54, PHASE=55, 
+		LEN=39, FOR=40, ROT=41, PHASE=42, PRE=43, POS=44, BOOL=45, QREG=46, CNOT=47, 
+		SWAP=48, TOFF=49, FRED=50, SQRT=51, ELSE=52, CIRC=53, APPLY=54, FLOAT=55, 
 		RANGE=56, RET=57, ASSERT=58, CONTROL=59, REVERSE=60, WITHCTL=61, INVARIANT=62, 
 		ID=63, NUM=64, FORMULA=65, COMM=66, SPACE=67;
 	public static final int
@@ -50,10 +50,10 @@ public class QbricksParser extends Parser {
 			"'{'", "'}'", "'=='", "'!='", "'>='", "'<='", "'>'", "'<'", "'+'", "'-'", 
 			"'*'", "'/'", "'^'", "'->'", "'||'", "'H'", "'RZ'", "'RX'", "'RY'", "'X'", 
 			"'Y'", "'Z'", "'S'", "'T'", "'pi'", "'in'", "'if'", "'int'", "'def'", 
-			"'len'", "'for'", "'rot'", "'pre'", "'pos'", "'bool'", "'qreg'", "'cnot'", 
-			"'swap'", "'toff'", "'fred'", "'sqrt'", "'else'", "'circ'", "'apply'", 
-			"'float'", "'ph'", "'range'", "'return'", "'assert'", "'control'", "'reverse'", 
-			"'with control'", "'invariant'"
+			"'len'", "'for'", "'rot'", "'ph'", "'pre'", "'pos'", "'bool'", "'qreg'", 
+			"'cnot'", "'swap'", "'toff'", "'fred'", "'sqrt'", "'else'", "'circ'", 
+			"'apply'", "'float'", "'range'", "'return'", "'assert'", "'control'", 
+			"'reverse'", "'with control'", "'invariant'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
@@ -63,8 +63,8 @@ public class QbricksParser extends Parser {
 			"CCL", "EQ", "NEQ", "GEQ", "LEQ", "GT", "LT", "PLUS", "MINUS", "MUL", 
 			"DIV", "POW", "ARROW", "BB", "HAD", "RZ", "RX", "RY", "XGATE", "YGATE", 
 			"ZGATE", "SGATE", "TGATE", "PI", "IN", "IF", "INT", "DEF", "LEN", "FOR", 
-			"ROT", "PRE", "POS", "BOOL", "QREG", "CNOT", "SWAP", "TOFF", "FRED", 
-			"SQRT", "ELSE", "CIRC", "APPLY", "FLOAT", "PHASE", "RANGE", "RET", "ASSERT", 
+			"ROT", "PHASE", "PRE", "POS", "BOOL", "QREG", "CNOT", "SWAP", "TOFF", 
+			"FRED", "SQRT", "ELSE", "CIRC", "APPLY", "FLOAT", "RANGE", "RET", "ASSERT", 
 			"CONTROL", "REVERSE", "WITHCTL", "INVARIANT", "ID", "NUM", "FORMULA", 
 			"COMM", "SPACE"
 		};
@@ -1067,7 +1067,7 @@ public class QbricksParser extends Parser {
 			setState(141);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << HAD) | (1L << RZ) | (1L << RX) | (1L << RY) | (1L << XGATE) | (1L << YGATE) | (1L << ZGATE) | (1L << SGATE) | (1L << TGATE) | (1L << IF) | (1L << FOR) | (1L << CNOT) | (1L << SWAP) | (1L << TOFF) | (1L << FRED) | (1L << PHASE) | (1L << RET) | (1L << REVERSE) | (1L << WITHCTL) | (1L << ID))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << HAD) | (1L << RZ) | (1L << RX) | (1L << RY) | (1L << XGATE) | (1L << YGATE) | (1L << ZGATE) | (1L << SGATE) | (1L << TGATE) | (1L << IF) | (1L << FOR) | (1L << PHASE) | (1L << CNOT) | (1L << SWAP) | (1L << TOFF) | (1L << FRED) | (1L << RET) | (1L << REVERSE) | (1L << WITHCTL) | (1L << ID))) != 0)) {
 				{
 				{
 				setState(138);
@@ -1366,12 +1366,12 @@ public class QbricksParser extends Parser {
 			case TGATE:
 			case IF:
 			case FOR:
+			case PHASE:
 			case POS:
 			case CNOT:
 			case SWAP:
 			case TOFF:
 			case FRED:
-			case PHASE:
 			case RET:
 			case REVERSE:
 			case WITHCTL:
@@ -1627,11 +1627,11 @@ public class QbricksParser extends Parser {
 			case TGATE:
 			case IF:
 			case FOR:
+			case PHASE:
 			case CNOT:
 			case SWAP:
 			case TOFF:
 			case FRED:
-			case PHASE:
 			case REVERSE:
 			case WITHCTL:
 			case ID:
@@ -1662,8 +1662,8 @@ public class QbricksParser extends Parser {
 				case ZGATE:
 				case SGATE:
 				case TGATE:
-				case SWAP:
 				case PHASE:
+				case SWAP:
 				case REVERSE:
 				case ID:
 					{
@@ -4150,9 +4150,9 @@ public class QbricksParser extends Parser {
 		"\2\2\2WX\7\b\2\2X]\5\n\6\2YZ\7\7\2\2Z\\\5\n\6\2[Y\3\2\2\2\\_\3\2\2\2]"+
 		"[\3\2\2\2]^\3\2\2\2^`\3\2\2\2_]\3\2\2\2`a\7\t\2\2a\t\3\2\2\2bc\5\16\b"+
 		"\2cd\7A\2\2d\13\3\2\2\2ej\5\64\33\2fg\7\7\2\2gi\5\64\33\2hf\3\2\2\2il"+
-		"\3\2\2\2jh\3\2\2\2jk\3\2\2\2k\r\3\2\2\2lj\3\2\2\2ms\7\'\2\2ns\78\2\2o"+
-		"s\7.\2\2ps\7\66\2\2qs\7/\2\2rm\3\2\2\2rn\3\2\2\2ro\3\2\2\2rp\3\2\2\2r"+
-		"q\3\2\2\2s\17\3\2\2\2tu\7A\2\2u\21\3\2\2\2vw\7\66\2\2wz\5\24\13\2xy\7"+
+		"\3\2\2\2jh\3\2\2\2jk\3\2\2\2k\r\3\2\2\2lj\3\2\2\2ms\7\'\2\2ns\79\2\2o"+
+		"s\7/\2\2ps\7\67\2\2qs\7\60\2\2rm\3\2\2\2rn\3\2\2\2ro\3\2\2\2rp\3\2\2\2"+
+		"rq\3\2\2\2s\17\3\2\2\2tu\7A\2\2u\21\3\2\2\2vw\7\67\2\2wz\5\24\13\2xy\7"+
 		"\31\2\2y{\5\30\r\2zx\3\2\2\2z{\3\2\2\2{\23\3\2\2\2|\u0081\5\26\f\2}~\7"+
 		"\7\2\2~\u0080\5\26\f\2\177}\3\2\2\2\u0080\u0083\3\2\2\2\u0081\177\3\2"+
 		"\2\2\u0081\u0082\3\2\2\2\u0082\25\3\2\2\2\u0083\u0081\3\2\2\2\u0084\u0089"+
@@ -4160,12 +4160,12 @@ public class QbricksParser extends Parser {
 		"\u008a\3\2\2\2\u0089\u0085\3\2\2\2\u0089\u008a\3\2\2\2\u008a\27\3\2\2"+
 		"\2\u008b\u008f\5\36\20\2\u008c\u008e\5\"\22\2\u008d\u008c\3\2\2\2\u008e"+
 		"\u0091\3\2\2\2\u008f\u008d\3\2\2\2\u008f\u0090\3\2\2\2\u0090\31\3\2\2"+
-		"\2\u0091\u008f\3\2\2\2\u0092\u0094\7,\2\2\u0093\u0095\7\f\2\2\u0094\u0093"+
+		"\2\u0091\u008f\3\2\2\2\u0092\u0094\7-\2\2\u0093\u0095\7\f\2\2\u0094\u0093"+
 		"\3\2\2\2\u0094\u0095\3\2\2\2\u0095\u0096\3\2\2\2\u0096\u009b\7C\2\2\u0097"+
 		"\u0098\7\7\2\2\u0098\u009a\7C\2\2\u0099\u0097\3\2\2\2\u009a\u009d\3\2"+
 		"\2\2\u009b\u0099\3\2\2\2\u009b\u009c\3\2\2\2\u009c\u009f\3\2\2\2\u009d"+
 		"\u009b\3\2\2\2\u009e\u00a0\7\r\2\2\u009f\u009e\3\2\2\2\u009f\u00a0\3\2"+
-		"\2\2\u00a0\33\3\2\2\2\u00a1\u00a3\7-\2\2\u00a2\u00a4\7\f\2\2\u00a3\u00a2"+
+		"\2\2\u00a0\33\3\2\2\2\u00a1\u00a3\7.\2\2\u00a2\u00a4\7\f\2\2\u00a3\u00a2"+
 		"\3\2\2\2\u00a3\u00a4\3\2\2\2\u00a4\u00a5\3\2\2\2\u00a5\u00aa\7C\2\2\u00a6"+
 		"\u00a7\7\7\2\2\u00a7\u00a9\7C\2\2\u00a8\u00a6\3\2\2\2\u00a9\u00ac\3\2"+
 		"\2\2\u00aa\u00a8\3\2\2\2\u00aa\u00ab\3\2\2\2\u00ab\u00ae\3\2\2\2\u00ac"+
@@ -4194,7 +4194,7 @@ public class QbricksParser extends Parser {
 		"\u00ee\u00ef\7\t\2\2\u00ef\u00f2\3\2\2\2\u00f0\u00f2\5\26\f\2\u00f1\u00e8"+
 		"\3\2\2\2\u00f1\u00f0\3\2\2\2\u00f2\'\3\2\2\2\u00f3\u00f4\7&\2\2\u00f4"+
 		"\u00f5\5\62\32\2\u00f5\u00f6\7\f\2\2\u00f6\u00f7\5\30\r\2\u00f7\u00fd"+
-		"\7\r\2\2\u00f8\u00f9\7\65\2\2\u00f9\u00fa\7\f\2\2\u00fa\u00fb\5*\26\2"+
+		"\7\r\2\2\u00f8\u00f9\7\66\2\2\u00f9\u00fa\7\f\2\2\u00fa\u00fb\5*\26\2"+
 		"\u00fb\u00fc\7\r\2\2\u00fc\u00fe\3\2\2\2\u00fd\u00f8\3\2\2\2\u00fd\u00fe"+
 		"\3\2\2\2\u00fe)\3\2\2\2\u00ff\u0100\5\30\r\2\u0100+\3\2\2\2\u0101\u0102"+
 		"\5\20\t\2\u0102\u0103\7\b\2\2\u0103\u0104\5\f\7\2\u0104\u0105\7\t\2\2"+
@@ -4212,9 +4212,9 @@ public class QbricksParser extends Parser {
 		"\7\t\2\2\u012c\u0150\3\2\2\2\u012d\u012e\7 \2\2\u012e\u012f\7\b\2\2\u012f"+
 		"\u0130\5\26\f\2\u0130\u0131\7\t\2\2\u0131\u0150\3\2\2\2\u0132\u0133\7"+
 		"!\2\2\u0133\u0134\7\b\2\2\u0134\u0135\5\26\f\2\u0135\u0136\7\t\2\2\u0136"+
-		"\u0150\3\2\2\2\u0137\u0138\7\61\2\2\u0138\u0139\7\b\2\2\u0139\u013a\5"+
+		"\u0150\3\2\2\2\u0137\u0138\7\62\2\2\u0138\u0139\7\b\2\2\u0139\u013a\5"+
 		"\26\f\2\u013a\u013b\7\7\2\2\u013b\u013c\5\26\f\2\u013c\u013d\7\t\2\2\u013d"+
-		"\u0150\3\2\2\2\u013e\u013f\79\2\2\u013f\u0140\7\b\2\2\u0140\u0141\5.\30"+
+		"\u0150\3\2\2\2\u013e\u013f\7,\2\2\u013f\u0140\7\b\2\2\u0140\u0141\5.\30"+
 		"\2\u0141\u0142\7\7\2\2\u0142\u0143\5\26\f\2\u0143\u0144\7\t\2\2\u0144"+
 		"\u0150\3\2\2\2\u0145\u0146\7#\2\2\u0146\u0147\7\b\2\2\u0147\u0148\5\26"+
 		"\f\2\u0148\u0149\7\t\2\2\u0149\u0150\3\2\2\2\u014a\u014b\7\"\2\2\u014b"+
@@ -4225,12 +4225,12 @@ public class QbricksParser extends Parser {
 		"\u013e\3\2\2\2\u014f\u0145\3\2\2\2\u014f\u014a\3\2\2\2\u0150-\3\2\2\2"+
 		"\u0151\u0152\5\64\33\2\u0152/\3\2\2\2\u0153\u0154\7?\2\2\u0154\u0155\5"+
 		"\24\13\2\u0155\u0156\7\b\2\2\u0156\u0157\5,\27\2\u0157\u0158\7\t\2\2\u0158"+
-		"\u0173\3\2\2\2\u0159\u015a\7\60\2\2\u015a\u015b\7\b\2\2\u015b\u015c\5"+
+		"\u0173\3\2\2\2\u0159\u015a\7\61\2\2\u015a\u015b\7\b\2\2\u015b\u015c\5"+
 		"\26\f\2\u015c\u015d\7\7\2\2\u015d\u015e\5\26\f\2\u015e\u015f\7\t\2\2\u015f"+
-		"\u0173\3\2\2\2\u0160\u0161\7\62\2\2\u0161\u0162\7\b\2\2\u0162\u0163\5"+
+		"\u0173\3\2\2\2\u0160\u0161\7\63\2\2\u0161\u0162\7\b\2\2\u0162\u0163\5"+
 		"\26\f\2\u0163\u0164\7\7\2\2\u0164\u0165\5\26\f\2\u0165\u0166\7\7\2\2\u0166"+
 		"\u0167\5\26\f\2\u0167\u0168\7\t\2\2\u0168\u0173\3\2\2\2\u0169\u016a\7"+
-		"\63\2\2\u016a\u016b\7\b\2\2\u016b\u016c\5\26\f\2\u016c\u016d\7\7\2\2\u016d"+
+		"\64\2\2\u016a\u016b\7\b\2\2\u016b\u016c\5\26\f\2\u016c\u016d\7\7\2\2\u016d"+
 		"\u016e\5\26\f\2\u016e\u016f\7\7\2\2\u016f\u0170\5\26\f\2\u0170\u0171\7"+
 		"\t\2\2\u0171\u0173\3\2\2\2\u0172\u0153\3\2\2\2\u0172\u0159\3\2\2\2\u0172"+
 		"\u0160\3\2\2\2\u0172\u0169\3\2\2\2\u0173\61\3\2\2\2\u0174\u0175\b\32\1"+
@@ -4259,7 +4259,7 @@ public class QbricksParser extends Parser {
 		"\2\u01b3\u01b0\3\2\2\2\u01b3\u01b1\3\2\2\2\u01b3\u01b2\3\2\2\2\u01b4\67"+
 		"\3\2\2\2\u01b5\u01b6\7\25\2\2\u01b6\u01c2\5\64\33\2\u01b7\u01b8\7)\2\2"+
 		"\u01b8\u01b9\7\b\2\2\u01b9\u01ba\5\26\f\2\u01ba\u01bb\7\t\2\2\u01bb\u01c2"+
-		"\3\2\2\2\u01bc\u01bd\7\64\2\2\u01bd\u01be\7\b\2\2\u01be\u01bf\5\64\33"+
+		"\3\2\2\2\u01bc\u01bd\7\65\2\2\u01bd\u01be\7\b\2\2\u01be\u01bf\5\64\33"+
 		"\2\u01bf\u01c0\7\t\2\2\u01c0\u01c2\3\2\2\2\u01c1\u01b5\3\2\2\2\u01c1\u01b7"+
 		"\3\2\2\2\u01c1\u01bc\3\2\2\2\u01c29\3\2\2\2\u01c3\u01cf\5\64\33\2\u01c4"+
 		"\u01c5\7\6\2\2\u01c5\u01cf\5\64\33\2\u01c6\u01c7\5\64\33\2\u01c7\u01c8"+

@@ -213,6 +213,7 @@ DEF  : 'def';
 LEN  : 'len';
 FOR  : 'for';
 ROT  : 'rot';
+PHASE: 'ph' ;
 PRE  : 'pre';
 POS  : 'pos';
 BOOL : 'bool';
@@ -226,7 +227,7 @@ ELSE : 'else';
 CIRC : 'circ';
 APPLY: 'apply';
 FLOAT: 'float';
-PHASE: 'ph';
+
 RANGE: 'range';
 RET  : 'return';
 ASSERT : 'assert';
@@ -238,7 +239,7 @@ INVARIANT : 'invariant';
 
 ID : [a-zA-Z][a-zA-Z_0-9]* ;
 NUM : [0-9]+ ;
-FORMULA : COP ~[\n]+ CCL ;
+FORMULA : COP ~[{}\n]+ CCL ;
 
 
 COMM : '#' ~[\n]* -> skip ;
