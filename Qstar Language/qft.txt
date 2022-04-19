@@ -12,7 +12,7 @@ pre {true}
                 invariant { true }
                 with control qr[i+1] (RZ(n-i-1, qr[q]))
                 #assert { |qr> = ps_rot(pi/2^(n-i)) |qr'> q }
-                assert {true}
+                assert {forall x y i. 0<= i < width aux ->basis_ket aux x y i = x i}
 
             }
         }

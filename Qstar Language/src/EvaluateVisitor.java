@@ -193,7 +193,11 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                 + Visit(node.getIter())
                 + Visit(node.getInvariant());
         body = Visit(node.getBody());
-        if (diag) r += "invariant{range !"+circs.peek()+" = 0}\n";
+        if (diag) {
+            r += "invariant{range !"+circs.peek()+" = 0}\n";
+                //+"invariant{forall x y i. 0<= i < width !"+circs.peek()
+                //    +"->basis_ket !"+circs.peek()+"x y i = x i}\n";
+        }
         r += body + iterator +" := " + iterator + " + 1\ndone;\n"
                 + Visit(node.getAssertion());
         old = circs.pop();
@@ -316,7 +320,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
     public String Visit(HadApply node) {
         String r,old,start,end,qr = Visit(node.getQreg());
         String[] limits;
-        diag = false;
+        diag = true;
         if (global_qrs.contains(qr)) {
             circs.push("c"+circs.size());
             r = "let "+circs.peek()+" = ref (m_skip n)\nin "
@@ -856,7 +860,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                         + "variant{"+end+" - ctl}\n"
                         + "invariant{"+start+" <= ctl <= "+end+"}\n"
                         + "invariant{range !" + circs.peek() + " = 0}\n"
-                        + circs.peek()+":= diag_cont !"+circs.peek()
+                        + circs.peek()+":= cont_diag !"+circs.peek()
                         +" ctl ("+ target + ") n;\n"+Visit(node.getAssertion())
                         + "ctl := ctl + 1\ndone;\n"
                         + Visit(node.getAssertion());
@@ -869,8 +873,10 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             if (!diag) {
                 r = circs.peek()+":= !"+circs.peek()+" -- (cont"+aux+"("+qr
                 +") ("+ target + ") n);\n"+Visit(node.getAssertion());
-            } else r = circs.peek()+":= seq_diag !"+circs.peek()+" (cont"+aux+"("+qr
-                    +") ("+ target + ") n);\n"+Visit(node.getAssertion());
+            } else {
+                r = circs.peek()+":= seq_diag !"+circs.peek()+" (cont_diag"+aux+"("+
+                    qr+") ("+ target + ") n);\n"+Visit(node.getAssertion());
+            }
         }
 
         return r;

@@ -22,7 +22,6 @@ variant{n - q}
 invariant{0 <= q <= n}
 invariant{width !c1 = n}
 invariant{ true }
-invariant{true}
 invariant{range !c1 = 0}
 assert{ true };
 c1:= !c1 -- (place_hadamard (q) n);
@@ -35,8 +34,8 @@ invariant{q <= i <= n-1}
 invariant{width !c2 = n}
 invariant{ true }
 invariant{range !c2 = 0}
-c2:= seq_diag !c2 (cont (rz (n-i-1)) (i+1) (q) n);
-assert{true};
+c2:= seq_diag !c2 (cont_diag (rz (n-i-1)) (i+1) (q) n);
+assert{forall x y i. 0<= i < width aux ->basis_ket aux x y i = x i};
 i := i + 1
 done;
 c1:= !c1 -- !c2;
