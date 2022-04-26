@@ -776,7 +776,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         else if (gate instanceof HadApply) {
             target = Visit(((HadApply) gate).getQreg());
             aux = " hadamard ";
-            diag = false;
+            diag = true;
         }
         else if (gate instanceof RxApply) {
             target = Visit(((RxApply) gate).getQreg());

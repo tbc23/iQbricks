@@ -1,5 +1,3 @@
-module AST
-
 type atom =
     | Num of int
     | Var of string ;;
@@ -57,11 +55,11 @@ type unitary =
     | REV of {id:string; args: string list};;
 
 type instruction =
-    | For of {iter:iter, inv: spec; body:instruction list; assertion: spec}
-    | If of {cond: expr; body:instruction list ; assertion: spec}
-    | IfElse of {cond:expr; ifbody:instruction list; elsebody:instruction list; assertion:spec}
+    | For of {iter:iter; inv: string list; body:instruction list; assertion: string list}
+    | If of {cond: cond; body:instruction list ; assertion: string list}
+    | IfElse of {cond:cond; ifbody:instruction list; elsebody:instruction list; assertion:string list}
     | Unitary of unitary
-    | Return of expr;;
+    | Return of string;;
 
 type circ =
 {
@@ -82,8 +80,8 @@ type fun_ =
     id: string;
     circ: circ;
     params: param list;
-    pre: spec;
-    pos: spec
+    pre: string list;
+    pos: string list
 }
 
 type program =
@@ -93,20 +91,19 @@ type program =
      aux: fun_ list;
 }
 
-(*let p (program) = {
+let p (program) = {
     id = "program";
     main = {
         id="main";
         circ= {
-            qregs= [{id="qr";range=n}];
-            body= [
-            Unitary Apply (H, {id="qr";range=n})
-            ]
+            qregs= [{id="qr"; range=5}];
+            body= [Unitary (Apply {gate=H; qregs=[{id="qr"; range=5}]});
+                    If {cond= Gt {Var "a"; Num 0}; body=[Unitary (Apply {gate=H; qregs=[{id="qr"; range=5}]})]; assertion=[]};
+                    Return "c"]
         };
         params = [];
-        pre = "precond";
-        pos = "poscond";
-    }
-}*)
-
-end
+        pre = ["precond"];
+        pos = ["poscond"];
+    };
+    aux = []
+}
