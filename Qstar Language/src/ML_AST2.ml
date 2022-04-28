@@ -1,11 +1,7 @@
-type atom =
-    | Num of int
-    | Var of string ;;
-
 type qreg =
 {
     id: string;
-    range: int;
+(*    range: int;*)
 }
 
 type spec = {
@@ -15,8 +11,8 @@ type spec = {
 type iter =
 {
     iterator: string;
-    starts: int;
-    ends: int;
+    starts: string;
+    ends: string;
 }
 
 type expr =
@@ -26,31 +22,31 @@ type expr =
     | Divide of expr * expr      (* a / b *)
     | Power of expr * expr       (* a ^ b *)
     | Minus of expr
-    | Len of qreg
+    | Len of string
     | Sqrt of expr
-    | Var of atom              (* "x", "y", etc. *) ;;
+    | Num of int
+    | Var of string              (* "x", "y", etc. *) ;;
 
 type cond =
-    | Eq of cond * cond         (* a == b *)
-    | NEq of cond * cond        (* a != b *)
-    | Gt of cond * cond         (* a > b *)
-    | Lt of cond * cond         (* a < b *)
-    | GEq of cond * cond        (* a >= b *)
-    | LEq of cond * cond        (* a <= b *)
-    | Expr of expr ;;
+    | Eq of expr * expr         (* a == b *)
+    | NEq of expr * expr        (* a != b *)
+    | Gt of expr * expr         (* a > b *)
+    | Lt of expr * expr         (* a < b *)
+    | GEq of expr * expr        (* a >= b *)
+    | LEq of expr * expr        (* a <= b *) ;;
 
 type gate =
-    | H | X | Y | Z | SWAP | FUN | REV | T | S
+    | H | X | Y | Z | SWAP | T | S
     | Cnot | Toff | Fred
-    | Rx of {ang:int}
-    | Ry of {ang:int}
-    | Rz of {ang:int}
-    | Ph of {ang:int} ;;
+    | Rx of string
+    | Ry of string
+    | Rz of string
+    | Ph of string ;;
 
 type unitary =
     | Sequence of unitary * unitary
-    | Apply of {gate:gate; qregs:qreg list}
-    | WithControl of {gate:gate; ctls:qreg list; tg:qreg}
+    | Apply of {gate:gate; qregs:string list}
+    | WithControl of {gate:gate; ctls:string list; tg:string}
     | FUN of {id:string; args: string list}
     | REV of {id:string; args: string list};;
 
@@ -63,7 +59,7 @@ type instruction =
 
 type circ =
 {
-    qregs: qreg list;
+    qregs: string list;
     body: instruction list
 }
 
@@ -96,9 +92,29 @@ let p (program) = {
     main = {
         id="main";
         circ= {
-            qregs= [{id="qr"; range=5}];
-            body= [Unitary (Apply {gate=H; qregs=[{id="qr"; range=5}]});
-                    If {cond= Gt {Var "a"; Num 0}; body=[Unitary (Apply {gate=H; qregs=[{id="qr"; range=5}]})]; assertion=[]};
+            qregs= ["qr"];
+            body= [Unitary (Apply {gate=H; qregs=["qr"]});
+                    If {
+                        cond= Gt (Var "a", Num 0);
+                        body=[Unitary (Apply {gate=H; qregs=["qr"]})];
+                        assertion=[]
+                    };
+                    For {
+                        iter = {
+                            iterator="i";
+                            starts="0";
+                            ends="n-1"
+                        };
+                        inv = [];
+                        body= [
+                            Unitary(WithControl{
+                                gate= Rz "1";
+                                ctls= ["i"];
+                                tg= "n-1"
+                            })
+                        ];
+                        assertion=[]
+                    };
                     Return "c"]
         };
         params = [];
@@ -106,4 +122,5 @@ let p (program) = {
         pos = ["poscond"];
     };
     aux = []
-}
+};;
+
