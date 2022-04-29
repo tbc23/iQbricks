@@ -5,12 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="51950d2f-e0a2-4e54-a47f-0db7ffbc82fd" name="Changes" comment="Make visit functions return Nodes (almost complete)">
-      <change afterPath="$PROJECT_DIR$/src/ML_eval.ml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/EvaluateVisitor2.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ML_AST2.cmi" beforeDir="false" afterPath="$PROJECT_DIR$/src/ML_AST2.cmi" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ML_AST2.cmi" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ML_AST2.cmo" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ML_AST2.ml" beforeDir="false" afterPath="$PROJECT_DIR$/src/ML_AST2.ml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/program" beforeDir="false" afterPath="$PROJECT_DIR$/src/program" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ML_eval.ml" beforeDir="false" afterPath="$PROJECT_DIR$/src/ML_eval.ml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/a.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/program" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
