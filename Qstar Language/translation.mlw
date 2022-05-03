@@ -1,179 +1,100 @@
-module GROVER
-use qbricks.Circuit_macros
-use export binary.Bit_vector
-use wired_circuits.Circuit_c
-use export p_int.Int_comp
-use ref.Ref
+let p = {
+    id = "program";
+    aux = [
 
-let diffusor(qr aux n:int): circuit
-requires {n > 0}
-requires {qr+aux = n}
-requires {true}
-ensures {true}
-ensures {width result = n}
-ensures {range result = n}
-=
-begin
-let c = ref (m_skip n) in 
-let c1 = ref (m_skip n)
-in let ref i = 0 
-in while (i < qr) do
-variant{qr - i}
-invariant{0 <= i <= qr}
-invariant{range !c1 = i}
-invariant{width !c1 = qr}
-c1:= !c1 -- (place_hadamard i n);
-i := i + 1
-done;
-c:= !c -- !c1;
-let c1 = ref (m_skip n)
-in let ref i = 0 
-in while (i < qr) do
-variant{qr - i}
-invariant{0 <= i <= qr}
-invariant{width !c1 = qr}
-c1:= !c1 -- (place xx i n);
-i := i + 1
-done;
-assert{true};
-c:= !c -- !c1;
-let c1 = ref zz 
-in let ref ctl = 0 
-in while (ctl < n-1) do
-variant{n-1 - ctl}
-invariant{0 <= ctl <= n-1}
-invariant{range !c1 = 0}
-c1:= cont_diag !c1 ctl (n-1) n;
-assert{true};
-ctl := ctl + 1
-done;
-assert{true};
-c:= !c -- !c1;
-let c1 = ref (m_skip n)
-in let ref i = 0 
-in while (i < qr) do
-variant{qr - i}
-invariant{0 <= i <= qr}
-invariant{width !c1 = qr}
-c1:= !c1 -- (place xx i n);
-i := i + 1
-done;
-c:= !c -- !c1;
-let c1 = ref (m_skip n)
-in let ref i = 0 
-in while (i < qr) do
-variant{qr - i}
-invariant{0 <= i <= qr}
-invariant{range !c1 = i}
-invariant{width !c1 = qr}
-c1:= !c1 -- (place_hadamard i n);
-i := i + 1
-done;
-c:= !c -- !c1;
-return (!c)
-end
+{
+ id = "diffusor";
+circ = {
+qregs= ["qr"; "aux"];
+body = [
+Unitary (Apply {gate=H; qreg="qr"; range={starts="0"; ends="n"}});
+Unitary (Apply {gate=X; qreg="qr"; range={starts="0"; ends="n"}});
+Unitary(WithControl{gate= Z; ctls=["0 to Minus"]; tg="Minus Num 1"})
+Unitary (Apply {gate=X; qreg="qr"; range={starts="0"; ends="n"}});
+Unitary (Apply {gate=H; qreg="qr"; range={starts="0"; ends="n"}});
+Return "";
+];
+params = [{id="qr";  type_=Qreg}; {id="aux";  type_=Qreg}; ];
 
-let oracle(qr aux n:int): circuit
-requires {n > 0}
-requires {qr = n}
-requires {true}
-ensures {true}
-ensures {width result = n}
-ensures {range result = n}
-=
-begin
-let c = ref (m_skip n) in 
-return (!c)
-end
+pre = ["{true}"; ];
 
-let grover_iter(qr aux n:int): circuit
-requires {n > 0}
-requires {qr = n}
-requires {true}
-ensures {true}
-ensures {width result = n}
-ensures {range result = n}
-=
-begin
-let c = ref (m_skip n) in 
-c:= !c -- (oracle qr aux n);
-c:= !c -- (diffusor qr aux n);
-assert{true};
-return (!c)
-end
+pos = ["{true}"; ];
 
-let init(qr aux n:int): circuit
-requires {n > 0}
-requires {qr+aux = n}
-requires {true}
-ensures {true}
-ensures {width result = n}
-ensures {range result = n}
-=
-begin
-let c = ref (m_skip n) in 
-let c1 = ref (m_skip n)
-in let ref i = 0
-in while (i < n-1) do
-variant{n-1 - i}
-invariant{0 <= i <= n-1}
-invariant{range !c1 = i}
-invariant{width !c1 = n-1 - 0}
-c1:= !c1 -- (place_hadamard i n);
-i := i + 1
-done;
-c:= !c -- !c1;
-let c1 = ref (m_skip n)
-in let ref i = 0 
-in while (i < aux) do
-variant{aux - i}
-invariant{0 <= i <= aux}
-invariant{width !c1 = aux}
-c1:= !c1 -- (place xx i n);
-i := i + 1
-done;
-assert{true};
-c:= !c -- !c1;
-let c1 = ref (m_skip n)
-in let ref i = 0 
-in while (i < aux) do
-variant{aux - i}
-invariant{0 <= i <= aux}
-invariant{range !c1 = i}
-invariant{width !c1 = aux}
-c1:= !c1 -- (place_hadamard i n);
-i := i + 1
-done;
-assert{true};
-c:= !c -- !c1;
-return (!c)
-end
+}
+};
+{
+ id = "oracle";
+circ = {
+qregs= ["qr"];
+body = [
+Return "";
+];
+params = [{id="qr";  type_=Qreg}; {id="aux";  type_=Qreg}; ];
 
-let main (qr aux iters n:int): circuit
-requires {n > 0}
-requires {qr+aux = n}
-requires {true}
-ensures {true}
-ensures {width result = n}
-ensures {range result = n}
-=
-begin
-let c = ref (m_skip n) in 
-c:= !c -- (init qr aux n);
-assert{true};
-let c1 = ref (m_skip n)
-in let ref i = 0
-in while (i<iters) do
-variant{iters - i}
-invariant{0 <= i <= iters}
-invariant{width !c1 = n}
-invariant{true}
-c1:= !c1 -- (grover_iter qr aux n);
-assert{true};
-i := i + 1
-done;
-c:= !c -- !c1;
-return (!c)
-end
+pre = ["{true}"; ];
 
-end
+pos = ["{true}"; ];
+
+}
+};
+{
+ id = "grover_iter";
+circ = {
+qregs= ["qr"];
+body = [
+Unitary (FUN {id="oracle"; args=["Var "qr""; "Var "aux""; ]};
+Unitary (FUN {id="diffusor"; args=["Var "qr""; "Var "aux""; ]};
+Return "";
+];
+params = [{id="qr";  type_=Qreg}; {id="aux";  type_=Qreg}; ];
+
+pre = ["{true}"; ];
+
+pos = ["{true}"; ];
+
+}
+};
+{
+ id = "init";
+circ = {
+qregs= ["qr"; "aux"];
+body = [
+Unitary (Apply {gate=H; qreg="qr"; range={starts="0"; ends="Minus"}});
+Unitary (Apply {gate=X; qreg="aux"; range={starts="0"; ends="n"}});
+Unitary (Apply {gate=H; qreg="aux"; range={starts="0"; ends="n"}});
+Return "";
+];
+params = [{id="qr";  type_=Qreg}; {id="aux";  type_=Qreg}; ];
+
+pre = ["{true}"; ];
+
+pos = ["{true}"; ];
+
+}
+};
+];
+main = {
+ id = "grover";
+circ = {
+qregs= ["qr"; "aux"];
+body = [
+Unitary (FUN {id="init"; args=["Var "qr""; "Var "aux""; ]};
+For {
+iter = {
+iterator= "i";
+starts = "0";
+ends = "Var "iters""};
+inv = ["{true}"; ];
+body = [
+Unitary (FUN {id="grover_iter"; args=["Var "qr""; "Var "aux""; ]};
+];
+assertion=[]
+};
+Return "";
+];
+
+pre = ["{true}"; ];
+
+pos = ["{true}"; ];
+
+};

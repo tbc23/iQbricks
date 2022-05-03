@@ -8,11 +8,18 @@ type qreg =
 {
     id: string;
     range: int;
-};;
+}
 
 type spec = {
      conds: string list
- } ;;
+ }
+
+type iter =
+{
+    iterator: string;
+    starts: int;
+    ends: int;
+}
 
 type expr =
     | Plus of expr * expr        (* a + b *)
@@ -23,7 +30,7 @@ type expr =
     | Minus of expr
     | Len of qreg
     | Sqrt of expr
-    | Var of atom              (* "x", "y", etc. *);;
+    | Var of atom              (* "x", "y", etc. *) ;;
 
 type cond =
     | Eq of cond * cond         (* a == b *)
@@ -42,19 +49,18 @@ type gate =
     | Rz of {ang:int}
     | Ph of {ang:int} ;;
 
-type iter =
-{
-    iterator: string;
-    starts: int;
-    ends: int;
-}
+type unitary =
+    | Sequence of unitary * unitary
+    | Apply of {gate:gate; qregs:qreg list}
+    | WithControl of {gate:gate; ctls:qreg list; tg:qreg}
+    | FUN of {id:string; args: string list}
+    | REV of {id:string; args: string list};;
 
 type instruction =
     | For of {iter:iter, inv: spec; body:instruction list; assertion: spec}
     | If of {cond: expr; body:instruction list ; assertion: spec}
     | IfElse of {cond:expr; ifbody:instruction list; elsebody:instruction list; assertion:spec}
-    | Apply of {gate:gate; qregs:qreg list}
-    | WithControl of {gate:gate; ctls:qreg list; tg:qreg}
+    | Unitary of unitary
     | Return of expr;;
 
 type circ =
@@ -86,3 +92,21 @@ type program =
      main: fun_;
      aux: fun_ list;
 }
+
+(*let p (program) = {
+    id = "program";
+    main = {
+        id="main";
+        circ= {
+            qregs= [{id="qr";range=n}];
+            body= [
+            Unitary Apply (H, {id="qr";range=n})
+            ]
+        };
+        params = [];
+        pre = "precond";
+        pos = "poscond";
+    }
+}*)
+
+end

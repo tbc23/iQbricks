@@ -95,7 +95,9 @@ class SingleParam extends ParamsNode {
 
     public String getId() { return id; }
 
-    public String getType() { return type; }
+    public String getType() {
+        return type.substring(0,1).toUpperCase()+type.substring(1);
+    }
 }
 
 class CircNode extends ProgramNode {
