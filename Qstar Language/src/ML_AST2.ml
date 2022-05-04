@@ -1,25 +1,6 @@
-type qreg =
-{
-    id: string;
-(*    range: int;*)
-}
-
 type spec = {
      conds: string list
  }
-
-type iter =
-{
-    iterator: string;
-    starts: string;
-    ends: string;
-}
-
-type range =
-{
-    starts: string;
-    ends: string;
-}
 
 type expr =
     | Plus of expr * expr        (* a + b *)
@@ -33,6 +14,25 @@ type expr =
     | Num of int
     | Var of string              (* "x", "y", etc. *) ;;
 
+type iter =
+{
+    iterator: string;
+    starts: expr;
+    ends: expr;
+}
+
+type qreg =
+{
+    id: string;
+    size: expr;
+}
+
+type range =
+{
+    starts: expr;
+    ends: expr;
+}
+
 type cond =
     | Eq of expr * expr         (* a == b *)
     | NEq of expr * expr        (* a != b *)
@@ -43,21 +43,21 @@ type cond =
 
 type gate =
     | H | X | Y | Z | T | S
-    | Rx of string
-    | Ry of string
-    | Rz of string
-    | Ph of string ;;
+    | Rx of expr
+    | Ry of expr
+    | Rz of expr
+    | Ph of expr ;;
 
 type multigate =
     | Cnot | Toff | Fred | SWAP ;;
 
 type unitary =
-    | Sequence of unitary * unitary
+(*    | Sequence of unitary * unitary*)
     | Apply of {gate:gate; qreg:string; range:range}
     | MultiApply of {gate:multigate; ctls: string list; tg:string}
     | WithControl of {gate:gate; ctls: string list; tg:string}
-    | FUN of {id:string; args: string list}
-    | REV of {id:string; args: string list} ;;
+    | FUN of {id:string; args: expr list}
+    | REV of {id:string; args: expr list} ;;
 
 type instruction =
     | For of {iter:iter; inv: string list; body:instruction list; assertion: string list}
@@ -68,7 +68,7 @@ type instruction =
 
 type circ =
 {
-    qregs: string list;
+    qregs: qreg list;
     body: instruction list
 }
 

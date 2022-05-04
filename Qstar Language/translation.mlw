@@ -1,100 +1,92 @@
 let p = {
     id = "program";
-    aux = [
+aux = [
 
 {
- id = "diffusor";
+id = "diffusor";
 circ = {
-qregs= ["qr"; "aux"];
+qregs= [{id="qr"; size=Num 0}; {id="aux"; size=Num 0}];
 body = [
-Unitary (Apply {gate=H; qreg="qr"; range={starts="0"; ends="n"}});
-Unitary (Apply {gate=X; qreg="qr"; range={starts="0"; ends="n"}});
-Unitary(WithControl{gate= Z; ctls=["0 to Minus"]; tg="Minus Num 1"})
-Unitary (Apply {gate=X; qreg="qr"; range={starts="0"; ends="n"}});
-Unitary (Apply {gate=H; qreg="qr"; range={starts="0"; ends="n"}});
+Unitary (Apply {gate=H; qreg="qr"; range={starts=Num 0; ends=Var "n"}});
+Unitary (Apply {gate=X; qreg="qr"; range={starts=Num 0; ends=Var "n"}});
+Unitary(WithControl{gate= Z; ctls=["Num 0 to Subtract (Var "n", Num 1)"]; tg="Subtract (Var "n", Num 1)"});
+Unitary (Apply {gate=X; qreg="qr"; range={starts=Num 0; ends=Var "n"}});
+Unitary (Apply {gate=H; qreg="qr"; range={starts=Num 0; ends=Var "n"}});
 Return "";
 ];
-params = [{id="qr";  type_=Qreg}; {id="aux";  type_=Qreg}; ];
-
-pre = ["{true}"; ];
-
-pos = ["{true}"; ];
-
-}
 };
+params = [{id="qr";  type_=Qreg}; {id="aux";  type_=Qreg}; ];
+pre = ["{true}"; ];
+pos = ["{true}"; ];
+};
+
 {
- id = "oracle";
+id = "oracle";
 circ = {
-qregs= ["qr"];
+qregs= [{id="qr"; size=Num 0}];
 body = [
 Return "";
 ];
-params = [{id="qr";  type_=Qreg}; {id="aux";  type_=Qreg}; ];
-
-pre = ["{true}"; ];
-
-pos = ["{true}"; ];
-
-}
 };
+params = [{id="qr";  type_=Qreg}; {id="aux";  type_=Qreg}; ];
+pre = ["{true}"; ];
+pos = ["{true}"; ];
+};
+
 {
- id = "grover_iter";
+id = "grover_iter";
 circ = {
-qregs= ["qr"];
+qregs= [{id="qr"; size=Num 0}];
 body = [
-Unitary (FUN {id="oracle"; args=["Var "qr""; "Var "aux""; ]};
-Unitary (FUN {id="diffusor"; args=["Var "qr""; "Var "aux""; ]};
+Unitary (FUN {id="oracle"; args=[Var "qr"; Var "aux"; ]});
+Unitary (FUN {id="diffusor"; args=[Var "qr"; Var "aux"; ]});
 Return "";
 ];
-params = [{id="qr";  type_=Qreg}; {id="aux";  type_=Qreg}; ];
-
-pre = ["{true}"; ];
-
-pos = ["{true}"; ];
-
-}
 };
+params = [{id="qr";  type_=Qreg}; {id="aux";  type_=Qreg}; ];
+pre = ["{true}"; ];
+pos = ["{true}"; ];
+};
+
 {
- id = "init";
+id = "init";
 circ = {
-qregs= ["qr"; "aux"];
+qregs= [{id="qr"; size=Num 0}; {id="aux"; size=Num 0}];
 body = [
-Unitary (Apply {gate=H; qreg="qr"; range={starts="0"; ends="Minus"}});
-Unitary (Apply {gate=X; qreg="aux"; range={starts="0"; ends="n"}});
-Unitary (Apply {gate=H; qreg="aux"; range={starts="0"; ends="n"}});
+Unitary (Apply {gate=H; qreg="qr"; range={starts=Num 0; ends=Subtract (Var "n", Num 1)}});
+Unitary (Apply {gate=X; qreg="aux"; range={starts=Num 0; ends=Var "n"}});
+Unitary (Apply {gate=H; qreg="aux"; range={starts=Num 0; ends=Var "n"}});
 Return "";
 ];
-params = [{id="qr";  type_=Qreg}; {id="aux";  type_=Qreg}; ];
-
-pre = ["{true}"; ];
-
-pos = ["{true}"; ];
-
-}
 };
+params = [{id="qr";  type_=Qreg}; {id="aux";  type_=Qreg}; ];
+pre = ["{true}"; ];
+pos = ["{true}"; ];
+};
+
 ];
 main = {
  id = "grover";
 circ = {
-qregs= ["qr"; "aux"];
+qregs= [{id="qr"; size=Num 0}; {id="aux"; size=Num 0}];
 body = [
-Unitary (FUN {id="init"; args=["Var "qr""; "Var "aux""; ]};
+Unitary (FUN {id="init"; args=[Var "qr"; Var "aux"; ]});
 For {
 iter = {
 iterator= "i";
-starts = "0";
-ends = "Var "iters""};
+starts = Num 0;
+ends = Var "iters"
+};
 inv = ["{true}"; ];
 body = [
-Unitary (FUN {id="grover_iter"; args=["Var "qr""; "Var "aux""; ]};
+Unitary (FUN {id="grover_iter"; args=[Var "qr"; Var "aux"; ]});
 ];
 assertion=[]
 };
 Return "";
 ];
-
-pre = ["{true}"; ];
-
-pos = ["{true}"; ];
-
 };
+params = [{id="qr";  type_=Qreg}; {id="aux";  type_=Qreg}; {id="iters";  type_=Int}; ];
+pre = ["{true}"; ];
+pos = ["{true}"; ];
+}};;
