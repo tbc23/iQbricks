@@ -515,6 +515,8 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
     @Override public AST visitTermRange(QbricksParser.TermRangeContext ctx) {
         RangeNode node = new RangeNode();
         TermNode term = (TermNode) visit(ctx.term());
+        String id = ctx.getParent().getChild(0).getText();
+        node.setIterator(id);
         node.set(term,term);
         return node;
     }
@@ -523,7 +525,8 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
         // Start at 0 and go up until the value defined by "term"
         RangeNode node = new RangeNode();
         TermNode end = (TermNode) visit(ctx.term());
-
+        String id = ctx.getParent().getChild(0).getText();
+        node.setIterator(id);
         node.set(null,end);
         return node;
     }
@@ -532,7 +535,8 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
         // Start at term and go up until the value defined by the qr size (how do I find it?)
         RangeNode node = new RangeNode();
         TermNode start = (TermNode) visit(ctx.term());
-
+        String id = ctx.getParent().getChild(0).getText();
+        node.setIterator(id);
         node.set(start,null);
         return node;
     }
@@ -543,7 +547,8 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
         RangeNode node = new RangeNode();
         TermNode start = (TermNode) visit(ctx.getChild(0));
         TermNode end = (TermNode) visit(ctx.getChild(3));
-
+        String id = ctx.getParent().getChild(0).getText();
+        node.setIterator(id);
         node.set(start,end);
         return node;
     }

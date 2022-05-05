@@ -44,17 +44,18 @@ let run_multigate = function
 
 let run_range = function
     {starts; ends} ->
-        if (starts=ends) then run_expr starts
-        else run_expr starts ^ " to " ^ run_expr ends
+        if (starts=ends) then "[" ^ run_expr starts ^ "]"
+        else "[" ^ run_expr starts ^ " to " ^ run_expr ends ^ "]"
 
 let rec run_unitary = function
 (*    | Sequence (e, d) -> "seq " ^ run_unitary e ^ run_unitary d*)
     | Apply {gate; qreg; range} ->
         run_gate gate ^ " " ^ qreg ^ " " ^ run_range range
-    | MultiApply {gate; ctls; tg} ->
-        run_multigate gate ^ (String.concat " " ctls) ^ " " ^ tg
-    | WithControl {gate; ctls; tg} ->
-        "ctl (" ^ run_gate gate ^ ") " ^ (String.concat " " ctls) ^ " " ^ tg
+    | MultiApply {gate; qregs} ->
+        run_multigate gate ^ (String.concat "" qregs)
+    | WithControl {gate; ctls; range; tg} ->
+        "ctl (" ^ run_gate gate ^ ") (" ^ (String.concat " " ctls) ^ " "
+        ^ run_range range ^ ") " ^ run_expr tg
     | FUN {id; args} ->
         id ^ " " ^ String.concat " " (List.map run_expr args)
     | REV {id; args} ->
@@ -97,7 +98,7 @@ let run_fun = function
 let run_program {id; main; aux} =
      run_fun main ^ (String.concat "" (List.map run_fun aux));;
 
-let p = {
+(*let p = {
     id = "program";
     main = {
         id="main";
@@ -132,97 +133,44 @@ let p = {
         pos = ["postcond"];
     };
     aux = []
-};;
+};;*)
 
 let p2 = {
     id = "program";
-aux = [
-
-{
-id = "diffusor";
-circ = {
-qregs= [{id="qr"; size=Num 0}; {id="aux"; size=Num 0}];
-body = [
-Unitary (Apply {gate=H; qreg="qr"; range={starts=Num 0; ends=Var "n"}});
-Unitary (Apply {gate=X; qreg="qr"; range={starts=Num 0; ends=Var "n"}});
-Unitary(WithControl{gate= Z; ctls=["Num 0 to Subtract (Var \"n\", Num 1)"]; tg="Subtract (Var \"n\", Num 1)"});
-Unitary (Apply {gate=X; qreg="qr"; range={starts=Num 0; ends=Var "n"}});
-Unitary (Apply {gate=H; qreg="qr"; range={starts=Num 0; ends=Var "n"}});
-Return "";
-];
-};
-params = [{id="qr";  type_=Qreg}; {id="aux";  type_=Qreg}; ];
-pre = ["{true}"; ];
-pos = ["{true}"; ];
-};
-
-{
-id = "oracle";
-circ = {
-qregs= [{id="qr"; size=Num 0}];
-body = [
-Return "";
-];
-};
-params = [{id="qr";  type_=Qreg}; {id="aux";  type_=Qreg}; ];
-pre = ["{true}"; ];
-pos = ["{true}"; ];
-};
-
-{
-id = "grover_iter";
-circ = {
-qregs= [{id="qr"; size=Num 0}];
-body = [
-Unitary (FUN {id="oracle"; args=[Var "qr"; Var "aux"; ]});
-Unitary (FUN {id="diffusor"; args=[Var "qr"; Var "aux"; ]});
-Return "";
-];
-};
-params = [{id="qr";  type_=Qreg}; {id="aux";  type_=Qreg}; ];
-pre = ["{true}"; ];
-pos = ["{true}"; ];
-};
-
-{
-id = "init";
-circ = {
-qregs= [{id="qr"; size=Num 0}; {id="aux"; size=Num 0}];
-body = [
-Unitary (Apply {gate=H; qreg="qr"; range={starts=Num 0; ends=Subtract (Var "n", Num 1)}});
-Unitary (Apply {gate=X; qreg="aux"; range={starts=Num 0; ends=Var "n"}});
-Unitary (Apply {gate=H; qreg="aux"; range={starts=Num 0; ends=Var "n"}});
-Return "";
-];
-};
-params = [{id="qr";  type_=Qreg}; {id="aux";  type_=Qreg}; ];
-pre = ["{true}"; ];
-pos = ["{true}"; ];
-};
-
-];
+aux = [];
 main = {
- id = "grover";
+ id = "qft";
 circ = {
-qregs= [{id="qr"; size=Num 0}; {id="aux"; size=Num 0}];
+qregs= [{id="qr"; size=Num 0}];
 body = [
-Unitary (FUN {id="init"; args=[Var "qr"; Var "aux"; ]});
+For {
+iter = {
+iterator= "q";
+starts = Num 0;
+ends = Len "qr"
+};
+inv = ["{ true }"; ];
+body = [
+Unitary (Apply {gate=H; qreg="qr"; range={starts=Var "q"; ends=Var "q"}});
 For {
 iter = {
 iterator= "i";
-starts = Num 0;
-ends = Var "iters"
+starts = Var "q";
+ends = Subtract (Len "qr", Num 1)
 };
-inv = ["{true}"; ];
+inv = ["{ true }"; ];
 body = [
-Unitary (FUN {id="grover_iter"; args=[Var "qr"; Var "aux"; ]});
+Unitary(WithControl{gate= Rz (Subtract (Subtract (Var "n",Var "i"),Num 1)); ctls=["qr"; ]; range={starts=Plus (Var "i",Num 1); ends=Plus (Var "i",Num 1)}; tg=Var "q"});
 ];
 assertion=[]
+};
+];
+assertion=["{true}"; ]
 };
 Return "";
 ];
 };
-params = [{id="qr";  type_=Qreg}; {id="aux";  type_=Qreg}; {id="iters";  type_=Int}; ];
+params = [{id="qr";  type_=Qreg}; ];
 pre = ["{true}"; ];
 pos = ["{true}"; ];
 }};;

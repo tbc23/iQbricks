@@ -51,10 +51,11 @@ let rec run_unitary = function
 (*    | Sequence (e, d) -> "seq " ^ run_unitary e ^ run_unitary d*)
     | Apply {gate; qreg; range} ->
         run_gate gate ^ " " ^ qreg ^ " " ^ run_range range
-    | MultiApply {gate; ctls; tg} ->
-        run_multigate gate ^ (String.concat " " ctls) ^ " " ^ tg
-    | WithControl {gate; ctls; tg} ->
-        "ctl (" ^ run_gate gate ^ ") " ^ (String.concat " " ctls) ^ " " ^ tg
+    | MultiApply {gate; qregs} ->
+        run_multigate gate ^ (String.concat "" qregs)
+    | WithControl {gate; ctls; range; tg} ->
+        "ctl (" ^ run_gate gate ^ ") (" ^ (String.concat " " ctls) ^ " "
+        ^ run_range range ^ ") " ^ run_expr tg
     | FUN {id; args} ->
         id ^ " " ^ String.concat " " (List.map run_expr args)
     | REV {id; args} ->
@@ -97,7 +98,7 @@ let run_fun = function
 let run_program {id; main; aux} =
      run_fun main ^ (String.concat "" (List.map run_fun aux));;
 
-let p = {
+(*let p = {
     id = "program";
     main = {
         id="main";
@@ -132,7 +133,7 @@ let p = {
         pos = ["postcond"];
     };
     aux = []
-};;
+};;*)
 
 let p2 = {
     id = "program";
@@ -145,7 +146,7 @@ qregs= [{id="qr"; size=Num 0}; {id="aux"; size=Num 0}];
 body = [
 Unitary (Apply {gate=H; qreg="qr"; range={starts=Num 0; ends=Var "n"}});
 Unitary (Apply {gate=X; qreg="qr"; range={starts=Num 0; ends=Var "n"}});
-Unitary(WithControl{gate= Z; ctls=["0 to Minus Num 1"]; tg="Minus Num 1"});
+Unitary(WithControl{gate= Z; ctls=["qr"; ]; range={starts=Num 0; ends=Subtract (Len "qr", Num 1)}; tg=Subtract (Len "qr", Num 1)});
 Unitary (Apply {gate=X; qreg="qr"; range={starts=Num 0; ends=Var "n"}});
 Unitary (Apply {gate=H; qreg="qr"; range={starts=Num 0; ends=Var "n"}});
 Return "";
@@ -189,7 +190,7 @@ id = "init";
 circ = {
 qregs= [{id="qr"; size=Num 0}; {id="aux"; size=Num 0}];
 body = [
-Unitary (Apply {gate=H; qreg="qr"; range={starts=0; ends=Minus Num 1}});
+Unitary (Apply {gate=H; qreg="qr"; range={starts=Num 0; ends=Subtract (Len "qr", Num 1)}});
 Unitary (Apply {gate=X; qreg="aux"; range={starts=Num 0; ends=Var "n"}});
 Unitary (Apply {gate=H; qreg="aux"; range={starts=Num 0; ends=Var "n"}});
 Return "";

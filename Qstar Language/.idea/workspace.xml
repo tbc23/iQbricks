@@ -12,22 +12,21 @@
       <change beforePath="$PROJECT_DIR$/out/production/Qbricks/ML_AST2.ml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/ML_AST2.ml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Qbricks/ML_AST2.o" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/ML_AST2.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Qbricks/ML_eval.cmi" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/ML_eval.cmi" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/ML_eval.cmx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Qbricks/ML_eval.ml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/ML_eval.ml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/ML_eval.o" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Qbricks/program" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/program" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Qbricks/tmp/src/ML_AST.ml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ASTBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ASTBuilder.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/EvaluateVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/EvaluateVisitor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ML_AST2.cmi" beforeDir="false" afterPath="$PROJECT_DIR$/src/ML_AST2.cmi" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ML_AST2.cmx" beforeDir="false" afterPath="$PROJECT_DIR$/src/ML_AST2.cmx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ML_AST2.ml" beforeDir="false" afterPath="$PROJECT_DIR$/src/ML_AST2.ml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ML_AST2.o" beforeDir="false" afterPath="$PROJECT_DIR$/src/ML_AST2.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ML_eval.cmi" beforeDir="false" afterPath="$PROJECT_DIR$/src/ML_eval.cmi" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ML_eval.cmx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ML_eval.cmx" beforeDir="false" afterPath="$PROJECT_DIR$/src/ML_eval.cmx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ML_eval.ml" beforeDir="false" afterPath="$PROJECT_DIR$/src/ML_eval.ml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ML_eval.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ML_eval.o" beforeDir="false" afterPath="$PROJECT_DIR$/src/ML_eval.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/program" beforeDir="false" afterPath="$PROJECT_DIR$/src/program" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/test2.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/translation.mlw" beforeDir="false" afterPath="$PROJECT_DIR$/translation.mlw" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
