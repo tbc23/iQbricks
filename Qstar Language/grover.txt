@@ -1,6 +1,6 @@
 || grover || (qreg qr, qreg aux, int iters)
 pre {true}
-	circ qr, aux ->
+	circ qr[4], aux[1] ->
         init(qr,aux)
         assert{true}
         for i in range(iters) {

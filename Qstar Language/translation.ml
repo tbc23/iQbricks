@@ -1,3 +1,6 @@
+open ML_AST2
+open ML_eval
+
 let p = {
     id = "program";
 aux = [];
@@ -23,7 +26,8 @@ ends = Subtract (Len "qr", Num 1)
 };
 inv = ["{ true }"; ];
 body = [
-Unitary(WithControl{gate= Rz (Subtract (Subtract (Var "n",Var "i"),Num 1)); ctls=["qr"; ]; range={starts=Plus (Var "i",Num 1); ends=Plus (Var "i",Num 1)}; tg=Var "q"});
+Unitary(WithControl{gate=(Apply {gate=Rz (Subtract (Subtract (Var "n",Var "i"),Num 1)); qreg="qr"; range={starts=Var "q"; ends=Var "q"}});
+ctls=["qr"; ]; range={starts=Plus (Var "i",Num 1); ends=Plus (Var "i",Num 1)}; tg=Var "q"});
 ];
 assertion=[]
 };
@@ -37,3 +41,6 @@ params = [{id="qr";  type_=Qreg}; ];
 pre = ["{true}"; ];
 pos = ["{true}"; ];
 }};;
+
+let run = run_program p ;;
+print_endline run;;

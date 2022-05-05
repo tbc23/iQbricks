@@ -54,7 +54,7 @@ let rec run_unitary = function
     | MultiApply {gate; qregs} ->
         run_multigate gate ^ (String.concat "" qregs)
     | WithControl {gate; ctls; range; tg} ->
-        "ctl (" ^ run_gate gate ^ ") (" ^ (String.concat " " ctls) ^ " "
+        "ctl (" ^ run_unitary gate ^ ") (" ^ (String.concat " " ctls) ^ " "
         ^ run_range range ^ ") " ^ run_expr tg
     | FUN {id; args} ->
         id ^ " " ^ String.concat " " (List.map run_expr args)
@@ -87,7 +87,7 @@ let rec run_instr = function
     | Unitary (unit) -> run_unitary unit
     | Return (e) -> "return\n" ;;
 
-let run_circ = function (*dont forget to visit the qrs*)
+let run_circ = function
     {qregs; body} ->
      (String.concat "" (List.map run_qreg qregs)) ^ (String.concat "\n" (List.map run_instr body)) ;;
 
@@ -134,47 +134,4 @@ let run_program {id; main; aux} =
     };
     aux = []
 };;*)
-
-let p2 = {
-    id = "program";
-aux = [];
-main = {
- id = "qft";
-circ = {
-qregs= [{id="qr"; size=Num 0}];
-body = [
-For {
-iter = {
-iterator= "q";
-starts = Num 0;
-ends = Len "qr"
-};
-inv = ["{ true }"; ];
-body = [
-Unitary (Apply {gate=H; qreg="qr"; range={starts=Var "q"; ends=Var "q"}});
-For {
-iter = {
-iterator= "i";
-starts = Var "q";
-ends = Subtract (Len "qr", Num 1)
-};
-inv = ["{ true }"; ];
-body = [
-Unitary(WithControl{gate= Rz (Subtract (Subtract (Var "n",Var "i"),Num 1)); ctls=["qr"; ]; range={starts=Plus (Var "i",Num 1); ends=Plus (Var "i",Num 1)}; tg=Var "q"});
-];
-assertion=[]
-};
-];
-assertion=["{true}"; ]
-};
-Return "";
-];
-};
-params = [{id="qr";  type_=Qreg}; ];
-pre = ["{true}"; ];
-pos = ["{true}"; ];
-}};;
-
-let run = run_program p2 ;;
-print_endline run;;
 

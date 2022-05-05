@@ -6,28 +6,30 @@
   <component name="ChangeListManager">
     <list default="true" id="51950d2f-e0a2-4e54-a47f-0db7ffbc82fd" name="Changes" comment="Make visit functions return Nodes (almost complete)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/grover.txt" beforeDir="false" afterPath="$PROJECT_DIR$/grover.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Qbricks/EvaluateVisitor.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/EvaluateVisitor.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/ML_AST2.cmi" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/ML_AST2.cmi" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/ML_AST2.cmx" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/ML_AST2.cmx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/ML_AST2.ml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/ML_AST2.ml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/ML_AST2.o" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/ML_AST2.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/ML_eval.cmi" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/ML_eval.cmi" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/ML_eval.ml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/ML_eval.ml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/program" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/program" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/tmp/src/ML_AST.ml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ASTBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ASTBuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/ML_AST.ml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/ML_AST2.cmi" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/ML_AST2.cmx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/ML_AST2.ml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/ML_AST2.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/ML_eval.cmi" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/ML_eval.ml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/program" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/EvaluateVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/EvaluateVisitor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ML_AST2.cmi" beforeDir="false" afterPath="$PROJECT_DIR$/src/ML_AST2.cmi" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ML_AST2.cmx" beforeDir="false" afterPath="$PROJECT_DIR$/src/ML_AST2.cmx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ML_AST2.ml" beforeDir="false" afterPath="$PROJECT_DIR$/src/ML_AST2.ml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ML_AST2.o" beforeDir="false" afterPath="$PROJECT_DIR$/src/ML_AST2.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ML_eval.cmi" beforeDir="false" afterPath="$PROJECT_DIR$/src/ML_eval.cmi" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ML_eval.cmx" beforeDir="false" afterPath="$PROJECT_DIR$/src/ML_eval.cmx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ML_eval.ml" beforeDir="false" afterPath="$PROJECT_DIR$/src/ML_eval.ml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ML_eval.o" beforeDir="false" afterPath="$PROJECT_DIR$/src/ML_eval.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ML_AST.ml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ML_AST2.cmi" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ML_AST2.cmx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ML_AST2.ml" beforeDir="false" afterPath="$PROJECT_DIR$/ML_AST2.ml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ML_AST2.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ML_eval.cmi" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ML_eval.cmx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ML_eval.ml" beforeDir="false" afterPath="$PROJECT_DIR$/ML_eval.ml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ML_eval.o" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/program" beforeDir="false" afterPath="$PROJECT_DIR$/src/program" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/translation.mlw" beforeDir="false" afterPath="$PROJECT_DIR$/translation.mlw" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/program" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/translation.mlw" beforeDir="false" afterPath="$PROJECT_DIR$/translation.ml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,6 +87,9 @@
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src" />
+      <recent name="$PROJECT_DIR$" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
