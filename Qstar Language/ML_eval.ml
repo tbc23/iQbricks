@@ -53,9 +53,9 @@ let rec run_unitary = function
         run_gate gate ^ " " ^ qreg ^ " " ^ run_range range
     | MultiApply {gate; qregs} ->
         run_multigate gate ^ (String.concat "" qregs)
-    | WithControl {gate; ctls; range; tg} ->
+    | WithControl {gate; ctls; range1; tg; range2} ->
         "ctl (" ^ run_unitary gate ^ ") (" ^ (String.concat " " ctls) ^ " "
-        ^ run_range range ^ ") " ^ run_expr tg
+        ^ run_range range1 ^ ") " ^ tg ^ run_range range2
     | FUN {id; args} ->
         id ^ " " ^ String.concat " " (List.map run_expr args)
     | REV {id; args} ->

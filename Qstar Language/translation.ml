@@ -27,7 +27,7 @@ ends = Subtract (Len "qr", Num 1)
 inv = ["{ true }"; ];
 body = [
 Unitary(WithControl{gate=(Apply {gate=Rz (Subtract (Subtract (Var "n",Var "i"),Num 1)); qreg="qr"; range={starts=Var "q"; ends=Var "q"}});
-ctls=["qr"; ]; range={starts=Plus (Var "i",Num 1); ends=Plus (Var "i",Num 1)}; tg=Var "q"});
+ctls=["qr"; ]; range1={starts=Plus (Var "i",Num 1); ends=Plus (Var "i",Num 1)}; tg="qr"; range2={starts=Var "q"; ends=Var "q"}});
 ];
 assertion=[]
 };
