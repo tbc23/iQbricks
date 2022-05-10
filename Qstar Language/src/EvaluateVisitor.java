@@ -9,6 +9,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
     public List<String> auxIds = new ArrayList<>();
     public List<String> global_qrs = new ArrayList<>();
     public Boolean diag = false;
+    public List<String> unitaries = new ArrayList<>();
 
     @Override
     public String Visit(ProgramNode node) {
@@ -143,9 +144,11 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
     @Override
     public String Visit(BodyNode node) {
         StringBuilder r = new StringBuilder("body = [\n");
+        unitaries.clear();
         for(InstrNode c:node.getBodyInstr()){
             r.append(Visit(c));
         }
+        //System.out.println(unitaries);
         return r+"];\n";
     }
 
@@ -170,8 +173,11 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         global_qrs.add(qr);
         if (node.getRegs().size()>1) {
             for (QregNode c : node.getRegs().subList(1, node.getRegs().size())) {
-                qr = Visit(c);
+                qr = c.getId();
                 qregs.append("; {id=\"").append(qr).append("\"; ");
+                if (c.hasRange())
+                    size = Visit(c.getRange());
+                else size = "Num 0";
                 qregs.append("size=").append(size).append("}");
                 //qregs.append("+").append(qr);
                 global_qrs.add(qr);
@@ -197,6 +203,8 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         ForIter iter = node.getIter();
         String iterator = iter.getIterator();
         circs.push("c"+circs.size());
+        if (!unitaries.isEmpty()) System.out.println("Sequence before for("+unitaries+")");
+
         s = "For {\n" + Visit(node.getIter())
             + Visit(node.getInvariant());
         r = "let "+circs.peek()+" = ref (m_skip n)\nin "
@@ -213,6 +221,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         s += body + Visit(node.getAssertion()) + "};\n";
         old = circs.pop();
         r += circs.peek()+":= !"+circs.peek()+" -- !"+old+";\n";
+        if (!unitaries.isEmpty()) System.out.println("Sequence after for("+unitaries+")");
         return s;
     }
 
@@ -410,6 +419,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             r = circs.peek()+":= !"+circs.peek()+" -- (place_hadamard ("
                     +qr+") n);\n" +Visit(node.getAssertion());
         }
+        unitaries.add(s);
         return s;
     }
 
@@ -637,6 +647,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             r = circs.peek()+":= !"+circs.peek()+" -- (place xx ("
                     +qr+") n);\n" +Visit(node.getAssertion());
         }
+        unitaries.add(s);
         return s;
     }
 
@@ -1063,7 +1074,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                     qr+") ("+ target + ") n);\n"+Visit(node.getAssertion());
             }
         }
-
+        unitaries.add(s.toString());
         return s.toString();
     }
 
