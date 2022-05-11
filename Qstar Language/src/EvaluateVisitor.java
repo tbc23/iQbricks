@@ -11,6 +11,22 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
     public Boolean diag = false;
     public List<String> unitaries = new ArrayList<>();
 
+    public String printUnitaries (List<String> l) {
+        String old, s="";
+        if (!l.isEmpty()) {
+            if (l.size() < 2)
+                s = "Unitary ("+l.get(0)+");\n";
+            else {
+                s = "Sequence ("+l.get(0)+","+l.get(1)+")";
+                for (int i = 2; l.size()>i; i++){
+                    old = s;
+                    s = "Sequence (" + l.get(i) + "," + old + ")";
+                } s += "Unitary("+s+");\n";
+            }
+        }
+        return s;
+    }
+
     @Override
     public String Visit(ProgramNode node) {
         StringBuilder r = new StringBuilder();
@@ -203,9 +219,9 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         ForIter iter = node.getIter();
         String iterator = iter.getIterator();
         circs.push("c"+circs.size());
-        if (!unitaries.isEmpty()) System.out.println("Sequence before for("+unitaries+")");
+        s = printUnitaries(unitaries);
 
-        s = "For {\n" + Visit(node.getIter())
+        s += "For {\n" + Visit(node.getIter())
             + Visit(node.getInvariant());
         r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                 + Visit(node.getIter())
@@ -218,10 +234,11 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         }
         r += body + iterator +" := " + iterator + " + 1\ndone;\n"
                 + Visit(node.getAssertion());
-        s += body + Visit(node.getAssertion()) + "};\n";
+        s += body + printUnitaries(unitaries) + Visit(node.getAssertion()) + "};\n";
         old = circs.pop();
         r += circs.peek()+":= !"+circs.peek()+" -- !"+old+";\n";
-        if (!unitaries.isEmpty()) System.out.println("Sequence after for("+unitaries+")");
+        //if (!unitaries.isEmpty()) System.out.println("Sequence after for("+unitaries+")");
+        unitaries.clear();
         return s;
     }
 
@@ -293,17 +310,19 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
     public String Visit(IfNode node) {
         String old, r,s;
         circs.push("c"+circs.size());
+        s = printUnitaries(unitaries);
         if(!node.getWithElse()) {
             s = "If {\ncond= " + Visit(node.getCond()) + ";\n"
-                + Visit(node.getIfBody()) + Visit(node.getAssertion())
-                + "};\n";
+                    + Visit(node.getIfBody()) + printUnitaries(unitaries)
+                    + Visit(node.getAssertion()) + "};\n";
             r = "let " + circs.peek() + " = ref (m_skip n)\nin " +
                     "if (" + Visit(node.getCond()) + ")\nthen begin\n" +
                     Visit(node.getAssertion()) + Visit(node.getIfBody()) + "end\n";
         }
         else {
             s = "IfElse {\ncond= " + Visit(node.getCond()) + ";\nif"
-                    + Visit(node.getIfBody()) + "else" + Visit(node.getElseBody())
+                    + Visit(node.getIfBody()) + printUnitaries(unitaries)
+                    + "else" + Visit(node.getElseBody()) + printUnitaries(unitaries)
                     + Visit(node.getAssertion())
                     + "};\n";
             r = "let " + circs.peek() + " = ref (m_skip n)\nin " +
@@ -313,6 +332,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         }
         old = circs.pop();
         r += circs.peek()+":= !"+circs.peek()+" -- !"+old+";\n";
+        unitaries.clear();
         return s;
     }
 
@@ -323,9 +343,10 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
 
     @Override
     public String Visit(RetNode node) {
+        String s = printUnitaries(unitaries);
         if(node.getArgBool())
-            return "Return \""+ Visit(node.getArgs())+"\";\n";
-        else return "Return \"\";\n";
+            return s+"Return \""+ Visit(node.getArgs())+"\";\n";
+        else return s+"Return \"\";\n";
     }
 
     @Override
@@ -343,9 +364,10 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         }
         r = circs.peek()+":= !"+circs.peek()+" -- ("+node.getFunID()+" "+args+"n);\n"
                     + Visit(node.getAssertion());
-        s = "Unitary (FUN {id=\"" + node.getFunID() + "\"; args=["
-            + args + "]});\n";
-        return s;
+        s = "FUN {id=\"" + node.getFunID() + "\"; args=["
+            + args + "]}";
+        unitaries.add(s);
+        return "";
     }
 
     @Override
@@ -363,9 +385,10 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         }
         r = circs.peek()+":= !"+circs.peek()+" -- ("+node.getFunID()+" "+args+"n);\n"
                 + Visit(node.getAssertion());
-        s = "Unitary (REV {id=\"" + node.getFunID() + "\"; args=["
-                + args + "]});\n";
-        return s;
+        s = "REV {id=\"" + node.getFunID() + "\"; args=["
+                + args + "]}";
+        unitaries.add(s);
+        return "";
     }
 
     @Override
@@ -376,8 +399,8 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         diag = true;
         if (global_qrs.contains(qr)) {
             circs.push("c"+circs.size());
-            s = "Unitary (Apply {gate=H; qreg=\"" + id +
-                "\"; range={starts=Num 0; ends=Var \"n\"}});\n";
+            s = "Apply {gate=H; qreg=\"" + id +
+                "\"; range={starts=Num 0; ends=Var \"n\"}}";
             r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                     + "let ref i = 0 \n"
                     + "in while (i < "+qr+") do\n"
@@ -397,9 +420,9 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             start = limits[0];
             end = limits[1];
             circs.push("c"+circs.size());
-            s = "Unitary (Apply {gate=H; qreg=\"" + id +
+            s = "Apply {gate=H; qreg=\"" + id +
                     "\"; range={starts="+start+
-                    "; ends="+end+"}});\n";
+                    "; ends="+end+"}}";
             r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                     + "let ref i = "+start+"\n"
                     + "in while (i < "+end+") do\n"
@@ -413,14 +436,14 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             r += circs.peek()+":= !"+circs.peek()+" -- !"+old+";\n";
         }
         else {
-            s = "Unitary (Apply {gate=H; qreg=\"" + id +
+            s = "Apply {gate=H; qreg=\"" + id +
                     "\"; range={starts="+qr+
-                    "; ends="+qr+"}});\n";
+                    "; ends="+qr+"}}";
             r = circs.peek()+":= !"+circs.peek()+" -- (place_hadamard ("
                     +qr+") n);\n" +Visit(node.getAssertion());
         }
         unitaries.add(s);
-        return s;
+        return "";
     }
 
     @Override
@@ -431,8 +454,9 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         diag = false;
         if (global_qrs.contains(qr)) {
             circs.push("c"+circs.size());
-            s = "Unitary (Apply {gate=Rx ("+Visit(node.getAngle())
-                    +"); qreg=\"" + id + "\"; range={starts=Num 0; ends=Var \"n\"}});\n";
+            s = "Apply {gate=Rx ("+Visit(node.getAngle())
+                    +"); qreg=\"" + id
+                    + "\"; range={starts=Num 0; ends=Var \"n\"}}";
             r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                     + "let ref i = 0 \n"
                     + "in while (i < "+qr+") do\n"
@@ -452,9 +476,9 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             start = limits[0];
             end = limits[1];
             circs.push("c"+circs.size());
-            s = "Unitary (Apply {gate=Rx ("+Visit(node.getAngle())
+            s = "Apply {gate=Rx ("+Visit(node.getAngle())
                     +"); qreg=\"" + id + "\"; range={starts="+
-                    start+"; ends="+end+"}});\n";
+                    start+"; ends="+end+"}}";
             r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                     + "let ref i = "+start+"\n"
                     + "in while (i < "+end+") do\n"
@@ -470,15 +494,16 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             r += circs.peek()+":= !"+circs.peek()+" -- !"+old+";\n";
         }
         else {
-            s = "Unitary (Apply {gate=Rx ("+Visit(node.getAngle())
+            s = "Apply {gate=Rx ("+Visit(node.getAngle())
                     +"); qreg=\"" + id + "\"; range={starts="+
-                    qr+"; ends="+qr+"}});\n";
+                    qr+"; ends="+qr+"}}";
             r = circs.peek()+":= !"+circs.peek()+" -- (place (rx ("
                     + Visit(node.getAngle())+")) ("
                     + qr +") n);\n"
                     +Visit(node.getAssertion());
         }
-        return s;
+        unitaries.add(s);
+        return "";
     }
 
     @Override
@@ -488,9 +513,9 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         diag = false;
         if (global_qrs.contains(qr)) {
             circs.push("c"+circs.size());
-            s = "Unitary (Apply {gate=Ry ("+Visit(node.getAngle())
+            s = "Apply {gate=Ry ("+Visit(node.getAngle())
                     +"); qreg=\"" + id
-                    + "\"; range={starts=Num 0; ends=Var \"n\"}});\n";
+                    + "\"; range={starts=Num 0; ends=Var \"n\"}}";
             r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                     + "let ref i = 0 \n"
                     + "in while (i < "+qr+") do\n"
@@ -510,9 +535,9 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             String start = limits[0];
             String end = limits[1];
             circs.push("c" + circs.size());
-            s = "Unitary (Apply {gate=Ry ("+Visit(node.getAngle())
+            s = "Apply {gate=Ry ("+Visit(node.getAngle())
                     +"); qreg=\"" + id + "\"; range={starts="+
-                    start+"; ends="+end+"}});\n";
+                    start+"; ends="+end+"}}";
             r = "let " + circs.peek() + " = ref (m_skip n)\nin "
                     + "let ref i = " + start + "\n"
                     + "in while (i < " + end + ") do\n"
@@ -528,15 +553,16 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             r += circs.peek()+":= !"+circs.peek()+" -- !"+old+";\n";
         }
         else {
-            s = "Unitary (Apply {gate=Ry ("+Visit(node.getAngle())
+            s = "Apply {gate=Ry ("+Visit(node.getAngle())
                     +"); qreg=\"" + id + "\"; range={starts="+
-                    qr+"; ends="+qr+"}});\n";
+                    qr+"; ends="+qr+"}}";
             r = circs.peek()+":= !"+circs.peek()+" -- (place (ry ("
                     + Visit(node.getAngle())+")) ("
                     + qr +") n);\n"
                     +Visit(node.getAssertion());
         }
-        return s;
+        unitaries.add(s);
+        return "";
     }
 
     @Override
@@ -546,9 +572,9 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         diag = true;
         if (global_qrs.contains(qr)) {
             circs.push("c"+circs.size());
-            s = "Unitary (Apply {gate=Rz ("+Visit(node.getAngle())
+            s = "Apply {gate=Rz ("+Visit(node.getAngle())
                     +"); qreg=\"" + id
-                    + "\"; range={starts=Num 0; ends=Var \"n\"}});\n";
+                    + "\"; range={starts=Num 0; ends=Var \"n\"}}";
             r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                     + "let ref i = 0 \n"
                     + "in while (i < "+qr+") do\n"
@@ -568,9 +594,9 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             String start = limits[0];
             String end = limits[1];
             circs.push("c" + circs.size());
-            s = "Unitary (Apply {gate=Rz ("+Visit(node.getAngle())
+            s = "Apply {gate=Rz ("+Visit(node.getAngle())
                     +"); qreg=\"" + id + "\"; range={starts="+
-                    start+"; ends="+end+"}});\n";
+                    start+"; ends="+end+"}}";
             r = "let " + circs.peek() + " = ref (m_skip n)\nin "
                     + "let ref i = " + start + "\n"
                     + "in while (i < " + end + ") do\n"
@@ -586,15 +612,16 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             r += circs.peek()+":= !"+circs.peek()+" -- !"+old+";\n";
         }
         else {
-            s = "Unitary (Apply {gate=Rz ("+Visit(node.getAngle())
+            s = "Apply {gate=Rz ("+Visit(node.getAngle())
                     +"); qreg=\"" + id + "\"; range={starts="+
-                    qr+"; ends="+qr+"}});\n";
+                    qr+"; ends="+qr+"}}";
             r = circs.peek()+":= seq_diag !"+circs.peek()+" (place (rz ("
                     + Visit(node.getAngle())+")) ("
                     + qr +") n);\n"
                     +Visit(node.getAssertion());
         }
-        return s;
+        unitaries.add(s);
+        return "";
     }
 
     @Override
@@ -604,8 +631,8 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         diag = false;
         if (global_qrs.contains(qr)) {
             circs.push("c"+circs.size());
-            s = "Unitary (Apply {gate=X; qreg=\"" + id +
-                    "\"; range={starts=Num 0; ends=Var \"n\"}});\n";
+            s = "Apply {gate=X; qreg=\"" + id +
+                    "\"; range={starts=Num 0; ends=Var \"n\"}}";
             r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                     + "let ref i = 0 \n"
                     + "in while (i < "+qr+") do\n"
@@ -624,9 +651,9 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             String start = limits[0];
             String end = limits[1];
             circs.push("c"+circs.size());
-            s = "Unitary (Apply {gate=X; qreg=\"" + id +
+            s = "Apply {gate=X; qreg=\"" + id +
                     "\"; range={starts="+start+
-                    "; ends="+end+"}});\n";
+                    "; ends="+end+"}}";
             r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                     + "let ref i = "+start+"\n"
                     + "in while (i < "+end+") do\n"
@@ -641,14 +668,14 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             r += circs.peek()+":= !"+circs.peek()+" -- !"+old+";\n";
         }
         else {
-            s = "Unitary (Apply {gate=X; qreg=\"" + id +
+            s = "Apply {gate=X; qreg=\"" + id +
                     "\"; range={starts="+qr+
-                    "; ends="+qr+"}});\n";
+                    "; ends="+qr+"}}";
             r = circs.peek()+":= !"+circs.peek()+" -- (place xx ("
                     +qr+") n);\n" +Visit(node.getAssertion());
         }
         unitaries.add(s);
-        return s;
+        return "";
     }
 
     @Override
@@ -658,8 +685,8 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         diag = false;
         if (global_qrs.contains(qr)) {
             circs.push("c"+circs.size());
-            s = "Unitary (Apply {gate=Y; qreg=\"" + id +
-                    "\"; range={starts=Num 0; ends=Var \"n\"}});\n";
+            s = "Apply {gate=Y; qreg=\"" + id +
+                    "\"; range={starts=Num 0; ends=Var \"n\"}}";
             r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                     + "let ref i = 0 \n"
                     + "in while (i < "+qr+") do\n"
@@ -678,9 +705,9 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             String start = limits[0];
             String end = limits[1];
             circs.push("c"+circs.size());
-            s = "Unitary (Apply {gate=Y; qreg=\"" + id +
+            s = "Apply {gate=Y; qreg=\"" + id +
                     "\"; range={starts="+start+
-                    "; ends="+end+"}});\n";
+                    "; ends="+end+"}}";
             r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                     + "let ref i = "+start+"\n"
                     + "in while (i < "+end+") do\n"
@@ -695,13 +722,14 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             r += circs.peek()+":= !"+circs.peek()+" -- !"+old+";\n";
         }
         else {
-            s = "Unitary (Apply {gate=Y; qreg=\"" + id +
+            s = "Apply {gate=Y; qreg=\"" + id +
                     "\"; range={starts="+qr+
-                    "; ends="+qr+"}});\n";
+                    "; ends="+qr+"}}";
             r = circs.peek()+":= !"+circs.peek()+" -- (place yy ("
                     +qr+") n);\n" +Visit(node.getAssertion());
         }
-        return s;
+        unitaries.add(s);
+        return "";
     }
 
     @Override
@@ -711,8 +739,8 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         diag = true;
         if (global_qrs.contains(qr)) {
             circs.push("c"+circs.size());
-            s = "Unitary (Apply {gate=Z; qreg=\"" + id +
-                    "\"; range={starts=Num 0; ends=Var \"n\"}});\n";
+            s = "Apply {gate=Z; qreg=\"" + id +
+                    "\"; range={starts=Num 0; ends=Var \"n\"}}";
             r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                     + "let ref i = 0 \n"
                     + "in while (i < "+qr+") do\n"
@@ -731,9 +759,9 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             String start = limits[0];
             String end = limits[1];
             circs.push("c"+circs.size());
-            s = "Unitary (Apply {gate=Z; qreg=\"" + id +
+            s = "Apply {gate=Z; qreg=\"" + id +
                     "\"; range={starts="+start+
-                    "; ends="+end+"}});\n";
+                    "; ends="+end+"}}";
             r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                     + "let ref i = "+start+"\n"
                     + "in while (i < "+end+") do\n"
@@ -748,13 +776,15 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             r += circs.peek()+":= !"+circs.peek()+" -- !"+old+";\n";
         }
         else {
-            s = "Unitary (Apply {gate=Z; qreg=\"" + id +
+            s = "Apply {gate=Z; qreg=\"" + id +
                     "\"; range={starts="+qr+
-                    "; ends="+qr+"}});\n";
+                    "; ends="+qr+"}}";
             r = circs.peek()+":= seq_diag !"+circs.peek()+" (place zz ("
                     +qr+") n);\n" +Visit(node.getAssertion());
         }
-        return s;    }
+        unitaries.add(s);
+        return "";
+    }
 
     @Override
     public String Visit(SApply node) {
@@ -763,8 +793,8 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         diag = true;
         if (global_qrs.contains(qr)) {
             circs.push("c"+circs.size());
-            s = "Unitary (Apply {gate=S; qreg=\"" + id +
-                    "\"; range={starts=Num 0; ends=Var \"n\"}});\n";
+            s = "Apply {gate=S; qreg=\"" + id +
+                    "\"; range={starts=Num 0; ends=Var \"n\"}}";
             r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                     + "let ref i = 0 \n"
                     + "in while (i < "+qr+") do\n"
@@ -783,9 +813,9 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             String start = limits[0];
             String end = limits[1];
             circs.push("c"+circs.size());
-            s = "Unitary (Apply {gate=S; qreg=\"" + id +
+            s = "Apply {gate=S; qreg=\"" + id +
                     "\"; range={starts="+start+
-                    "; ends="+end+"}});\n";
+                    "; ends="+end+"}}";
             r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                     + "let ref i = "+start+"\n"
                     + "in while (i < "+end+") do\n"
@@ -800,13 +830,14 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             r += circs.peek()+":= !"+circs.peek()+" -- !"+old+";\n";
         }
         else {
-            s = "Unitary (Apply {gate=S; qreg=\"" + id +
+            s = "Apply {gate=S; qreg=\"" + id +
                     "\"; range={starts="+qr+
-                    "; ends="+qr+"}});\n";
+                    "; ends="+qr+"}}";
             r = circs.peek()+":= seq_diag !"+circs.peek()+" (place s ("
                     +qr+") n);\n" +Visit(node.getAssertion());
         }
-        return s;
+        unitaries.add(s);
+        return "";
     }
 
     @Override
@@ -816,8 +847,8 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         diag = true;
         if (global_qrs.contains(qr)) {
             circs.push("c"+circs.size());
-            s = "Unitary (Apply {gate=T; qreg=\"" + id +
-                    "\"; range={starts=Num 0; ends=Var \"n\"}});\n";
+            s = "Apply {gate=T; qreg=\"" + id +
+                    "\"; range={starts=Num 0; ends=Var \"n\"}}";
             r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                     + "let ref i = 0 \n"
                     + "in while (i < "+qr+") do\n"
@@ -836,9 +867,9 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             String start = limits[0];
             String end = limits[1];
             circs.push("c"+circs.size());
-            s = "Unitary (Apply {gate=T; qreg=\"" + id +
+            s = "Apply {gate=T; qreg=\"" + id +
                     "\"; range={starts="+start+
-                    "; ends="+end+"}});\n";
+                    "; ends="+end+"}}";
             r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                     + "let ref i = "+start+"\n"
                     + "in while (i < "+end+") do\n"
@@ -853,26 +884,28 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             r += circs.peek()+":= !"+circs.peek()+" -- !"+old+";\n";
         }
         else {
-            s = "Unitary (Apply {gate=T; qreg=\"" + id +
+            s = "Apply {gate=T; qreg=\"" + id +
                     "\"; range={starts="+qr+
-                    "; ends="+qr+"}});\n";
+                    "; ends="+qr+"}}";
             r = circs.peek()+":= seq_diag !"+circs.peek()+" (place t ("
                     +qr+") n);\n" +Visit(node.getAssertion());
         }
-        return s;
+        unitaries.add(s);
+        return "";
     }
 
     public String Visit(SwapApply node) {
         String r,s;
         diag = false;
-        s = "Unitary (MultiApply {gate=SWAP; regs=[\""+
+        s = "MultiApply {gate=SWAP; regs=[\""+
                 Visit(node.getLQreg())+"\"; \"" +
-                Visit(node.getRQreg())+"\"]});\n";
+                Visit(node.getRQreg())+"\"]}";
         r = circs.peek()+":= !"+circs.peek()+" -- (swap ("
                 + Visit(node.getLQreg())+") ("
                 +Visit(node.getRQreg())+") n);\n"
                 +Visit(node.getAssertion());
-        return s;
+        unitaries.add(s);
+        return "";
     }
 
     @Override
@@ -882,8 +915,9 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         diag = true;
         if (global_qrs.contains(qr)) {
             circs.push("c"+circs.size());
-            s = "Unitary (Apply {gate=Ph ("+Visit(node.getAngle())
-                    +"); qreg=\"" + id + "\"; range={starts=Num 0; ends=Var \"n\"}});\n";
+            s = "Apply {gate=Ph ("+Visit(node.getAngle())
+                    +"); qreg=\"" + id
+                    + "\"; range={starts=Num 0; ends=Var \"n\"}}";
             r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                     + "let ref i = 0 \n"
                     + "in while (i < "+qr+") do\n"
@@ -903,9 +937,9 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             String start = limits[0];
             String end = limits[1];
             circs.push("c" + circs.size());
-            s = "Unitary (Apply {gate=Ph ("+Visit(node.getAngle())
+            s = "Apply {gate=Ph ("+Visit(node.getAngle())
                     +"); qreg=\"" + id + "\"; range={starts="+
-                    start+"; ends="+end+"}});\n";
+                    start+"; ends="+end+"}}";
             r = "let " + circs.peek() + " = ref (m_skip n)\nin "
                     + "let ref i = " + start + "\n"
                     + "in while (i < " + end + ") do\n"
@@ -921,15 +955,16 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             r += circs.peek()+":= !"+circs.peek()+" -- !"+old+";\n";
         }
         else {
-            s = "Unitary (Apply {gate=Ph ("+Visit(node.getAngle())
+            s = "Apply {gate=Ph ("+Visit(node.getAngle())
                     +"); qreg=\"" + id + "\"; range={starts="+
-                    qr+"; ends="+qr+"}});\n";
+                    qr+"; ends="+qr+"}}";
             r = circs.peek()+":= seq_diag !"+circs.peek()+" (place (phase ("
                     + Visit(node.getAngle())+")) ("
                     + qr +") n);\n"
                     +Visit(node.getAssertion());
         }
-        return s;
+        unitaries.add(s);
+        return "";
     }
 
     @Override
@@ -939,9 +974,12 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         String aux,angle,id = null,r,start,end,old,qr,target=null;
         StringBuilder s;
         ApplyNode gate = node.getCtlGate();
-        s = new StringBuilder("Unitary(WithControl{gate=");
-        ls = Visit(node.getCtlGate()).split("Unitary ");
-        s.append(ls[1]);
+        s = new StringBuilder("WithControl{gate=");
+        /*ls = Visit(node.getCtlGate()).split("Unitary ");
+        s.append(ls[1]);*/
+        Visit(node.getCtlGate());
+        s.append(unitaries.get(unitaries.size()-1)); // get last unitary in list
+        unitaries.remove(unitaries.size()-1); // delete it since its not needed anymore
         if (gate instanceof FunApply) // not defined
             aux = ((FunApply) gate).getFunID()+(((FunApply) gate).getTermArgs());
         else if (gate instanceof RevApply) // not defined
@@ -1012,7 +1050,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             aux = " Ph ("+ angle +"); ";
             diag = true;
         }
-        s.append("ctls=[");
+        s.append("; ctls=[");
         for (QregNode n:node.getCtlArgs()){
             controls.add(Visit(n));
             s.append("\"").append(n.getId()).append("\"; ");
@@ -1065,7 +1103,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             qr = controls.get(0); // be careful here because a whole register can't be used as controls
             s.append("]; range1={starts=").append(qr).append("; ends=").append(qr);
             s.append("}; tg=\"").append(id).append("\"; range2={starts=");
-            s.append(target).append("; ends=").append(target).append("}});\n");
+            s.append(target).append("; ends=").append(target).append("}}");
             if (!diag) {
                 r = circs.peek()+":= !"+circs.peek()+" -- (cont"+aux+"("+qr
                 +") ("+ target + ") n);\n"+Visit(node.getAssertion());
@@ -1075,36 +1113,39 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             }
         }
         unitaries.add(s.toString());
-        return s.toString();
+        return "";
     }
 
     @Override
     public String Visit(CnotNode node) {
         String s;
-        s = "Unitary (MultiApply {gate=Cnot; regs=[\""+
+        s = "MultiApply {gate=Cnot; regs=[\""+
                 Visit(node.getCtl())+"\"; \"" +
-                Visit(node.getTarget())+"\"]});\n";
-        return s;
+                Visit(node.getTarget())+"\"]}";
+        unitaries.add(s);
+        return "";
     }
 
     @Override
     public String Visit(ToffNode node) {
         String s;
-        s = "Unitary (MultiApply {gate=Toff; regs=[\""+
+        s = "MultiApply {gate=Toff; regs=[\""+
                 Visit(node.getCtl1())+"\"; \"" +
                 Visit(node.getCtl2())+"\"; \"" +
-                Visit(node.getTarget())+"\"]});\n";
-        return s;
+                Visit(node.getTarget())+"\"]}";
+        unitaries.add(s);
+        return "";
     }
 
     @Override
     public String Visit(FredNode node) {
-        String r,s;
-        s = "Unitary (MultiApply {gate=Fred; regs=[\""+
+        String s;
+        s = "MultiApply {gate=Fred; regs=[\""+
                 Visit(node.getCtl1())+"\"; \"" +
                 Visit(node.getCtl2())+"\"; \"" +
-                Visit(node.getTarget())+"\"]});\n";
-        return s;
+                Visit(node.getTarget())+"\"]}";
+        unitaries.add(s);
+        return "";
     }
 
     @Override
