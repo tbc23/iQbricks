@@ -48,7 +48,7 @@ let run_range = function
         else "[" ^ run_expr starts ^ " to " ^ run_expr ends ^ "]"
 
 let rec run_unitary = function
-(*    | Sequence (e, d) -> "seq " ^ run_unitary e ^ run_unitary d*)
+    | Sequence (e, d) -> "seq (" ^ run_unitary e ^ ", " ^ run_unitary d ^ ")"
     | Apply {gate; qreg; range} ->
         run_gate gate ^ " " ^ qreg ^ " " ^ run_range range
     | MultiApply {gate; qregs} ->

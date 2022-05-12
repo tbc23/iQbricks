@@ -10,9 +10,8 @@ id = "diffusor";
 circ = {
 qregs= [{id="qr"; size=Num 0}; {id="aux"; size=Num 0}];
 body = [
-Sequence (Apply {gate=H; qreg="qr"; range={starts=Num 0; ends=Var "n"}},Sequence (Apply {gate=X; qreg="qr"; range={starts=Num 0; ends=Var "n"}},Sequence (WithControl{gate=Apply {gate=Z; qreg="qr"; range={starts=Subtract (Len "qr", Num 1); ends=Subtract (Len "qr", Num 1)}}; ctls=["qr"; ]; range1={starts=Num 0; ends=Subtract (Len "qr", Num 1)}; tg="qr"; range2={starts=Subtract (Len "qr", Num 1); ends=Subtract (Len "qr", Num 1)}});
-,Sequence (Apply {gate=H; qreg="qr"; range={starts=Num 0; ends=Var "n"}},Apply {gate=X; qreg="qr"; range={starts=Num 0; ends=Var "n"}}))))Unitary(Sequence (Apply {gate=H; qreg="qr"; range={starts=Num 0; ends=Var "n"}},Sequence (Apply {gate=X; qreg="qr"; range={starts=Num 0; ends=Var "n"}},Sequence (WithControl{gate=Apply {gate=Z; qreg="qr"; range={starts=Subtract (Len "qr", Num 1); ends=Subtract (Len "qr", Num 1)}}; ctls=["qr"; ]; range1={starts=Num 0; ends=Subtract (Len "qr", Num 1)}; tg="qr"; range2={starts=Subtract (Len "qr", Num 1); ends=Subtract (Len "qr", Num 1)}});
-,Sequence (Apply {gate=H; qreg="qr"; range={starts=Num 0; ends=Var "n"}},Apply {gate=X; qreg="qr"; range={starts=Num 0; ends=Var "n"}})))));
+Unitary(Sequence (Apply {gate=H; qreg="qr"; range={starts=Num 0; ends=Len "qr"}},Sequence (Apply {gate=X; qreg="qr"; range={starts=Num 0; ends=Var "n"}},Sequence (WithControl{gate=Apply {gate=Z; qreg="qr"; range={starts=Subtract (Len "qr", Num 1); ends=Subtract (Len "qr", Num 1)}}; ctls=["qr"; ]; range1={starts=Num 0; ends=Subtract (Len "qr", Num 1)}; tg="qr"; range2={starts=Subtract (Len "qr", Num 1); ends=Subtract (Len "qr", Num 1)}}
+,Sequence (Apply {gate=H; qreg="qr"; range={starts=Num 0; ends=Len "qr"}},Apply {gate=X; qreg="qr"; range={starts=Num 0; ends=Var "n"}})))));
 Return "";
 ];
 };
@@ -39,7 +38,7 @@ id = "grover_iter";
 circ = {
 qregs= [{id="qr"; size=Num 0}];
 body = [
-Sequence (FUN {id="oracle"; args=[Var "qr"; Var "aux"; ]},FUN {id="diffusor"; args=[Var "qr"; Var "aux"; ]})Unitary(Sequence (FUN {id="oracle"; args=[Var "qr"; Var "aux"; ]},FUN {id="diffusor"; args=[Var "qr"; Var "aux"; ]}));
+Unitary(Sequence (FUN {id="oracle"; args=[Var "qr"; Var "aux"; ]},FUN {id="diffusor"; args=[Var "qr"; Var "aux"; ]}));
 Return "";
 ];
 };
@@ -53,7 +52,7 @@ id = "init";
 circ = {
 qregs= [{id="qr"; size=Num 0}; {id="aux"; size=Num 0}];
 body = [
-Sequence (Apply {gate=H; qreg="aux"; range={starts=Num 0; ends=Var "n"}},Sequence (Apply {gate=H; qreg="qr"; range={starts=Num 0; ends=Subtract (Len "qr", Num 1)}},Apply {gate=X; qreg="aux"; range={starts=Num 0; ends=Var "n"}}))Unitary(Sequence (Apply {gate=H; qreg="aux"; range={starts=Num 0; ends=Var "n"}},Sequence (Apply {gate=H; qreg="qr"; range={starts=Num 0; ends=Subtract (Len "qr", Num 1)}},Apply {gate=X; qreg="aux"; range={starts=Num 0; ends=Var "n"}})));
+Unitary(Sequence (Apply {gate=H; qreg="aux"; range={starts=Num 0; ends=Len "aux"}},Sequence (Apply {gate=H; qreg="qr"; range={starts=Num 0; ends=Subtract (Len "qr", Num 1)}},Apply {gate=X; qreg="aux"; range={starts=Num 0; ends=Var "n"}})));
 Return "";
 ];
 };
@@ -76,9 +75,9 @@ starts = Num 0;
 ends = Var "iters"
 };
 inv = ["{true}"; ];
-body = [
-];
+body=[
 Unitary (FUN {id="grover_iter"; args=[Var "qr"; Var "aux"; ]});
+];
 assertion=[]
 };
 Return "";

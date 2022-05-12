@@ -21,7 +21,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                 for (int i = 2; l.size()>i; i++){
                     old = s;
                     s = "Sequence (" + l.get(i) + "," + old + ")";
-                } s += "Unitary("+s+");\n";
+                } s = "Unitary("+s+");\n";
             }
         }
         return s;
@@ -234,10 +234,11 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         }
         r += body + iterator +" := " + iterator + " + 1\ndone;\n"
                 + Visit(node.getAssertion());
-        s += body + printUnitaries(unitaries) + Visit(node.getAssertion()) + "};\n";
+        if (body.equals("body = [\n];\n"))
+            s += "body=[\n" + printUnitaries(unitaries) + "];\n" + Visit(node.getAssertion()) + "};\n";
+        else s += body  + Visit(node.getAssertion()) + "};\n";
         old = circs.pop();
         r += circs.peek()+":= !"+circs.peek()+" -- !"+old+";\n";
-        //if (!unitaries.isEmpty()) System.out.println("Sequence after for("+unitaries+")");
         unitaries.clear();
         return s;
     }
@@ -400,7 +401,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         if (global_qrs.contains(qr)) {
             circs.push("c"+circs.size());
             s = "Apply {gate=H; qreg=\"" + id +
-                "\"; range={starts=Num 0; ends=Var \"n\"}}";
+                "\"; range={starts=Num 0; ends=Len \""+id+"\"}}";
             r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                     + "let ref i = 0 \n"
                     + "in while (i < "+qr+") do\n"
@@ -456,7 +457,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             circs.push("c"+circs.size());
             s = "Apply {gate=Rx ("+Visit(node.getAngle())
                     +"); qreg=\"" + id
-                    + "\"; range={starts=Num 0; ends=Var \"n\"}}";
+                    + "\"; range={starts=Num 0; ends=Len \""+id+"\"}}";
             r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                     + "let ref i = 0 \n"
                     + "in while (i < "+qr+") do\n"
@@ -515,7 +516,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             circs.push("c"+circs.size());
             s = "Apply {gate=Ry ("+Visit(node.getAngle())
                     +"); qreg=\"" + id
-                    + "\"; range={starts=Num 0; ends=Var \"n\"}}";
+                    + "\"; range={starts=Num 0; ends=Len \""+id+"\"}}";
             r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                     + "let ref i = 0 \n"
                     + "in while (i < "+qr+") do\n"
@@ -574,7 +575,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             circs.push("c"+circs.size());
             s = "Apply {gate=Rz ("+Visit(node.getAngle())
                     +"); qreg=\"" + id
-                    + "\"; range={starts=Num 0; ends=Var \"n\"}}";
+                    + "\"; range={starts=Num 0; ends=Len \""+id+"\"}}";
             r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                     + "let ref i = 0 \n"
                     + "in while (i < "+qr+") do\n"
@@ -632,7 +633,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         if (global_qrs.contains(qr)) {
             circs.push("c"+circs.size());
             s = "Apply {gate=X; qreg=\"" + id +
-                    "\"; range={starts=Num 0; ends=Var \"n\"}}";
+                    "\"; range={starts=Num 0; ends=Len \""+id+"\"}}";
             r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                     + "let ref i = 0 \n"
                     + "in while (i < "+qr+") do\n"
@@ -686,7 +687,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         if (global_qrs.contains(qr)) {
             circs.push("c"+circs.size());
             s = "Apply {gate=Y; qreg=\"" + id +
-                    "\"; range={starts=Num 0; ends=Var \"n\"}}";
+                    "\"; range={starts=Num 0; ends=Len \""+id+"\"}}";
             r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                     + "let ref i = 0 \n"
                     + "in while (i < "+qr+") do\n"
@@ -740,7 +741,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         if (global_qrs.contains(qr)) {
             circs.push("c"+circs.size());
             s = "Apply {gate=Z; qreg=\"" + id +
-                    "\"; range={starts=Num 0; ends=Var \"n\"}}";
+                    "\"; range={starts=Num 0; ends=Len \""+id+"\"}}";
             r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                     + "let ref i = 0 \n"
                     + "in while (i < "+qr+") do\n"
@@ -794,7 +795,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         if (global_qrs.contains(qr)) {
             circs.push("c"+circs.size());
             s = "Apply {gate=S; qreg=\"" + id +
-                    "\"; range={starts=Num 0; ends=Var \"n\"}}";
+                    "\"; range={starts=Num 0; ends=Len \""+id+"\"}}";
             r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                     + "let ref i = 0 \n"
                     + "in while (i < "+qr+") do\n"
@@ -848,7 +849,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         if (global_qrs.contains(qr)) {
             circs.push("c"+circs.size());
             s = "Apply {gate=T; qreg=\"" + id +
-                    "\"; range={starts=Num 0; ends=Var \"n\"}}";
+                    "\"; range={starts=Num 0; ends=Len \""+id+"\"}}";
             r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                     + "let ref i = 0 \n"
                     + "in while (i < "+qr+") do\n"
@@ -917,7 +918,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             circs.push("c"+circs.size());
             s = "Apply {gate=Ph ("+Visit(node.getAngle())
                     +"); qreg=\"" + id
-                    + "\"; range={starts=Num 0; ends=Var \"n\"}}";
+                    + "\"; range={starts=Num 0; ends=Len \""+id+"\"}}";
             r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                     + "let ref i = 0 \n"
                     + "in while (i < "+qr+") do\n"
@@ -1061,7 +1062,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             start = limits[0]; end = limits[1];
             s.append("]; range1={starts=").append(start).append("; ends=").append(end);
             s.append("}; tg=\"").append(id).append("\"; range2={starts=");
-            s.append(target).append("; ends=").append(target).append("}});\n");
+            s.append(target).append("; ends=").append(target).append("}}\n");
             circs.push("c"+circs.size());
             if (!diag) {
             r = "let "+circs.peek()+" = ref"+aux+"\nin "
