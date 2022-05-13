@@ -896,11 +896,17 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
     }
 
     public String Visit(SwapApply node) {
-        String r,s;
+        String r,s, id1=node.getLQreg().getId(), id2=node.getRQreg().getId();
         diag = false;
-        s = "MultiApply {gate=SWAP; regs=[\""+
-                Visit(node.getLQreg())+"\"; \"" +
-                Visit(node.getRQreg())+"\"]}";
+        s = "MultiApply {gate=SWAP; qreg1=\""+ id1 +
+                "\"; range1={starts="+
+                Visit(node.getLQreg()) +
+                "; ends=" + Visit(node.getLQreg())
+                +"}; qreg2=\""+ id2 +
+                "\"; range2={starts="+
+                Visit(node.getRQreg()) +
+                "; ends=" + Visit(node.getRQreg())
+                +"}; qreg3=\"NONE\"; range3={starts=Num 0; ends=Num 0}}";
         r = circs.peek()+":= !"+circs.peek()+" -- (swap ("
                 + Visit(node.getLQreg())+") ("
                 +Visit(node.getRQreg())+") n);\n"
@@ -1119,32 +1125,56 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
 
     @Override
     public String Visit(CnotNode node) {
-        String s;
-        s = "MultiApply {gate=Cnot; regs=[\""+
-                Visit(node.getCtl())+"\"; \"" +
-                Visit(node.getTarget())+"\"]}";
+        String s,ctl=node.getCtl().getId(),tg=node.getTarget().getId();
+        s = "MultiApply {gate=Cnot; qreg1=\""+ ctl +
+                "\"; range1={starts="+
+                Visit(node.getCtl()) +
+                "; ends=" + Visit(node.getCtl())
+                +"}; qreg2=\""+ tg +
+                "\"; range2={starts="+
+                Visit(node.getTarget()) +
+                "; ends=" + Visit(node.getTarget())
+                +"}; qreg3=\"NONE\"; range3={starts=Num 0; ends=Num 0}}";
         unitaries.add(s);
         return "";
     }
 
     @Override
     public String Visit(ToffNode node) {
-        String s;
-        s = "MultiApply {gate=Toff; regs=[\""+
-                Visit(node.getCtl1())+"\"; \"" +
-                Visit(node.getCtl2())+"\"; \"" +
-                Visit(node.getTarget())+"\"]}";
+        String s, id1=node.getCtl1().getId(), id2=node.getCtl2().getId();
+        String id3=node.getTarget().getId();
+        s = "MultiApply {gate=Toff; qreg1=\""+ id1 +
+                "\"; range1={starts="+
+                Visit(node.getCtl1()) +
+                "; ends=" + Visit(node.getCtl1())
+                +"}; qreg2=\""+ id2 +
+                "\"; range2={starts="+
+                Visit(node.getCtl2()) +
+                "; ends=" + Visit(node.getCtl2())
+                +"}; qreg3=\"" + id3 +
+                "\"; range3={starts=" +
+                Visit(node.getTarget()) +
+                "; ends=" + Visit(node.getTarget())+ "}}";
         unitaries.add(s);
         return "";
     }
 
     @Override
     public String Visit(FredNode node) {
-        String s;
-        s = "MultiApply {gate=Fred; regs=[\""+
-                Visit(node.getCtl1())+"\"; \"" +
-                Visit(node.getCtl2())+"\"; \"" +
-                Visit(node.getTarget())+"\"]}";
+        String s, id1=node.getCtl1().getId(), id2=node.getCtl2().getId();
+        String id3=node.getTarget().getId();
+        s = "MultiApply {gate=Fred; qreg1=\""+ id1 +
+                "\"; range1={starts="+
+                Visit(node.getCtl1()) +
+                "; ends=" + Visit(node.getCtl1())
+                +"}; qreg2=\""+ id2 +
+                "\"; range2={starts="+
+                Visit(node.getCtl2()) +
+                "; ends=" + Visit(node.getCtl2())
+                +"}; qreg3=\"" + id3 +
+                "\"; range3={starts=" +
+                Visit(node.getTarget()) +
+                "; ends=" + Visit(node.getTarget())+ "}}";
         unitaries.add(s);
         return "";
     }

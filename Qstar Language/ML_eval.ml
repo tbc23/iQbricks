@@ -50,16 +50,16 @@ let run_range = function
 let rec run_unitary = function
     | Sequence (e, d) -> "seq (" ^ run_unitary e ^ ", " ^ run_unitary d ^ ")"
     | Apply {gate; qreg; range} ->
-        run_gate gate ^ " " ^ qreg ^ " " ^ run_range range
-    | MultiApply {gate; qregs} ->
-        run_multigate gate ^ (String.concat "" qregs)
+        run_gate gate ^ " (" ^ qreg ^ " " ^ run_range range ^ ")"
+    | MultiApply {gate; qreg1; range1; qreg2; range2; qreg3; range3} ->
+        run_multigate gate ^ " (" ^ qreg1 ^ " " ^ run_range range1 ^ ")"^ " (" ^ qreg2 ^ " " ^ run_range range2 ^ ")"^ " (" ^ qreg3 ^ " " ^ run_range range3 ^ ")"
     | WithControl {gate; ctls; range1; tg; range2} ->
-        "ctl (" ^ run_unitary gate ^ ") (" ^ (String.concat " " ctls) ^ " "
-        ^ run_range range1 ^ ") " ^ tg ^ run_range range2
+        "ctl ((" ^ run_unitary gate ^ ") (" ^ (String.concat " " ctls) ^ " "
+        ^ run_range range1 ^ ") " ^ tg ^ run_range range2 ^ ")"
     | FUN {id; args} ->
-        id ^ " " ^ String.concat " " (List.map run_expr args)
+        id ^ " (" ^ String.concat " " (List.map run_expr args) ^ ")"
     | REV {id; args} ->
-        "reverse" ^ id ^ " " ^ String.concat " " (List.map run_expr args)
+        "reverse (" ^ id ^ " (" ^ String.concat " " (List.map run_expr args) ^ ")"
 
 
 (*for variable = start_value to end_value do

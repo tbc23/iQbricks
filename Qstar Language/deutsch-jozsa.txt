@@ -20,4 +20,5 @@ pre {n > 0}
 			assert {true}
 		}
 		assert { true }
+		return
 pos {true}
