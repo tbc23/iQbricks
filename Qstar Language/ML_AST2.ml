@@ -1,6 +1,13 @@
 type spec = {
      conds: string list
- }
+}
+
+type pps = {
+    width: int;
+    range: int;
+    ket: string;
+    angle: int
+}
 
 type expr =
     | Plus of expr * expr        (* a + b *)

@@ -1,11 +1,10 @@
 || qft || (qreg qr)
 pre {true}
 	circ qr ->
-        for q in range(len(qr)) {  # use while , sequence of instr
+        for q in range(len(qr)) {
             invariant { true }
-            # multiple formulas are not working...
             assert { true }
-            H(qr[q])  # keep track of registers!! (place hadamard q n)
+            H(qr[q])
             # assert { |qr> = ps_had |qr'> q}
             assert {true}
             for i in range(qr[q..-1]) {
