@@ -20,7 +20,7 @@ let rec run_expr = function
     | Var (e) -> e
 
 let run_qreg = function
-    {id; size} -> "id: " ^ id ^ " | size: " ^ run_expr size ^ "\n"
+    {id; size} -> "id: " ^ id ^ " | size: " ^ run_expr size
 
 and run_cond = function
     | Eq (e, d) -> run_expr e ^ " = " ^ run_expr d
@@ -89,14 +89,18 @@ let rec run_instr = function
 
 let run_circ = function
     {qregs; body} ->
-     (String.concat "" (List.map run_qreg qregs)) ^ (String.concat "\n" (List.map run_instr body)) ;;
+        " (" ^ (String.concat "" (List.map run_qreg qregs)) ^ "): circuit\n=\nbegin\n" ^
+        "let c:= ref (m_skip" ^ ")" ^ (String.concat "\n" (List.map run_instr body)) ^ "end\n";;
+
+(*     (String.concat "" (List.map run_qreg qregs)) ^ (String.concat "\n" (List.map run_instr body)) ;;*)
 
 let run_fun = function
     {id; circ; params; pre; pos} ->
-        id ^ ":\n" ^ run_circ circ ^ (String.concat "" pre) ^ "\n" ^ String.concat "" pos ^ "\n\n";;
+        "let " ^ id ^ run_circ circ ^ (String.concat "" pre) ^ "\n" ^ String.concat "" pos ^ "\n\n";;
+(*        id ^ ":\n" ^ run_circ circ ^ (String.concat "" pre) ^ "\n" ^ String.concat "" pos ^ "\n\n";;*)
 
 let run_program {id; main; aux} =
-     run_fun main ^ (String.concat "" (List.map run_fun aux));;
+     (String.concat "" (List.map run_fun aux)) ^ run_fun main ;;
 
 (*let p = {
     id = "program";

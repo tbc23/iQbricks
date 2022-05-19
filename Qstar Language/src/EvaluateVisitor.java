@@ -17,7 +17,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             if (l.size() < 2)
                 s = "Unitary ("+l.get(0)+");\n";
             else {
-                s = "Sequence ("+l.get(0)+","+l.get(1)+")";
+                s = "Sequence ("+l.get(1)+","+l.get(0)+")";
                 for (int i = 2; l.size()>i; i++){
                     old = s;
                     s = "Sequence (" + l.get(i) + "," + old + ")";

@@ -3,10 +3,9 @@ open ML_eval
 
 let p = {
     id = "program";
-aux = [
-
-{
-id = "oracle";
+aux = [];
+main = {
+ id = "qft";
 circ = {
 qregs= [{id="qr"; size=Num 0}];
 body = [
@@ -14,33 +13,31 @@ For {
 iter = {
 iterator= "q";
 starts = Num 0;
+ends = Len "qr"
+};
+inv = ["{ true }"; ];
+body = [
+Unitary (Apply {gate=H; qreg="qr"; range={starts=Var "q"; ends=Var "q"}});
+For {
+iter = {
+iterator= "i";
+starts = Var "q";
 ends = Subtract (Len "qr", Num 1)
 };
-inv = ["{true}"; ];
+inv = ["{ true }"; ];
 body=[
-Unitary (MultiApply {gate=Cnot; qreg1="qr"; range1={starts=Subtract (Len "qr", Num 1); ends=Subtract (Len "qr", Num 1)}; qreg2="qr"; range2={starts=Var "q"; ends=Var "q"}; qreg3="NONE"; range3={starts=Num 0; ends=Num 0}});
+Unitary (WithControl{gate=Apply {gate=Rz (Subtract (Subtract (Var "n",Var "i"),Num 1)); qreg="qr"; range={starts=Var "q"; ends=Var "q"}}; ctls=["qr"; ]; range1={starts=Plus (Var "i",Num 1); ends=Plus (Var "i",Num 1)}; tg="qr"; range2={starts=Var "q"; ends=Var "q"}});
 ];
-assertion=["{ true }"; ]
+assertion=[]
 };
 ];
+assertion=["{true}"; ]
 };
-params = [{id="qr";  type_=Qreg}; ];
-pre = ["{n > 0}"; ];
-pos = ["{true}"; ];
-};
-
-];
-main = {
- id = "dj";
-circ = {
-qregs= [{id="qr"; size=Num 0}];
-body = [
-Unitary(Sequence (Apply {gate=H; qreg="qr"; range={starts=Num 0; ends=Subtract (Len "qr", Num 1)}},Sequence (FUN {id="oracle"; args=[Var "qr"; ]},Sequence (Apply {gate=H; qreg="qr"; range={starts=Subtract (Len "qr", Num 1); ends=Subtract (Len "qr", Num 1)}},Sequence (Apply {gate=H; qreg="qr"; range={starts=Num 0; ends=Subtract (Len "qr", Num 1)}},Apply {gate=X; qreg="qr"; range={starts=Subtract (Len "qr", Num 1); ends=Subtract (Len "qr", Num 1)}})))));
 Return "";
 ];
 };
 params = [{id="qr";  type_=Qreg}; ];
-pre = ["{n > 0}"; ];
+pre = ["{true}"; ];
 pos = ["{true}"; ];
 }};;
 
