@@ -31,12 +31,12 @@ and run_cond = function
     | Lt (e, d) -> run_expr e ^ " < " ^ run_expr d
 
 let run_gate = function
-    | H -> "hadamard" | T -> "t" | S -> "s"
-    | X -> "xx" | Y -> "yy" | Z -> "zz"
-    | Rx (a) -> "rx " ^ "(" ^ run_expr a ^ ")"
-    | Ry (a) -> "ry " ^ "(" ^ run_expr a ^ ")"
-    | Rz (a) -> "rz " ^ "(" ^ run_expr a ^ ")"
-    | Ph (a) -> "phase " ^ "(" ^ run_expr a ^ ")"
+    | H -> "_hadamard" | T -> " t" | S -> " s"
+    | X -> " xx" | Y -> " yy" | Z -> " zz"
+    | Rx (a) -> " (rx " ^ "(" ^ run_expr a ^ "))"
+    | Ry (a) -> " (ry " ^ "(" ^ run_expr a ^ "))"
+    | Rz (a) -> " (rz " ^ "(" ^ run_expr a ^ "))"
+    | Ph (a) -> " (phase " ^ "(" ^ run_expr a ^ "))"
 
 let run_multigate = function
     | Cnot -> "cnot " | Toff -> "toffoli "
@@ -48,13 +48,13 @@ let run_range = function
         else "[" ^ run_expr starts ^ " to " ^ run_expr ends ^ "]"
 
 let rec run_unitary = function
-    | Sequence (e, d) -> "seq (" ^ run_unitary e ^ ", " ^ run_unitary d ^ ")"
+    | Sequence (e, d) ->  "(" ^ run_unitary e ^ ") -- (" ^ run_unitary d ^ ")"
     | Apply {gate; qreg; range} ->
-        run_gate gate ^ " (" ^ qreg ^ " " ^ run_range range ^ ")"
+        "place" ^ run_gate gate ^ " (" ^ qreg ^ " " ^ run_range range ^ ")"
     | MultiApply {gate; qreg1; range1; qreg2; range2; qreg3; range3} ->
         run_multigate gate ^ " (" ^ qreg1 ^ " " ^ run_range range1 ^ ")"^ " (" ^ qreg2 ^ " " ^ run_range range2 ^ ")"^ " (" ^ qreg3 ^ " " ^ run_range range3 ^ ")"
     | WithControl {gate; ctls; range1; tg; range2} ->
-        "ctl ((" ^ run_unitary gate ^ ") (" ^ (String.concat " " ctls) ^ " "
+        "cont ((" ^ run_unitary gate ^ ") (" ^ (String.concat " " ctls) ^ " "
         ^ run_range range1 ^ ") " ^ tg ^ run_range range2 ^ ")"
     | FUN {id; args} ->
         id ^ " (" ^ String.concat " " (List.map run_expr args) ^ ")"
@@ -74,21 +74,28 @@ let run_iter = function
 let rec run_instr i n =
     match i with
     | For {iter; inv; body; assertion} ->
-        run_iter iter ^ " do " ^
-        (String.concat "\n" (aux body (n+1))) ^
-        (String.concat "\n" assertion) ^ " done \n"
+        "let c" ^ string_of_int (n+1) ^ " = ref (m_skip n) in\n" ^
+        run_iter iter ^ " do\n" ^
+        (aux body (n+1)) ^
+        (String.concat "\n" assertion) ^ "\ndone;\n"
+        ^ "c" ^ string_of_int n ^ " := !c" ^ string_of_int n
+        ^ " -- !c" ^ string_of_int (n+1) ^ ";\n"
     | If {cond; body; assertion} ->
-        "if (" ^ run_cond cond ^ ") then " ^
-        (String.concat "\n" (aux body (n+1))) ^
+        "if (" ^ run_cond cond ^ ") then\n" ^
+        (aux body (n+1)) ^
         (String.concat "\n"  assertion) ^ " \n"
     | IfElse {cond; ifbody; elsebody; assertion} ->
-            "if (" ^ run_cond cond ^ ") then " ^
-            (String.concat "\n" (aux ifbody (n+1))) ^
-            " else \n" ^ (String.concat "\n" (aux elsebody (n+2)))
-    | Unitary (unit) -> "CIRC" ^ string_of_int n ^ run_unitary unit
-    | Return (e) -> "return\n"
+            "if (" ^ run_cond cond ^ ") then\n" ^
+            (aux ifbody (n+1)) ^
+            " else \n" ^ "\n" ^ (aux elsebody (n+2))
+            ^ "\n" ^ (String.concat "\n"  assertion) ^ "\n"
+    | Unitary (unit) ->
+        "c" ^ string_of_int n ^ " := !c"
+        ^ string_of_int n ^ " -- (" ^ run_unitary unit ^ ");\n"
+    | Return (e) -> "return (!c0)\n"
 
-and aux body n =
+and aux body n : string
+    =
     match body with
     | [] -> ""
     | [i] -> run_instr i n
@@ -98,13 +105,16 @@ and aux body n =
 let run_circ = function
     {qregs; body} ->
         " (" ^ (String.concat "" (List.map run_qreg qregs)) ^ "): circuit\n=\nbegin\n" ^
-        "let c := ref (m_skip n)" ^  aux body 0 ^ "end\n";;
+        "let c0 = ref (m_skip n) in\n" ^  aux body 0 ^ "end\n";;
 
 (*     (String.concat "" (List.map run_qreg qregs)) ^ (String.concat "\n" (List.map run_instr body)) ;;*)
 
 let run_fun = function
     {id; circ; params; pre; pos} ->
-        "let " ^ id ^ run_circ circ ^ (String.concat "" pre) ^ "\n" ^ String.concat "" pos ^ "\n\n";;
+        "let " ^ id
+        ^ run_circ circ
+        ^ "assert" ^ (String.concat "" pre)
+        ^ "\nassert" ^ (String.concat "" pos) ^ "\n\n";;
 (*        id ^ ":\n" ^ run_circ circ ^ (String.concat "" pre) ^ "\n" ^ String.concat "" pos ^ "\n\n";;*)
 
 let run_program {id; main; aux} =
