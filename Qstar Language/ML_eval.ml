@@ -50,7 +50,12 @@ let run_range = function
 let rec run_unitary = function
     | Sequence (e, d) ->  "(" ^ run_unitary e ^ ") -- (" ^ run_unitary d ^ ")"
     | Apply {gate; qreg; range} ->
-        "place" ^ run_gate gate ^ " (" ^ qreg ^ " " ^ run_range range ^ ")"
+        if (range.starts=range.ends) then
+        "place" ^ run_gate gate ^ " (" ^ qreg ^ " " ^ run_expr (range.starts) ^ " n)"
+        else "!circ_aux in let circ_aux = ref (m_skip n)\nin "
+        ^ "for i=" ^ run_expr (range.starts) ^ " to " ^ run_expr (range.ends)
+        ^ " do\n" ^ "circ_aux := !circ_aux -- " ^
+        "place" ^ run_gate gate ^ " (" ^ qreg ^ " " ^ "i n)\ndone;"
     | MultiApply {gate; qreg1; range1; qreg2; range2; qreg3; range3} ->
         run_multigate gate ^ " (" ^ qreg1 ^ " " ^ run_range range1 ^ ")"^ " (" ^ qreg2 ^ " " ^ run_range range2 ^ ")"^ " (" ^ qreg3 ^ " " ^ run_range range3 ^ ")"
     | WithControl {gate; ctls; range1; tg; range2} ->
