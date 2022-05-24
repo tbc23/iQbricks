@@ -71,26 +71,34 @@ let run_iter = function
         "for " ^ iterator ^ " = " ^ run_expr starts ^ " to " ^ run_expr ends ;;
 
 
-let rec run_instr = function
+let rec run_instr i n =
+    match i with
     | For {iter; inv; body; assertion} ->
         run_iter iter ^ " do " ^
-        (String.concat "\n" (List.map run_instr body)) ^
+        (String.concat "\n" (aux body (n+1))) ^
         (String.concat "\n" assertion) ^ " done \n"
     | If {cond; body; assertion} ->
         "if (" ^ run_cond cond ^ ") then " ^
-        (String.concat "\n" (List.map run_instr body)) ^
+        (String.concat "\n" (aux body (n+1))) ^
         (String.concat "\n"  assertion) ^ " \n"
     | IfElse {cond; ifbody; elsebody; assertion} ->
             "if (" ^ run_cond cond ^ ") then " ^
-            (String.concat "\n" (List.map run_instr ifbody)) ^
-            " else \n" ^ (String.concat "\n" (List.map run_instr elsebody))
-    | Unitary (unit) -> run_unitary unit
-    | Return (e) -> "return\n" ;;
+            (String.concat "\n" (aux ifbody (n+1))) ^
+            " else \n" ^ (String.concat "\n" (aux elsebody (n+2)))
+    | Unitary (unit) -> "CIRC" ^ string_of_int n ^ run_unitary unit
+    | Return (e) -> "return\n"
+
+and aux body n =
+    match body with
+    | [] -> ""
+    | [i] -> run_instr i n
+    | i :: tl -> run_instr i n ^ aux tl n ;;
+
 
 let run_circ = function
     {qregs; body} ->
         " (" ^ (String.concat "" (List.map run_qreg qregs)) ^ "): circuit\n=\nbegin\n" ^
-        "let c:= ref (m_skip" ^ ")" ^ (String.concat "\n" (List.map run_instr body)) ^ "end\n";;
+        "let c := ref (m_skip n)" ^  aux body 0 ^ "end\n";;
 
 (*     (String.concat "" (List.map run_qreg qregs)) ^ (String.concat "\n" (List.map run_instr body)) ;;*)
 
