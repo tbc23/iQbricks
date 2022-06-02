@@ -20,7 +20,9 @@ let rec run_expr = function
     | Var (e) -> e
 
 let run_qreg = function
-    {id; size} -> "id: " ^ id ^ " | size: " ^ run_expr size
+    {id; size} ->
+        if ((run_expr size)="0") then id ^ " = n"
+        else id ^ " = " ^ run_expr size
 
 and run_cond = function
     | Eq (e, d) -> run_expr e ^ " = " ^ run_expr d
@@ -57,10 +59,27 @@ let rec run_unitary = function
         ^ " do\n" ^ "circ_aux := !circ_aux -- " ^
         "place" ^ run_gate gate ^ " (" ^ qreg ^ " " ^ "i n)\ndone;"
     | MultiApply {gate; qreg1; range1; qreg2; range2; qreg3; range3} ->
-        run_multigate gate ^ " (" ^ qreg1 ^ " " ^ run_range range1 ^ ")"^ " (" ^ qreg2 ^ " " ^ run_range range2 ^ ")"^ " (" ^ qreg3 ^ " " ^ run_range range3 ^ ")"
+        run_multigate gate ^ " (" ^ qreg1 ^ " " ^ run_range range1 ^ ")"
+        ^ " (" ^ qreg2 ^ " " ^ run_range range2 ^ ")"
+        ^ " (" ^ qreg3 ^ " " ^ run_range range3 ^ ")"
     | WithControl {gate; ctls; range1; tg; range2} ->
-        "cont ((" ^ run_unitary gate ^ ") (" ^ (String.concat " " ctls) ^ " "
-        ^ run_range range1 ^ ") " ^ tg ^ run_range range2 ^ ")"
+        begin match gate with
+        | Apply {gate; qreg; range} ->
+            if (range.starts=range.ends) then
+                "cont ((" ^ run_gate gate ^ " " ^ run_expr (range.starts) ^ " n)"
+                ^ " (" ^ run_expr range1.starts ^ ") " ^ run_expr range2.starts ^ ")"
+            else
+                "!circ_aux in let circ_aux = ref (m_skip n)\nin "
+                ^ "for ctl=" ^ run_expr (range.starts) ^ " to " ^ run_expr (range.ends)
+                ^ " do\n" ^ "circ_aux := !circ_aux -- " ^
+                "cont ((" ^ run_gate gate ^ " " ^ run_expr (range.starts) ^ " n)"
+                ^ " ctl " ^ run_expr range2.starts ^ ")\ndone;"
+        | MultiApply {gate; qreg1; range1; qreg2; range2; qreg3; range3} ->
+            ""
+        | FUN {id; args} ->  ""
+        | REV {id; args} -> ""
+        | _ -> "\nError\n"
+        end
     | FUN {id; args} ->
         id ^ " (" ^ String.concat " " (List.map run_expr args) ^ ")"
     | REV {id; args} ->
@@ -106,10 +125,28 @@ and aux body n : string
     | [i] -> run_instr i n
     | i :: tl -> run_instr i n ^ aux tl n ;;
 
+let rec sum_regs = function
+    | [] -> ""
+    | [i] -> i
+    | i :: tl -> i ^ "+" ^ sum_regs tl ;;
+
+let rec get_size = function
+    | [] -> ""
+    | [i] -> "requires{" ^ run_qreg i ^ "}\n"
+    | i :: tl -> "requires{" ^ run_qreg i ^ "}\n" ^ get_size tl
+
+let rec get_ids (qregs:qreg list)= function
+    | [] -> ""
+    | [i] -> i.id
+    | i :: ls -> i.id ^ " " ^ get_ids ls
 
 let run_circ = function
     {qregs; body} ->
-        " (" ^ (String.concat "" (List.map run_qreg qregs)) ^ "): circuit\n=\nbegin\n" ^
+        " (" ^ get_ids qregs
+        ^ "n: int): circuit\nrequires{n>0}\n" ^
+        if (List.length qregs > 1) then "requires{" ^ sum_regs qregs ^ "=n}\n"
+        else ""
+        ^ get_size qregs ^ "=\nbegin\n" ^
         "let c0 = ref (m_skip n) in\n" ^  aux body 0 ^ "end\n";;
 
 (*     (String.concat "" (List.map run_qreg qregs)) ^ (String.concat "\n" (List.map run_instr body)) ;;*)
