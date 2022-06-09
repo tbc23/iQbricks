@@ -30,7 +30,7 @@ type iter =
 
 type qreg =
 {
-    id: string;
+    qrid: string;
     size: expr;
 }
 

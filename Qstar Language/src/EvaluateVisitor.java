@@ -184,13 +184,13 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             size = Visit(node.getRegs().get(0).getRange());
         else size = "Num 0";
         global_qrs.clear();
-        qregs.append("{id=\"").append(qr).append("\"; ");
+        qregs.append("{qrid=\"").append(qr).append("\"; ");
         qregs.append("size=").append(size).append("}");
         global_qrs.add(qr);
         if (node.getRegs().size()>1) {
             for (QregNode c : node.getRegs().subList(1, node.getRegs().size())) {
                 qr = c.getId();
-                qregs.append("; {id=\"").append(qr).append("\"; ");
+                qregs.append("; {qrid=\"").append(qr).append("\"; ");
                 if (c.hasRange())
                     size = Visit(c.getRange());
                 else size = "Num 0";

@@ -7,7 +7,7 @@ aux = [];
 main = {
  id = "qft";
 circ = {
-qregs= [{id="qr"; size=Num 0}];
+qregs= [{qrid="qr"; size=Num 0}];
 body = [
 For {
 iter = {

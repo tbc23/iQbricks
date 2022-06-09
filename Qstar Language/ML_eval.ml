@@ -20,11 +20,11 @@ let rec run_expr = function
     | Var (e) -> e
 
 let run_qreg = function
-    {id; size} ->
-        if ((run_expr size)="0") then id ^ " = n"
-        else id ^ " = " ^ run_expr size
+    {qrid; size} ->
+        if ((run_expr size)="0") then ""(*qrid ^ " = n"*)
+        else "requires{"^ qrid ^ " = " ^ run_expr size ^ "}\n" ;;
 
-and run_cond = function
+let run_cond = function
     | Eq (e, d) -> run_expr e ^ " = " ^ run_expr d
     | NEq (e, d) -> run_expr e ^ " <> " ^ run_expr d
     | GEq (e, d) -> run_expr e ^ " >= " ^ run_expr d
@@ -53,11 +53,11 @@ let rec run_unitary = function
     | Sequence (e, d) ->  "(" ^ run_unitary e ^ ") -- (" ^ run_unitary d ^ ")"
     | Apply {gate; qreg; range} ->
         if (range.starts=range.ends) then
-        "place" ^ run_gate gate ^ " (" ^ qreg ^ " " ^ run_expr (range.starts) ^ " n)"
+        "place" ^ run_gate gate ^ " (" ^ run_expr (range.starts) ^ ") n)"
         else "!circ_aux in let circ_aux = ref (m_skip n)\nin "
         ^ "for i=" ^ run_expr (range.starts) ^ " to " ^ run_expr (range.ends)
         ^ " do\n" ^ "circ_aux := !circ_aux -- " ^
-        "place" ^ run_gate gate ^ " (" ^ qreg ^ " " ^ "i n)\ndone;"
+        "place" ^ run_gate gate ^ "i n)\ndone;"
     | MultiApply {gate; qreg1; range1; qreg2; range2; qreg3; range3} ->
         run_multigate gate ^ " (" ^ qreg1 ^ " " ^ run_range range1 ^ ")"
         ^ " (" ^ qreg2 ^ " " ^ run_range range2 ^ ")"
@@ -66,13 +66,13 @@ let rec run_unitary = function
         begin match gate with
         | Apply {gate; qreg; range} ->
             if (range.starts=range.ends) then
-                "cont ((" ^ run_gate gate ^ " " ^ run_expr (range.starts) ^ " n)"
-                ^ " (" ^ run_expr range1.starts ^ ") " ^ run_expr range2.starts ^ ")"
+                "cont ((" ^ run_gate gate ^ " (" ^ run_expr (range.starts) ^ ") n)"
+                ^ " (" ^ run_expr range1.starts ^ ") (" ^ run_expr range2.starts ^ "))"
             else
                 "!circ_aux in let circ_aux = ref (m_skip n)\nin "
                 ^ "for ctl=" ^ run_expr (range.starts) ^ " to " ^ run_expr (range.ends)
                 ^ " do\n" ^ "circ_aux := !circ_aux -- " ^
-                "cont ((" ^ run_gate gate ^ " " ^ run_expr (range.starts) ^ " n)"
+                "cont ((" ^ run_gate gate ^ " (" ^ run_expr (range.starts) ^ ") n)"
                 ^ " ctl " ^ run_expr range2.starts ^ ")\ndone;"
         | MultiApply {gate; qreg1; range1; qreg2; range2; qreg3; range3} ->
             ""
@@ -92,62 +92,60 @@ done*)
 
 let run_iter = function
     {iterator; starts; ends} ->
-        "for " ^ iterator ^ " = " ^ run_expr starts ^ " to " ^ run_expr ends ;;
-
+        "for " ^ iterator ^ " = " ^ run_expr starts ^ " to (" ^ run_expr ends ^ ")";;
 
 let rec run_instr i n =
     match i with
     | For {iter; inv; body; assertion} ->
         "let c" ^ string_of_int (n+1) ^ " = ref (m_skip n) in\n" ^
         run_iter iter ^ " do\n" ^
-        (aux body (n+1)) ^
+        (get_body body (n+1)) ^
         (String.concat "\n" assertion) ^ "\ndone;\n"
         ^ "c" ^ string_of_int n ^ " := !c" ^ string_of_int n
         ^ " -- !c" ^ string_of_int (n+1) ^ ";\n"
     | If {cond; body; assertion} ->
         "if (" ^ run_cond cond ^ ") then\n" ^
-        (aux body (n+1)) ^
+        (get_body body (n+1)) ^
         (String.concat "\n"  assertion) ^ " \n"
     | IfElse {cond; ifbody; elsebody; assertion} ->
             "if (" ^ run_cond cond ^ ") then\n" ^
-            (aux ifbody (n+1)) ^
-            " else \n" ^ "\n" ^ (aux elsebody (n+2))
+            (get_body ifbody (n+1)) ^
+            " else \n" ^ "\n" ^ (get_body elsebody (n+2))
             ^ "\n" ^ (String.concat "\n"  assertion) ^ "\n"
     | Unitary (unit) ->
         "c" ^ string_of_int n ^ " := !c"
         ^ string_of_int n ^ " -- (" ^ run_unitary unit ^ ");\n"
     | Return (e) -> "return (!c0)\n"
 
-and aux body n : string
+and get_body body n : string
     =
     match body with
     | [] -> ""
     | [i] -> run_instr i n
-    | i :: tl -> run_instr i n ^ aux tl n ;;
+    | i :: tl -> run_instr i n ^ get_body tl n ;;
 
 let rec sum_regs = function
     | [] -> ""
-    | [i] -> i
-    | i :: tl -> i ^ "+" ^ sum_regs tl ;;
+    | [i] -> i.qrid
+    | i :: tl -> i.qrid ^ "+" ^ sum_regs tl ;;
 
 let rec get_size = function
     | [] -> ""
-    | [i] -> "requires{" ^ run_qreg i ^ "}\n"
-    | i :: tl -> "requires{" ^ run_qreg i ^ "}\n" ^ get_size tl
+    | [i] -> run_qreg i
+    | i :: tl -> run_qreg i ^ get_size tl
 
-let rec get_ids (qregs:qreg list)= function
+let rec get_ids = function
     | [] -> ""
-    | [i] -> i.id
-    | i :: ls -> i.id ^ " " ^ get_ids ls
+    | [i] -> i.qrid ^ " "
+    | i :: ls -> i.qrid ^ " " ^ get_ids ls
 
 let run_circ = function
     {qregs; body} ->
         " (" ^ get_ids qregs
         ^ "n: int): circuit\nrequires{n>0}\n" ^
-        if (List.length qregs > 1) then "requires{" ^ sum_regs qregs ^ "=n}\n"
-        else ""
+        "requires{" ^ sum_regs qregs ^ "=n}\n"
         ^ get_size qregs ^ "=\nbegin\n" ^
-        "let c0 = ref (m_skip n) in\n" ^  aux body 0 ^ "end\n";;
+        "let c0 = ref (m_skip n) in\n" ^  get_body body 0 ^ "end\n";;
 
 (*     (String.concat "" (List.map run_qreg qregs)) ^ (String.concat "\n" (List.map run_instr body)) ;;*)
 
