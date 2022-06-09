@@ -40,6 +40,8 @@ params = [{id="qr";  type_=Qreg}; ];
 pre = ["{true}"; ];
 pos = ["{true}"; ];
 }};;
-
-let run = run_program p ;;
-print_endline run;;
+let () =
+       let run = run_program p in
+       let oc = open_out "translation.mlw" in
+         Printf.fprintf oc "%s" run;
+         close_out oc;

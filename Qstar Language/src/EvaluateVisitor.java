@@ -10,6 +10,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
     public List<String> global_qrs = new ArrayList<>();
     public Boolean diag = false;
     public List<String> unitaries = new ArrayList<>();
+    public List<List<String>> asserts = new ArrayList<>();
 
     public String printUnitaries (List<String> l) {
         String old, s="";
@@ -89,9 +90,11 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
 
         t.append(main);
         t.append("""
-                
-                let run = run_program p ;;
-                print_endline run;;""");
+            let () =
+                   let run = run_program p in
+                   let oc = open_out "translation.mlw" in
+                     Printf.fprintf oc "%s" run;
+                     close_out oc;""");
         //return r+"end";
         return t.toString();
     }
@@ -161,6 +164,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
     public String Visit(BodyNode node) {
         StringBuilder r = new StringBuilder("body = [\n");
         unitaries.clear();
+        asserts.clear();
         for(InstrNode c:node.getBodyInstr()){
             r.append(Visit(c));
         }
@@ -240,6 +244,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         old = circs.pop();
         r += circs.peek()+":= !"+circs.peek()+" -- !"+old+";\n";
         unitaries.clear();
+        asserts.clear();
         return s;
     }
 
@@ -334,6 +339,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         old = circs.pop();
         r += circs.peek()+":= !"+circs.peek()+" -- !"+old+";\n";
         unitaries.clear();
+        asserts.clear();
         return s;
     }
 
@@ -368,6 +374,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         s = "FUN {id=\"" + node.getFunID() + "\"; args=["
             + args + "]}";
         unitaries.add(s);
+        asserts.add(node.getAssertion().getAssertions());
         return "";
     }
 
@@ -389,6 +396,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         s = "REV {id=\"" + node.getFunID() + "\"; args=["
                 + args + "]}";
         unitaries.add(s);
+        asserts.add(node.getAssertion().getAssertions());
         return "";
     }
 
@@ -444,6 +452,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                     +qr+") n);\n" +Visit(node.getAssertion());
         }
         unitaries.add(s);
+        asserts.add(node.getAssertion().getAssertions());
         return "";
     }
 
@@ -504,6 +513,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                     +Visit(node.getAssertion());
         }
         unitaries.add(s);
+        asserts.add(node.getAssertion().getAssertions());
         return "";
     }
 
@@ -563,6 +573,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                     +Visit(node.getAssertion());
         }
         unitaries.add(s);
+        asserts.add(node.getAssertion().getAssertions());
         return "";
     }
 
@@ -622,6 +633,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                     +Visit(node.getAssertion());
         }
         unitaries.add(s);
+        asserts.add(node.getAssertion().getAssertions());
         return "";
     }
 
@@ -676,6 +688,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                     +qr+") n);\n" +Visit(node.getAssertion());
         }
         unitaries.add(s);
+        asserts.add(node.getAssertion().getAssertions());
         return "";
     }
 
@@ -730,6 +743,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                     +qr+") n);\n" +Visit(node.getAssertion());
         }
         unitaries.add(s);
+        asserts.add(node.getAssertion().getAssertions());
         return "";
     }
 
@@ -784,6 +798,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                     +qr+") n);\n" +Visit(node.getAssertion());
         }
         unitaries.add(s);
+        asserts.add(node.getAssertion().getAssertions());
         return "";
     }
 
@@ -838,6 +853,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                     +qr+") n);\n" +Visit(node.getAssertion());
         }
         unitaries.add(s);
+        asserts.add(node.getAssertion().getAssertions());
         return "";
     }
 
@@ -892,6 +908,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                     +qr+") n);\n" +Visit(node.getAssertion());
         }
         unitaries.add(s);
+        asserts.add(node.getAssertion().getAssertions());
         return "";
     }
 
@@ -912,6 +929,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                 +Visit(node.getRQreg())+") n);\n"
                 +Visit(node.getAssertion());
         unitaries.add(s);
+        asserts.add(node.getAssertion().getAssertions());
         return "";
     }
 
@@ -971,6 +989,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                     +Visit(node.getAssertion());
         }
         unitaries.add(s);
+        asserts.add(node.getAssertion().getAssertions());
         return "";
     }
 
@@ -1120,6 +1139,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             }
         }
         unitaries.add(s.toString());
+        asserts.add(node.getAssertion().getAssertions());
         return "";
     }
 
@@ -1136,6 +1156,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                 "; ends=" + Visit(node.getTarget())
                 +"}; qreg3=\"NONE\"; range3={starts=Num 0; ends=Num 0}}";
         unitaries.add(s);
+        asserts.add(node.getAssertion().getAssertions());
         return "";
     }
 
@@ -1156,6 +1177,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                 Visit(node.getTarget()) +
                 "; ends=" + Visit(node.getTarget())+ "}}";
         unitaries.add(s);
+        asserts.add(node.getAssertion().getAssertions());
         return "";
     }
 
@@ -1176,6 +1198,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                 Visit(node.getTarget()) +
                 "; ends=" + Visit(node.getTarget())+ "}}";
         unitaries.add(s);
+        asserts.add(node.getAssertion().getAssertions());
         return "";
     }
 

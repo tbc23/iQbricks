@@ -14,7 +14,8 @@ let rec run_expr = function
     | Divide (e, d) -> run_expr e ^ " / " ^ run_expr d
     | Power (e, d) -> "power " ^ (run_expr e) ^ (run_expr d)
     | Minus (e) -> "-" ^ run_expr e
-    | Len (e) -> "size(" ^ e ^ ")"
+(*    | Len (e) -> "size(" ^ e ^ ")"*)
+    | Len (e) -> e
     | Sqrt (e) -> "sqrt (" ^ run_expr e ^ ")"
     | Num (e) -> string_of_int e
     | Var (e) -> e
@@ -53,11 +54,11 @@ let rec run_unitary = function
     | Sequence (e, d) ->  "(" ^ run_unitary e ^ ") -- (" ^ run_unitary d ^ ")"
     | Apply {gate; qreg; range} ->
         if (range.starts=range.ends) then
-        "place" ^ run_gate gate ^ " (" ^ run_expr (range.starts) ^ ") n)"
+        "place" ^ run_gate gate ^ " (" ^ run_expr (range.starts) ^ ") n"
         else "!circ_aux in let circ_aux = ref (m_skip n)\nin "
         ^ "for i=" ^ run_expr (range.starts) ^ " to " ^ run_expr (range.ends)
         ^ " do\n" ^ "circ_aux := !circ_aux -- " ^
-        "place" ^ run_gate gate ^ "i n)\ndone;"
+        "place" ^ run_gate gate ^ " i n)\ndone;"
     | MultiApply {gate; qreg1; range1; qreg2; range2; qreg3; range3} ->
         run_multigate gate ^ " (" ^ qreg1 ^ " " ^ run_range range1 ^ ")"
         ^ " (" ^ qreg2 ^ " " ^ run_range range2 ^ ")"
@@ -83,12 +84,12 @@ let rec run_unitary = function
     | FUN {id; args} ->
         id ^ " (" ^ String.concat " " (List.map run_expr args) ^ ")"
     | REV {id; args} ->
-        "reverse (" ^ id ^ " (" ^ String.concat " " (List.map run_expr args) ^ ")"
+        "reverse (" ^ id ^ " (" ^ String.concat " " (List.map run_expr args) ^ "))"
 
-
-(*for variable = start_value to end_value do
-  expression
-done*)
+let rec run_assert = function
+    | [] -> ""
+    | [i] -> "assert" ^ i ^ "\n"
+    | h :: tl -> "assert" ^ h ^ "\n" ^ run_assert tl
 
 let run_iter = function
     {iterator; starts; ends} ->
@@ -100,19 +101,19 @@ let rec run_instr i n =
         "let c" ^ string_of_int (n+1) ^ " = ref (m_skip n) in\n" ^
         run_iter iter ^ " do\n" ^
         (get_body body (n+1)) ^
-        (String.concat "\n" assertion) ^ "\ndone;\n"
+        run_assert assertion ^ "\ndone;\n"
         ^ "c" ^ string_of_int n ^ " := !c" ^ string_of_int n
         ^ " -- !c" ^ string_of_int (n+1) ^ ";\n"
     | If {cond; body; assertion} ->
         "if (" ^ run_cond cond ^ ") then\n" ^
         (get_body body (n+1)) ^
-        (String.concat "\n"  assertion) ^ " \n"
+        run_assert assertion ^ " \n"
     | IfElse {cond; ifbody; elsebody; assertion} ->
             "if (" ^ run_cond cond ^ ") then\n" ^
             (get_body ifbody (n+1)) ^
             " else \n" ^ "\n" ^ (get_body elsebody (n+2))
-            ^ "\n" ^ (String.concat "\n"  assertion) ^ "\n"
-    | Unitary (unit) ->
+            ^ "\n" ^ run_assert assertion ^ "\n"
+    | Unitary {unit; assertion} ->
         "c" ^ string_of_int n ^ " := !c"
         ^ string_of_int n ^ " -- (" ^ run_unitary unit ^ ");\n"
     | Return (e) -> "return (!c0)\n"
@@ -145,7 +146,7 @@ let run_circ = function
         ^ "n: int): circuit\nrequires{n>0}\n" ^
         "requires{" ^ sum_regs qregs ^ "=n}\n"
         ^ get_size qregs ^ "=\nbegin\n" ^
-        "let c0 = ref (m_skip n) in\n" ^  get_body body 0 ^ "end\n";;
+        "let c0 = ref (m_skip n) in\n" ^  get_body body 0 ;;
 
 (*     (String.concat "" (List.map run_qreg qregs)) ^ (String.concat "\n" (List.map run_instr body)) ;;*)
 
@@ -154,11 +155,16 @@ let run_fun = function
         "let " ^ id
         ^ run_circ circ
         ^ "assert" ^ (String.concat "" pre)
-        ^ "\nassert" ^ (String.concat "" pos) ^ "\n\n";;
+        ^ "\nassert" ^ (String.concat "" pos) ^ "\nend\n";;
 (*        id ^ ":\n" ^ run_circ circ ^ (String.concat "" pre) ^ "\n" ^ String.concat "" pos ^ "\n\n";;*)
 
 let run_program {id; main; aux} =
-     (String.concat "" (List.map run_fun aux)) ^ run_fun main ;;
+        "module " ^ String.capitalize_ascii id ^ "\n\n"
+        ^ "use export binary.Bit_vector\n" ^
+        "use wired_circuits.Circuit_c\n" ^
+        "use export p_int.Int_comp\n" ^
+        "use ref.Ref\n\n" ^
+        (String.concat "" (List.map run_fun aux)) ^ run_fun main ^ "end\n";;
 
 (*let p = {
     id = "program";

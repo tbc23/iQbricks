@@ -70,7 +70,7 @@ type instruction =
     | For of {iter:iter; inv: string list; body:instruction list; assertion: string list}
     | If of {cond: cond; body:instruction list ; assertion: string list}
     | IfElse of {cond:cond; ifbody:instruction list; elsebody:instruction list; assertion:string list}
-    | Unitary of unitary
+    | Unitary of {unit:unitary; assertion:string list}
     | Return of string ;;
 
 type circ =
