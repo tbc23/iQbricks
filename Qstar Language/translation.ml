@@ -17,7 +17,8 @@ ends = Len "qr"
 };
 inv = ["{ true }"; ];
 body = [
-Unitary (Apply {gate=H; qreg="qr"; range={starts=Var "q"; ends=Var "q"}});
+Unitary (Apply {gate=H; qreg="qr"; range={starts=Var "q"; ends=Var "q"}; assertion=["{true}"; ]
+});
 For {
 iter = {
 iterator= "i";
@@ -26,7 +27,9 @@ ends = Subtract (Len "qr", Num 1)
 };
 inv = ["{ true }"; ];
 body=[
-Unitary (WithControl{gate=Apply {gate=Rz (Subtract (Subtract (Var "n",Var "i"),Num 1)); qreg="qr"; range={starts=Var "q"; ends=Var "q"}}; ctls=["qr"; ]; range1={starts=Plus (Var "i",Num 1); ends=Plus (Var "i",Num 1)}; tg="qr"; range2={starts=Var "q"; ends=Var "q"}});
+Unitary (WithControl{gate=Apply {gate=Rz (Subtract (Subtract (Var "n",Var "i"),Num 1)); qreg="qr"; range={starts=Var "q"; ends=Var "q"}; assertion=["{forall x y i. 0<= i < width aux ->basis_ket aux x y i = x i}"; ]
+}; ctls=["qr"; ]; range1={starts=Plus (Var "i",Num 1); ends=Plus (Var "i",Num 1)}; tg="qr"; range2={starts=Var "q"; ends=Var "q"}; assertion=["{forall x y i. 0<= i < width aux ->basis_ket aux x y i = x i}"; ]
+});
 ];
 assertion=[]
 };

@@ -1,4 +1,4 @@
-module Qft
+module Program
 
 use export binary.Bit_vector
 use wired_circuits.Circuit_c
@@ -25,7 +25,7 @@ assert{true}
 done;
 c0 := !c0 -- !c1;
 return (!c0)
-assert{true}
-assert{true}
+assert{true};
+assert{true};
 end
 end

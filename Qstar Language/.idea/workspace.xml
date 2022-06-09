@@ -10,17 +10,11 @@
       <change beforePath="$PROJECT_DIR$/ML_AST2.cmx" beforeDir="false" afterPath="$PROJECT_DIR$/ML_AST2.cmx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ML_AST2.ml" beforeDir="false" afterPath="$PROJECT_DIR$/ML_AST2.ml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ML_AST2.o" beforeDir="false" afterPath="$PROJECT_DIR$/ML_AST2.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ML_eval.cmi" beforeDir="false" afterPath="$PROJECT_DIR$/ML_eval.cmi" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ML_eval.cmx" beforeDir="false" afterPath="$PROJECT_DIR$/ML_eval.cmx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ML_eval.cmx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/ML_eval.ml" beforeDir="false" afterPath="$PROJECT_DIR$/ML_eval.ml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ML_eval.o" beforeDir="false" afterPath="$PROJECT_DIR$/ML_eval.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/EvaluateVisitor.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/EvaluateVisitor.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/program" beforeDir="false" afterPath="$PROJECT_DIR$/program" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ML_eval.o" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/EvaluateVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/EvaluateVisitor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/translation.cmi" beforeDir="false" afterPath="$PROJECT_DIR$/translation.cmi" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/translation.cmx" beforeDir="false" afterPath="$PROJECT_DIR$/translation.cmx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/translation.ml" beforeDir="false" afterPath="$PROJECT_DIR$/translation.ml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/translation.o" beforeDir="false" afterPath="$PROJECT_DIR$/translation.o" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

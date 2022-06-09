@@ -60,9 +60,9 @@ type multigate =
 
 type unitary =
     | Sequence of unitary * unitary
-    | Apply of {gate:gate; qreg:string; range:range}
-    | MultiApply of {gate:multigate; qreg1: string; range1:range; qreg2: string; range2:range; qreg3: string; range3:range }
-    | WithControl of {gate:unitary; ctls: string list; range1:range; tg:string; range2:range}
+    | Apply of {gate:gate; qreg:string; range:range; assertion:string list}
+    | MultiApply of {gate:multigate; qreg1: string; range1:range; qreg2: string; range2:range; qreg3: string; range3:range; assertion:string list}
+    | WithControl of {gate:unitary; ctls: string list; range1:range; tg:string; range2:range; assertion:string list}
     | FUN of {id:string; args: expr list}
     | REV of {id:string; args: expr list} ;;
 
@@ -70,7 +70,7 @@ type instruction =
     | For of {iter:iter; inv: string list; body:instruction list; assertion: string list}
     | If of {cond: cond; body:instruction list ; assertion: string list}
     | IfElse of {cond:cond; ifbody:instruction list; elsebody:instruction list; assertion:string list}
-    | Unitary of {unit:unitary; assertion:string list}
+    | Unitary of unitary
     | Return of string ;;
 
 type circ =

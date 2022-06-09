@@ -52,20 +52,20 @@ let run_range = function
 
 let rec run_unitary = function
     | Sequence (e, d) ->  "(" ^ run_unitary e ^ ") -- (" ^ run_unitary d ^ ")"
-    | Apply {gate; qreg; range} ->
+    | Apply {gate; qreg; range; assertion} ->
         if (range.starts=range.ends) then
         "place" ^ run_gate gate ^ " (" ^ run_expr (range.starts) ^ ") n"
         else "!circ_aux in let circ_aux = ref (m_skip n)\nin "
         ^ "for i=" ^ run_expr (range.starts) ^ " to " ^ run_expr (range.ends)
         ^ " do\n" ^ "circ_aux := !circ_aux -- " ^
         "place" ^ run_gate gate ^ " i n)\ndone;"
-    | MultiApply {gate; qreg1; range1; qreg2; range2; qreg3; range3} ->
+    | MultiApply {gate; qreg1; range1; qreg2; range2; qreg3; range3; assertion} ->
         run_multigate gate ^ " (" ^ qreg1 ^ " " ^ run_range range1 ^ ")"
         ^ " (" ^ qreg2 ^ " " ^ run_range range2 ^ ")"
         ^ " (" ^ qreg3 ^ " " ^ run_range range3 ^ ")"
-    | WithControl {gate; ctls; range1; tg; range2} ->
+    | WithControl {gate; ctls; range1; tg; range2; assertion} ->
         begin match gate with
-        | Apply {gate; qreg; range} ->
+        | Apply {gate; qreg; range; assertion} ->
             if (range.starts=range.ends) then
                 "cont ((" ^ run_gate gate ^ " (" ^ run_expr (range.starts) ^ ") n)"
                 ^ " (" ^ run_expr range1.starts ^ ") (" ^ run_expr range2.starts ^ "))"
@@ -75,7 +75,7 @@ let rec run_unitary = function
                 ^ " do\n" ^ "circ_aux := !circ_aux -- " ^
                 "cont ((" ^ run_gate gate ^ " (" ^ run_expr (range.starts) ^ ") n)"
                 ^ " ctl " ^ run_expr range2.starts ^ ")\ndone;"
-        | MultiApply {gate; qreg1; range1; qreg2; range2; qreg3; range3} ->
+        | MultiApply {gate; qreg1; range1; qreg2; range2; qreg3; range3; assertion} ->
             ""
         | FUN {id; args} ->  ""
         | REV {id; args} -> ""
@@ -113,7 +113,7 @@ let rec run_instr i n =
             (get_body ifbody (n+1)) ^
             " else \n" ^ "\n" ^ (get_body elsebody (n+2))
             ^ "\n" ^ run_assert assertion ^ "\n"
-    | Unitary {unit; assertion} ->
+    | Unitary (unit) ->
         "c" ^ string_of_int n ^ " := !c"
         ^ string_of_int n ^ " -- (" ^ run_unitary unit ^ ");\n"
     | Return (e) -> "return (!c0)\n"
@@ -155,7 +155,7 @@ let run_fun = function
         "let " ^ id
         ^ run_circ circ
         ^ "assert" ^ (String.concat "" pre)
-        ^ "\nassert" ^ (String.concat "" pos) ^ "\nend\n";;
+        ^ ";\nassert" ^ (String.concat "" pos) ^ ";\nend\n";;
 (*        id ^ ":\n" ^ run_circ circ ^ (String.concat "" pre) ^ "\n" ^ String.concat "" pos ^ "\n\n";;*)
 
 let run_program {id; main; aux} =
