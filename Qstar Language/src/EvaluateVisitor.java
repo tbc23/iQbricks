@@ -164,19 +164,19 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
     public String Visit(BodyNode node) {
         StringBuilder r = new StringBuilder("body = [\n");
         unitaries.clear();
-        asserts.clear();
+        //asserts.clear();
         for(InstrNode c:node.getBodyInstr()){
             r.append(Visit(c));
         }
         //System.out.println(unitaries);
-        return r+"];\n";
+        return r.toString();
     }
 
     @Override
     public String Visit(CircNode node) {
         String r;
         r = "qregs= ["+Visit(node.getIds())+"];\n"+
-            Visit(node.getBody());
+            Visit(node.getBody())+"];\n";
         return r;
     }
 
@@ -238,13 +238,14 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         }
         r += body + iterator +" := " + iterator + " + 1\ndone;\n"
                 + Visit(node.getAssertion());
-        if (body.equals("body = [\n];\n"))
+        if (body.equals("body = [\n"))
             s += "body=[\n" + printUnitaries(unitaries) + "];\n" + Visit(node.getAssertion()) + "};\n";
-        else s += body  + Visit(node.getAssertion()) + "};\n";
+        else s += body + printUnitaries(unitaries)
+                +"];\n" + Visit(node.getAssertion()) + "};\n";
         old = circs.pop();
         r += circs.peek()+":= !"+circs.peek()+" -- !"+old+";\n";
         unitaries.clear();
-        asserts.clear();
+        //asserts.clear();
         return s;
     }
 
@@ -284,7 +285,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             }
             else {
                 s = "Num 0";
-                e = limits[0];
+                e = "Var \"" + limits[0] + "\"";
             }
             r = "let ref " + iterator + " = 0\n" +
                     "in while (" + iterator + "<"
@@ -317,16 +318,19 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         String old, r,s;
         circs.push("c"+circs.size());
         s = printUnitaries(unitaries);
+        String body;
         if(!node.getWithElse()) {
-            s = "If {\ncond= " + Visit(node.getCond()) + ";\n"
-                    + Visit(node.getIfBody()) + printUnitaries(unitaries)
-                    + Visit(node.getAssertion()) + "};\n";
+            s += "If {\ncond= " + Visit(node.getCond()) + ";\n";
+            body = Visit(node.getIfBody());
+            if (body.equals("body = [\n"))
+                s += "body=[\n" + printUnitaries(unitaries) + "];\n" + Visit(node.getAssertion()) + "};\n";
+            else s += body +"];\n" + Visit(node.getAssertion()) + "};\n";
             r = "let " + circs.peek() + " = ref (m_skip n)\nin " +
                     "if (" + Visit(node.getCond()) + ")\nthen begin\n" +
                     Visit(node.getAssertion()) + Visit(node.getIfBody()) + "end\n";
         }
         else {
-            s = "IfElse {\ncond= " + Visit(node.getCond()) + ";\nif"
+            s += "IfElse {\ncond= " + Visit(node.getCond()) + ";\nif"
                     + Visit(node.getIfBody()) + printUnitaries(unitaries)
                     + "else" + Visit(node.getElseBody()) + printUnitaries(unitaries)
                     + Visit(node.getAssertion())
@@ -339,7 +343,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         old = circs.pop();
         r += circs.peek()+":= !"+circs.peek()+" -- !"+old+";\n";
         unitaries.clear();
-        asserts.clear();
+        //asserts.clear();
         return s;
     }
 
@@ -374,7 +378,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         s = "FUN {id=\"" + node.getFunID() + "\"; args=["
             + args + "]}";
         unitaries.add(s);
-        asserts.add(node.getAssertion().getAssertions());
+        //asserts.add(node.getAssertion().getAssertions());
         return "";
     }
 
@@ -396,7 +400,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         s = "REV {id=\"" + node.getFunID() + "\"; args=["
                 + args + "]}";
         unitaries.add(s);
-        asserts.add(node.getAssertion().getAssertions());
+        //asserts.add(node.getAssertion().getAssertions());
         return "";
     }
 
@@ -453,7 +457,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                     +qr+") n);\n" +Visit(node.getAssertion());
         }
         unitaries.add(s);
-        asserts.add(node.getAssertion().getAssertions());
+        //asserts.add(node.getAssertion().getAssertions());
         return "";
     }
 
@@ -515,7 +519,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                     +Visit(node.getAssertion());
         }
         unitaries.add(s);
-        asserts.add(node.getAssertion().getAssertions());
+        //asserts.add(node.getAssertion().getAssertions());
         return "";
     }
 
@@ -576,7 +580,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                     +Visit(node.getAssertion());
         }
         unitaries.add(s);
-        asserts.add(node.getAssertion().getAssertions());
+        //asserts.add(node.getAssertion().getAssertions());
         return "";
     }
 
@@ -638,7 +642,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                     +Visit(node.getAssertion());
         }
         unitaries.add(s);
-        asserts.add(node.getAssertion().getAssertions());
+        //asserts.add(node.getAssertion().getAssertions());
         return "";
     }
 
@@ -693,7 +697,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                     +qr+") n);\n" +Visit(node.getAssertion());
         }
         unitaries.add(s);
-        asserts.add(node.getAssertion().getAssertions());
+        //asserts.add(node.getAssertion().getAssertions());
         return "";
     }
 
@@ -748,7 +752,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                     +qr+") n);\n" +Visit(node.getAssertion());
         }
         unitaries.add(s);
-        asserts.add(node.getAssertion().getAssertions());
+        //asserts.add(node.getAssertion().getAssertions());
         return "";
     }
 
@@ -803,7 +807,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                     +qr+") n);\n" +Visit(node.getAssertion());
         }
         unitaries.add(s);
-        asserts.add(node.getAssertion().getAssertions());
+        //asserts.add(node.getAssertion().getAssertions());
         return "";
     }
 
@@ -858,7 +862,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                     +qr+") n);\n" +Visit(node.getAssertion());
         }
         unitaries.add(s);
-        asserts.add(node.getAssertion().getAssertions());
+        //asserts.add(node.getAssertion().getAssertions());
         return "";
     }
 
@@ -913,7 +917,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                     +qr+") n);\n" +Visit(node.getAssertion());
         }
         unitaries.add(s);
-        asserts.add(node.getAssertion().getAssertions());
+        //asserts.add(node.getAssertion().getAssertions());
         return "";
     }
 
@@ -934,7 +938,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                 +Visit(node.getRQreg())+") n);\n"
                 +Visit(node.getAssertion());
         unitaries.add(s);
-        asserts.add(node.getAssertion().getAssertions());
+        //asserts.add(node.getAssertion().getAssertions());
         return "";
     }
 
@@ -994,7 +998,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                     +Visit(node.getAssertion());
         }
         unitaries.add(s);
-        asserts.add(node.getAssertion().getAssertions());
+        //asserts.add(node.getAssertion().getAssertions());
         return "";
     }
 
@@ -1144,7 +1148,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             }
         }
         unitaries.add(s.toString());
-        asserts.add(node.getAssertion().getAssertions());
+        //asserts.add(node.getAssertion().getAssertions());
         return "";
     }
 
@@ -1161,7 +1165,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                 "; ends=" + Visit(node.getTarget())
                 +"}; qreg3=\"NONE\"; range3={starts=Num 0; ends=Num 0}; "+Visit(node.getAssertion())+"}";
         unitaries.add(s);
-        asserts.add(node.getAssertion().getAssertions());
+        //asserts.add(node.getAssertion().getAssertions());
         return "";
     }
 
@@ -1182,7 +1186,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                 Visit(node.getTarget()) +
                 "; ends=" + Visit(node.getTarget())+ "}; "+Visit(node.getAssertion())+"}";
         unitaries.add(s);
-        asserts.add(node.getAssertion().getAssertions());
+        //asserts.add(node.getAssertion().getAssertions());
         return "";
     }
 
@@ -1203,7 +1207,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                 Visit(node.getTarget()) +
                 "; ends=" + Visit(node.getTarget())+ "}; "+Visit(node.getAssertion())+"}";
         unitaries.add(s);
-        asserts.add(node.getAssertion().getAssertions());
+        //asserts.add(node.getAssertion().getAssertions());
         return "";
     }
 

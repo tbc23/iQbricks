@@ -15,33 +15,33 @@ iterator= "q";
 starts = Num 0;
 ends = Len "qr"
 };
-inv = ["{ true }"; ];
+inv = ["{range !c1 = !q}"; "{forall x y i. 0<= i < n -> basis_ket !c1 x y i = if 0<= i < !q then y i else x i}"; "{forall x y. ang_ind !c1 x y = (ind_isum(fun k -> (ind_isum (fun l -> x l * y k * power 2 (n-l - 1+k)) k n))0 !q) /./ n}"; ];
 body = [
-Unitary (Apply {gate=H; qreg="qr"; range={starts=Var "q"; ends=Var "q"}; assertion=["{true}"; ]
-});
 For {
 iter = {
 iterator= "i";
 starts = Var "q";
 ends = Subtract (Len "qr", Num 1)
 };
-inv = ["{ true }"; ];
+inv = ["{range !c2 = 0}"; "{forall x y i. 0<= i < n -> basis_ket !c2 x y i = x i}"; "{forall x y. ang_ind !c2 x y = (ind_isum (fun l -> x l * x !q * power 2 (n- l -1+ !q)) (!q+1) !i) /./n}"; ];
 body=[
-Unitary (WithControl{gate=Apply {gate=Rz (Subtract (Subtract (Var "n",Var "i"),Num 1)); qreg="qr"; range={starts=Var "q"; ends=Var "q"}; assertion=["{forall x y i. 0<= i < width aux ->basis_ket aux x y i = x i}"; ]
-}; ctls=["qr"; ]; range1={starts=Plus (Var "i",Num 1); ends=Plus (Var "i",Num 1)}; tg="qr"; range2={starts=Var "q"; ends=Var "q"}; assertion=["{forall x y i. 0<= i < width aux ->basis_ket aux x y i = x i}"; ]
+Unitary (WithControl{gate=Apply {gate=Rz (Subtract (Subtract (Var "n",Var "i"),Num 1)); qreg="qr"; range={starts=Var "q"; ends=Var "q"}; assertion=[]
+}; ctls=["qr"; ]; range1={starts=Plus (Var "i",Num 1); ends=Plus (Var "i",Num 1)}; tg="qr"; range2={starts=Var "q"; ends=Var "q"}; assertion=[]
 });
 ];
 assertion=[]
 };
+Unitary (Apply {gate=H; qreg="qr"; range={starts=Var "q"; ends=Var "q"}; assertion=["{forall x y i. 0<= i < n -> basis_ket !cl x y i = if i = !q then y 0 else x i}"; "{forall x y. ang_ind !cl x y = (ind_isum (fun l -> x l * y 0 * power 2 (n-l - 1+ !q)) !q n) /./ n}"; ]
+});
 ];
-assertion=["{true}"; ]
+assertion=[]
 };
 Return "";
 ];
 };
 params = [{id="qr";  type_=Qreg}; ];
 pre = ["{true}"; ];
-pos = ["{true}"; ];
+pos = ["{width result = n}"; "{range result = n}"; "{forall x y i. 0<= i < n -> basis_ket result x y i = y i}"; "{forall x y. ang_ind result x y  = (ind_isum(fun k -> (ind_isum (fun l -> x l * y k * power 2 (n-l - 1+k)) k n))0 n) /./ n}"; ];
 }};;
 let () =
        let run = run_program p in

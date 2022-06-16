@@ -7,6 +7,26 @@ let rec power a = function
     let b = power a (n / 2) in
     b * b * (if n mod 2 = 0 then 1 else a) ;;
 
+let rec run_assert = function
+    | [] -> ""
+    | [i] -> "assert" ^ i ^ "\n"
+    | h :: tl -> "assert" ^ h ^ "\n" ^ run_assert tl
+
+let rec run_inv = function
+    | [] -> ""
+    | [i] -> "invariant" ^ i ^ "\n"
+    | h :: tl -> "invariant" ^ h ^ "\n" ^ run_inv tl
+
+let rec run_requires = function
+    | [] -> ""
+    | [i] -> "requires" ^ i ^ "\n"
+    | h :: tl -> "requires" ^ h ^ "\n" ^ run_requires tl
+
+let rec run_ensures = function
+    | [] -> ""
+    | [i] -> "ensures" ^ i ^ "\n"
+    | h :: tl -> "ensures" ^ h ^ "\n" ^ run_ensures tl
+
 let rec run_expr = function
     | Plus (e, d) -> run_expr e ^ " + " ^ run_expr d
     | Subtract (e, d) -> run_expr e ^ " - " ^ run_expr d
@@ -50,25 +70,37 @@ let run_range = function
         if (starts=ends) then "[" ^ run_expr starts ^ "]"
         else "[" ^ run_expr starts ^ " to " ^ run_expr ends ^ "]"
 
-let rec run_unitary = function
-    | Sequence (e, d) ->  "(" ^ run_unitary e ^ ") -- (" ^ run_unitary d ^ ")"
+let rec run_unitary unit n =
+    match unit with
+    | Sequence (e, d) ->  (run_unitary e n) ^ (run_unitary d n)
     | Apply {gate; qreg; range; assertion} ->
         if (range.starts=range.ends) then
-        "place" ^ run_gate gate ^ " (" ^ run_expr (range.starts) ^ ") n"
+            "c" ^ string_of_int n ^ " := !c"
+            ^ string_of_int n
+            ^ " -- (place" ^ run_gate gate
+            ^ " (" ^ run_expr (range.starts) ^ ") n);\n"
+            ^ run_assert assertion
         else "!circ_aux in let circ_aux = ref (m_skip n)\nin "
         ^ "for i=" ^ run_expr (range.starts) ^ " to " ^ run_expr (range.ends)
         ^ " do\n" ^ "circ_aux := !circ_aux -- " ^
         "place" ^ run_gate gate ^ " i n)\ndone;"
     | MultiApply {gate; qreg1; range1; qreg2; range2; qreg3; range3; assertion} ->
-        run_multigate gate ^ " (" ^ qreg1 ^ " " ^ run_range range1 ^ ")"
-        ^ " (" ^ qreg2 ^ " " ^ run_range range2 ^ ")"
-        ^ " (" ^ qreg3 ^ " " ^ run_range range3 ^ ")"
+        "c" ^ string_of_int n ^ " := !c"
+        ^ string_of_int n ^ " -- (" ^
+         run_multigate gate ^ " (" ^ qreg1 ^ " " ^ run_range range1 ^ ")"
+         ^ " (" ^ qreg2 ^ " " ^ run_range range2 ^ ")"
+         ^ " (" ^ qreg3 ^ " " ^ run_range range3 ^ ")" ^
+          ");\n" ^ run_assert assertion
+
     | WithControl {gate; ctls; range1; tg; range2; assertion} ->
         begin match gate with
         | Apply {gate; qreg; range; assertion} ->
             if (range.starts=range.ends) then
-                "cont ((" ^ run_gate gate ^ " (" ^ run_expr (range.starts) ^ ") n)"
+                "c" ^ string_of_int n ^ " := !c"
+                ^ string_of_int n ^ " -- ("
+                ^ "cont ((" ^ run_gate gate ^ " (" ^ run_expr (range.starts) ^ ") n)"
                 ^ " (" ^ run_expr range1.starts ^ ") (" ^ run_expr range2.starts ^ "))"
+                ^ ");\n"
             else
                 "!circ_aux in let circ_aux = ref (m_skip n)\nin "
                 ^ "for ctl=" ^ run_expr (range.starts) ^ " to " ^ run_expr (range.ends)
@@ -80,16 +112,11 @@ let rec run_unitary = function
         | FUN {id; args} ->  ""
         | REV {id; args} -> ""
         | _ -> "\nError\n"
-        end
+        end ^ run_assert assertion
     | FUN {id; args} ->
         id ^ " (" ^ String.concat " " (List.map run_expr args) ^ ")"
     | REV {id; args} ->
         "reverse (" ^ id ^ " (" ^ String.concat " " (List.map run_expr args) ^ "))"
-
-let rec run_assert = function
-    | [] -> ""
-    | [i] -> "assert" ^ i ^ "\n"
-    | h :: tl -> "assert" ^ h ^ "\n" ^ run_assert tl
 
 let run_iter = function
     {iterator; starts; ends} ->
@@ -100,6 +127,11 @@ let rec run_instr i n =
     | For {iter; inv; body; assertion} ->
         "let c" ^ string_of_int (n+1) ^ " = ref (m_skip n) in\n" ^
         run_iter iter ^ " do\n" ^
+        "invariant{width !c" ^ string_of_int (n+1) ^ "=n}\n"
+        ^ "invariant{"^ run_expr (iter.starts) ^ "<="
+        ^ iter.iterator ^ "<=" ^ run_expr (iter.ends) ^ "}\n"
+        ^ "variant{" ^ run_expr (iter.ends) ^"-"^ iter.iterator ^ "}\n" ^
+        run_inv inv ^
         (get_body body (n+1)) ^
         run_assert assertion ^ "\ndone;\n"
         ^ "c" ^ string_of_int n ^ " := !c" ^ string_of_int n
@@ -114,8 +146,9 @@ let rec run_instr i n =
             " else \n" ^ "\n" ^ (get_body elsebody (n+2))
             ^ "\n" ^ run_assert assertion ^ "\n"
     | Unitary (unit) ->
-        "c" ^ string_of_int n ^ " := !c"
-        ^ string_of_int n ^ " -- (" ^ run_unitary unit ^ ");\n"
+        (*"c" ^ string_of_int n ^ " := !c"
+        ^ string_of_int n ^ " -- (" ^ run_unitary unit ^ ");\n"*)
+        run_unitary unit n
     | Return (e) -> "return (!c0)\n"
 
 and get_body body n : string
@@ -142,10 +175,7 @@ let rec get_ids = function
 
 let run_circ = function
     {qregs; body} ->
-        " (" ^ get_ids qregs
-        ^ "n: int): circuit\nrequires{n>0}\n" ^
-        "requires{" ^ sum_regs qregs ^ "=n}\n"
-        ^ get_size qregs ^ "=\nbegin\n" ^
+        "=\nbegin\n" ^
         "let c0 = ref (m_skip n) in\n" ^  get_body body 0 ;;
 
 (*     (String.concat "" (List.map run_qreg qregs)) ^ (String.concat "\n" (List.map run_instr body)) ;;*)
@@ -153,9 +183,14 @@ let run_circ = function
 let run_fun = function
     {id; circ; params; pre; pos} ->
         "let " ^ id
+        ^ " (" ^ (get_ids circ.qregs)
+        ^ "n: int): circuit\nrequires{0>n}\n" ^
+        "requires{" ^ (sum_regs circ.qregs) ^ "=n}\n"
+        ^ get_size circ.qregs
+        ^ run_requires pre
         ^ run_circ circ
         ^ "assert" ^ (String.concat "" pre)
-        ^ ";\nassert" ^ (String.concat "" pos) ^ ";\nend\n";;
+        ^ ";\n"^ run_ensures pos ^ "\nend\n";;
 (*        id ^ ":\n" ^ run_circ circ ^ (String.concat "" pre) ^ "\n" ^ String.concat "" pos ^ "\n\n";;*)
 
 let run_program {id; main; aux} =
