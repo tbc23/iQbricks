@@ -7,15 +7,20 @@ let rec power a = function
     let b = power a (n / 2) in
     b * b * (if n mod 2 = 0 then 1 else a) ;;
 
-let rec run_assert = function
-    | [] -> ""
-    | [i] -> "assert" ^ i ^ "\n"
-    | h :: tl -> "assert" ^ h ^ "\n" ^ run_assert tl
+let replace_circ s n =
+    Str.global_replace (Str.regexp "circ") ("!c" ^ string_of_int n) s ;;
 
-let rec run_inv = function
+let rec run_assert a n =
+    match a with
     | [] -> ""
-    | [i] -> "invariant" ^ i ^ "\n"
-    | h :: tl -> "invariant" ^ h ^ "\n" ^ run_inv tl
+    | [i] -> "assert" ^ (replace_circ i n) ^ ";\n"
+    | h :: tl -> "assert" ^ (replace_circ h n) ^ ";\n" ^ run_assert tl n
+
+let rec run_inv a n =
+    match a with
+    | [] -> ""
+    | [i] -> "invariant" ^ (replace_circ i n) ^ "\n"
+    | h :: tl -> "invariant" ^ (replace_circ h n) ^ "\n" ^ run_inv tl n
 
 let rec run_requires = function
     | [] -> ""
@@ -79,7 +84,7 @@ let rec run_unitary unit n =
             ^ string_of_int n
             ^ " -- (place" ^ run_gate gate
             ^ " (" ^ run_expr (range.starts) ^ ") n);\n"
-            ^ run_assert assertion
+            ^ run_assert assertion n
         else "!circ_aux in let circ_aux = ref (m_skip n)\nin "
         ^ "for i=" ^ run_expr (range.starts) ^ " to " ^ run_expr (range.ends)
         ^ " do\n" ^ "circ_aux := !circ_aux -- " ^
@@ -90,29 +95,44 @@ let rec run_unitary unit n =
          run_multigate gate ^ " (" ^ qreg1 ^ " " ^ run_range range1 ^ ")"
          ^ " (" ^ qreg2 ^ " " ^ run_range range2 ^ ")"
          ^ " (" ^ qreg3 ^ " " ^ run_range range3 ^ ")" ^
-          ");\n" ^ run_assert assertion
+          ");\n" ^ run_assert assertion n
 
     | WithControl {gate; ctls; range1; tg; range2; assertion} ->
         begin match gate with
         | Apply {gate; qreg; range; assertion} ->
-            if (range.starts=range.ends) then
-                "c" ^ string_of_int n ^ " := !c"
-                ^ string_of_int n ^ " -- ("
-                ^ "cont ((" ^ run_gate gate ^ " (" ^ run_expr (range.starts) ^ ") n)"
-                ^ " (" ^ run_expr range1.starts ^ ") (" ^ run_expr range2.starts ^ "))"
-                ^ ");\n"
-            else
-                "!circ_aux in let circ_aux = ref (m_skip n)\nin "
-                ^ "for ctl=" ^ run_expr (range.starts) ^ " to " ^ run_expr (range.ends)
-                ^ " do\n" ^ "circ_aux := !circ_aux -- " ^
-                "cont ((" ^ run_gate gate ^ " (" ^ run_expr (range.starts) ^ ") n)"
-                ^ " ctl " ^ run_expr range2.starts ^ ")\ndone;"
+            begin match gate with
+                | Rz (a) ->
+                    if (range.starts=range.ends) then
+                                "c" ^ string_of_int n ^ " := !c"
+                                ^ string_of_int n ^ " -- ("
+                                ^ "crz (" ^ run_expr a ^ ") (" ^ run_expr range1.starts
+                                ^ ") (" ^ run_expr range2.starts ^ ") n);\n"
+                    else
+                                "!circ_aux in let circ_aux = ref (m_skip n)\nin "
+                                ^ "for ctl=" ^ run_expr (range.starts) ^ " to " ^ run_expr (range.ends)
+                                ^ " do\n" ^ "circ_aux := !circ_aux -- " ^
+                                "cont ((" ^ run_gate gate ^ " (" ^ run_expr (range.starts) ^ ") n)"
+                                ^ " ctl " ^ run_expr range2.starts ^ ")\ndone;"
+                | _ ->
+                    if (range.starts=range.ends) then
+                        "c" ^ string_of_int n ^ " := !c"
+                        ^ string_of_int n ^ " -- ("
+                        ^ "cont ((" ^ run_gate gate ^ " (" ^ run_expr (range.starts) ^ ") n)"
+                        ^ " (" ^ run_expr range1.starts ^ ") (" ^ run_expr range2.starts ^ "))"
+                        ^ ");\n"
+                    else
+                        "!circ_aux in let circ_aux = ref (m_skip n)\nin "
+                        ^ "for ctl=" ^ run_expr (range.starts) ^ " to " ^ run_expr (range.ends)
+                        ^ " do\n" ^ "circ_aux := !circ_aux -- " ^
+                        "cont ((" ^ run_gate gate ^ " (" ^ run_expr (range.starts) ^ ") n)"
+                        ^ " ctl " ^ run_expr range2.starts ^ ")\ndone;"
+            end
         | MultiApply {gate; qreg1; range1; qreg2; range2; qreg3; range3; assertion} ->
             ""
         | FUN {id; args} ->  ""
         | REV {id; args} -> ""
         | _ -> "\nError\n"
-        end ^ run_assert assertion
+        end ^ run_assert assertion n
     | FUN {id; args} ->
         id ^ " (" ^ String.concat " " (List.map run_expr args) ^ ")"
     | REV {id; args} ->
@@ -130,21 +150,20 @@ let rec run_instr i n =
         "invariant{width !c" ^ string_of_int (n+1) ^ "=n}\n"
         ^ "invariant{"^ run_expr (iter.starts) ^ "<="
         ^ iter.iterator ^ "<=" ^ run_expr (iter.ends) ^ "}\n"
-        ^ "variant{" ^ run_expr (iter.ends) ^"-"^ iter.iterator ^ "}\n" ^
-        run_inv inv ^
+        ^ run_inv inv (n+1)^
         (get_body body (n+1)) ^
-        run_assert assertion ^ "\ndone;\n"
+        (run_assert assertion n) ^ "\ndone;\n"
         ^ "c" ^ string_of_int n ^ " := !c" ^ string_of_int n
         ^ " -- !c" ^ string_of_int (n+1) ^ ";\n"
     | If {cond; body; assertion} ->
         "if (" ^ run_cond cond ^ ") then\n" ^
         (get_body body (n+1)) ^
-        run_assert assertion ^ " \n"
+        (run_assert assertion n) ^ " \n"
     | IfElse {cond; ifbody; elsebody; assertion} ->
             "if (" ^ run_cond cond ^ ") then\n" ^
             (get_body ifbody (n+1)) ^
             " else \n" ^ "\n" ^ (get_body elsebody (n+2))
-            ^ "\n" ^ run_assert assertion ^ "\n"
+            ^ "\n" ^ (run_assert assertion n) ^ "\n"
     | Unitary (unit) ->
         (*"c" ^ string_of_int n ^ " := !c"
         ^ string_of_int n ^ " -- (" ^ run_unitary unit ^ ");\n"*)
@@ -189,16 +208,21 @@ let run_fun = function
         ^ get_size circ.qregs
         ^ run_requires pre
         ^ run_circ circ
-        ^ "assert" ^ (String.concat "" pre)
         ^ ";\n"^ run_ensures pos ^ "\nend\n";;
 (*        id ^ ":\n" ^ run_circ circ ^ (String.concat "" pre) ^ "\n" ^ String.concat "" pos ^ "\n\n";;*)
 
 let run_program {id; main; aux} =
         "module " ^ String.capitalize_ascii id ^ "\n\n"
-        ^ "use export binary.Bit_vector\n" ^
-        "use wired_circuits.Circuit_c\n" ^
-        "use export p_int.Int_comp\n" ^
-        "use ref.Ref\n\n" ^
+        ^ "use export binary.Bit_vector
+use wired_circuits.Circuit_c
+use export p_int.Int_comp
+use ref.Ref
+use qbricks.Circuit_macros
+use int.Int
+use wired_circuits.Qbricks_prim
+use qbricks.Circuit_semantics
+use exponentiation.Int_Exponentiation
+use unit_circle.Angle\n\n" ^
         (String.concat "" (List.map run_fun aux)) ^ run_fun main ^ "end\n";;
 
 (*let p = {
