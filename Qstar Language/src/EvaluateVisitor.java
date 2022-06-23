@@ -94,7 +94,8 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                    let run = run_program p in
                    let oc = open_out "translation.mlw" in
                      Printf.fprintf oc "%s" run;
-                     close_out oc;""");
+                     close_out oc;
+                     print_endline "translation.mlw generated";""");
         //return r+"end";
         return t.toString();
     }

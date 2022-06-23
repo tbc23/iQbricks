@@ -9,7 +9,6 @@ pre {true}
             }
             H(qr[q])
             assert {
-                {range circ = 1},
                 {width circ = n},
                 {forall x y: int->int. forall i:int. 0<=i<n ->basis_ket circ x y i = if i = q then y 0 else x i},
                 {forall m:int. forall x y: int->int.   1<=m ->  ang_ind circ x y  =  (x q * y 0 * power 2 (m-1)) /./ m}

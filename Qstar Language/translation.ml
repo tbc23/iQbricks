@@ -17,7 +17,7 @@ ends = Len "qr"
 };
 inv = ["{range circ = q}"; "{forall x y i. 0<= i < n -> basis_ket circ x y i = if 0<= i < q then y i else x i}"; "{forall x y. ang_ind circ x y = (ind_isum(fun k -> (ind_isum (fun l -> x l * y k * power 2 (n-l - 1+k)) k n))0 q) /./ n}"; ];
 body = [
-Unitary (Apply {gate=H; qreg="qr"; range={starts=Var "q"; ends=Var "q"}; assertion=["{range circ = 1}"; "{width circ = n}"; "{forall x y: int->int. forall i:int. 0<=i<n ->basis_ket circ x y i = if i = q then y 0 else x i}"; "{forall m:int. forall x y: int->int.   1<=m ->  ang_ind circ x y  =  (x q * y 0 * power 2 (m-1)) /./ m}"; ]
+Unitary (Apply {gate=H; qreg="qr"; range={starts=Var "q"; ends=Var "q"}; assertion=["{width circ = n}"; "{forall x y: int->int. forall i:int. 0<=i<n ->basis_ket circ x y i = if i = q then y 0 else x i}"; "{forall m:int. forall x y: int->int.   1<=m ->  ang_ind circ x y  =  (x q * y 0 * power 2 (m-1)) /./ m}"; ]
 });
 For {
 iter = {
@@ -48,3 +48,4 @@ let () =
        let oc = open_out "translation.mlw" in
          Printf.fprintf oc "%s" run;
          close_out oc;
+         print_endline "translation.mlw generated";

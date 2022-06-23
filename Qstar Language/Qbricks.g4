@@ -21,7 +21,6 @@ params  :
         OP param (VG param)* CL     #funParams
         ;
 
-
 param   :
         ptype=type id=ID             #singlePar
         ;
@@ -29,7 +28,6 @@ param   :
 args    :
         term (VG term)*     #funArgs
         ;
-
 
 type    :
         INT         #intType
