@@ -92,12 +92,12 @@ let rec run_unitary unit n =
             ^ " -- (place" ^ run_gate gate
             ^ " (" ^ run_expr (range.starts) ^ ") n);\n"
             ^ run_assert assertion n
-        else "circ_aux := ref (m_skip n) in\n"
+        else "let circ_aux = ref (m_skip n) in\n"
             ^ "for i=" ^ run_expr (range.starts) ^ " to (" ^ run_expr (range.ends)
             ^ ") do\n" ^ "invariant{width !c" ^ (string_of_int n) ^ "=n}\n"
             ^ "circ_aux := !circ_aux -- (place" ^ run_gate gate
             ^ " i n);\ndone;\n" ^ "c" ^ string_of_int n ^ " := !c"
-            ^ string_of_int n ^ " -- circ_aux;\n" ^ run_assert assertion n
+            ^ string_of_int n ^ " -- !circ_aux;\n" ^ run_assert assertion n
     | MultiApply {gate; qreg1; range1; qreg2; range2; qreg3; range3; assertion} ->
         "c" ^ string_of_int n ^ " := !c"
         ^ string_of_int n ^ " -- (" ^
@@ -117,7 +117,7 @@ let rec run_unitary unit n =
                         ^ "crz (" ^ run_expr a ^ ") (" ^ run_expr range1.starts
                         ^ ") (" ^ run_expr range2.starts ^ ") n);\n"
                     else
-                        "!circ_aux in let circ_aux = ref (m_skip n)\nin "
+                        "let circ_aux = ref (m_skip n)\nin "
                         ^ "for ctl=" ^ run_expr (range.starts) ^ " to " ^ run_expr (range.ends)
                         ^ " do\n" ^ "circ_aux := !circ_aux -- " ^
                         "cont ((" ^ run_gate gate ^ " (" ^ run_expr (range.starts) ^ ") n)"
@@ -130,7 +130,7 @@ let rec run_unitary unit n =
                         ^ " (" ^ run_expr range1.starts ^ ") (" ^ run_expr range2.starts ^ "))"
                         ^ ");\n"
                     else
-                        "!circ_aux in let circ_aux = ref (m_skip n)\nin "
+                        "let circ_aux = ref (m_skip n)\nin "
                         ^ "for ctl=" ^ run_expr (range.starts) ^ " to " ^ run_expr (range.ends)
                         ^ " do\n" ^ "circ_aux := !circ_aux -- " ^
                         "cont ((" ^ run_gate gate ^ " (" ^ run_expr (range.starts) ^ ") n)"
@@ -170,11 +170,15 @@ let rec run_instr i n =
         "if (" ^ run_cond cond ^ ") then\n" ^
         (get_body body (n+1)) ^
         (run_assert assertion n) ^ " \n"
+        ^ "c" ^ string_of_int n ^ " := !c" ^ string_of_int n
+        ^ " -- !c" ^ string_of_int (n+1) ^ ";\n"
     | IfElse {cond; ifbody; elsebody; assertion} ->
             "if (" ^ run_cond cond ^ ") then\n" ^
             (get_body ifbody (n+1)) ^
-            " else \n" ^ "\n" ^ (get_body elsebody (n+2))
+            " else \n" ^ "\n" ^ (get_body elsebody (n+1))
             ^ "\n" ^ (run_assert assertion n) ^ "\n"
+            ^ "c" ^ string_of_int n ^ " := !c" ^ string_of_int n
+            ^ " -- !c" ^ string_of_int (n+1) ^ ";\n"
     | Unitary (unit) ->
         run_unitary unit n
     | Return (e) -> "return (!c0);\n"
@@ -233,41 +237,3 @@ use qbricks.Circuit_semantics
 use exponentiation.Int_Exponentiation
 use unit_circle.Angle\n\n" ^
         (String.concat "" (List.map run_fun aux)) ^ run_fun main ^ "end\n";;
-
-(*let p = {
-    id = "program";
-    main = {
-        id="main";
-        circ= {
-            qregs= [{id="qr"; size=Num 0}];
-            body= [Unitary (Apply {gate=H; qreg="qr"; range={starts=Var "i"; ends=Var "i"}});
-                    If {
-                        cond= Gt (Var "a", Num 0);
-                        body=[Unitary (Apply {gate=H; qreg="qr"; range={starts=Num 0; ends=Var "n"}})];
-                        assertion=[]
-                    };
-                    For {
-                        iter = {
-                            iterator="i";
-                            starts=Num 0;
-                            ends=Var "n-1"
-                        };
-                        inv = [];
-                        body= [
-                            Unitary(WithControl{
-                                gate= Rz (Num 1);
-                                ctls= ["i"];
-                                tg= "n-1"
-                            })
-                        ];
-                        assertion=[]
-                    };
-                    Return "c"]
-        };
-        params = [{id="n"; type_=Int}; ];
-        pre = ["precond"];
-        pos = ["postcond"];
-    };
-    aux = []
-};;*)
-

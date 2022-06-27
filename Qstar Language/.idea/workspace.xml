@@ -10,10 +10,9 @@
       <change beforePath="$PROJECT_DIR$/ML_eval.cmx" beforeDir="false" afterPath="$PROJECT_DIR$/ML_eval.cmx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ML_eval.ml" beforeDir="false" afterPath="$PROJECT_DIR$/ML_eval.ml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ML_eval.o" beforeDir="false" afterPath="$PROJECT_DIR$/ML_eval.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Qbricks.g4" beforeDir="false" afterPath="$PROJECT_DIR$/Qbricks.g4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/Main.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/program" beforeDir="false" afterPath="$PROJECT_DIR$/program" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qft.txt" beforeDir="false" afterPath="$PROJECT_DIR$/qft.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/EvaluateVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/EvaluateVisitor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/translation.cmi" beforeDir="false" afterPath="$PROJECT_DIR$/translation.cmi" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/translation.cmx" beforeDir="false" afterPath="$PROJECT_DIR$/translation.cmx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/translation.ml" beforeDir="false" afterPath="$PROJECT_DIR$/translation.ml" afterDir="false" />
@@ -85,7 +84,7 @@
       <recent name="" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Makefile Target.compile">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Main" />
       <module name="Qbricks" />
@@ -93,8 +92,15 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="compile" type="MAKEFILE_TARGET_RUN_CONFIGURATION" factoryName="Makefile" temporary="true">
+      <makefile filename="$PROJECT_DIR$/Makefile" target="compile" workingDirectory="" arguments="">
+        <envs />
+      </makefile>
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Makefile Target.compile" />
         <item itemvalue="Application.Main" />
         <item itemvalue="Application.Main" />
         <item itemvalue="Application.Main" />

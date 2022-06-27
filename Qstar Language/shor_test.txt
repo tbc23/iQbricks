@@ -1,0 +1,20 @@
+|| shor ||
+pre { true }
+    circ c, x, b ->
+        qft(b)
+        for i in range(len(x)-1) {
+            with control c, x[i] (add(b))
+        }
+        reverse(qft(b))
+        return
+pos { true }
+
+| add | (qreg q)
+pre { true }
+    circ q ->
+pos { true }
+
+| qft | (qreg q)
+pre { true }
+    circ q ->
+pos { true }
