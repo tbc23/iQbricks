@@ -82,6 +82,75 @@ let run_range = function
         if (starts=ends) then "[" ^ run_expr starts ^ "]"
         else "[" ^ run_expr starts ^ " to " ^ run_expr ends ^ "]"
 
+let rec run_unitary_inv unit n =
+    match unit with
+    | Sequence (e, d) ->  (run_unitary_inv d n) ^ (run_unitary_inv e n)
+    | Apply {gate; qreg; range; assertion} ->
+        if (range.starts=range.ends) then
+            "c" ^ string_of_int n ^ " := "
+            ^ "(place" ^ run_gate gate
+            ^ " (" ^ run_expr (range.starts) ^ ") n)"
+            ^ " -- !c" ^ string_of_int n ^ ";\n"
+            ^ run_assert assertion n
+        else "let circ_aux = ref (m_skip n) in\n"
+            ^ "for i=" ^ run_expr (range.starts) ^ " to (" ^ run_expr (range.ends)
+            ^ ") do\n" ^ "invariant{width !c" ^ (string_of_int n) ^ "=n}\n"
+            ^ "circ_aux := !circ_aux -- (place" ^ run_gate gate
+            ^ " i n);\ndone;\n" ^ "c" ^ string_of_int n
+            ^ " := !circ_aux -- !c" ^ string_of_int n ^ ";\n"
+            ^ run_assert assertion n
+    | MultiApply {gate; qreg1; range1; qreg2; range2; qreg3; range3; assertion} ->
+        "c" ^ string_of_int n ^ " := ("
+        ^ run_multigate gate ^ " (" ^ qreg1 ^ " " ^ run_range range1 ^ ")"
+         ^ " (" ^ qreg2 ^ " " ^ run_range range2 ^ ")"
+         ^ " (" ^ qreg3 ^ " " ^ run_range range3 ^ ")" ^
+          ") -- !c" ^ string_of_int n ^ ";\n" ^ run_assert assertion n
+
+    | WithControl {gate; ctls; range1; tg; range2; assertion} ->
+        begin match gate with
+        | Apply {gate; qreg; range; assertion} ->
+            begin match gate with
+                | Rz (a) ->
+                    if (range.starts=range.ends) then
+                        "c" ^ string_of_int n ^ " := "
+                        ^ "(crz (" ^ run_expr range1.starts
+                        ^ ") (" ^ run_expr range2.starts ^ ") (" ^ run_expr a ^ ") n) -- !c"
+                        ^ string_of_int n ^";\n"
+                    else
+                        "let circ_aux = ref (m_skip n)\nin "
+                        ^ "for ctl=" ^ run_expr (range.starts) ^ " to " ^ run_expr (range.ends)
+                        ^ " do\n" ^ "circ_aux := !circ_aux -- " ^
+                        "cont ((" ^ run_gate gate ^ " (" ^ run_expr (range.starts) ^ ") n)"
+                        ^ " ctl " ^ run_expr range2.starts ^ ")\ndone;"
+                | _ ->
+                    if (range.starts=range.ends) then
+                        "c" ^ string_of_int n ^ " := !c"
+                        ^ string_of_int n ^ " -- ("
+                        ^ "cont ((" ^ run_gate gate ^ " (" ^ run_expr (range.starts) ^ ") n)"
+                        ^ " (" ^ run_expr range1.starts ^ ") (" ^ run_expr range2.starts ^ "))"
+                        ^ ");\n"
+                    else
+                        "let circ_aux = ref (m_skip n)\nin "
+                        ^ "for ctl=" ^ run_expr (range.starts) ^ " to " ^ run_expr (range.ends)
+                        ^ " do\n" ^ "circ_aux := !circ_aux -- " ^
+                        "cont ((" ^ run_gate gate ^ " (" ^ run_expr (range.starts) ^ ") n)"
+                        ^ " ctl " ^ run_expr range2.starts ^ ")\ndone;"
+            end
+        | MultiApply {gate; qreg1; range1; qreg2; range2; qreg3; range3; assertion} ->
+            ""
+        | FUN {id; args} ->  ""
+        | REV {id; args} -> ""
+        | _ -> "\nError\n"
+        end ^ run_assert assertion n
+    | FUN {id; args} ->
+        "c" ^ string_of_int n ^ " :="
+        ^ "(" ^ id ^ " (" ^ (run_args args) ^ ")) -- !c"
+        ^ string_of_int n ^ ";\n"
+    | REV {id; args} ->
+        "c" ^ string_of_int n ^ " :="
+                ^ "(reverse (" ^ id ^ " (" ^ (run_args args) ^ "))) -- !c"
+                ^ string_of_int n ^ ";\n"
+
 let rec run_unitary unit n =
     match unit with
     | Sequence (e, d) ->  (run_unitary e n) ^ (run_unitary d n)
@@ -114,8 +183,9 @@ let rec run_unitary unit n =
                     if (range.starts=range.ends) then
                         "c" ^ string_of_int n ^ " := !c"
                         ^ string_of_int n ^ " -- ("
-                        ^ "crz (" ^ run_expr a ^ ") (" ^ run_expr range1.starts
-                        ^ ") (" ^ run_expr range2.starts ^ ") n);\n"
+                        ^ "crz (" ^ run_expr range1.starts
+                        ^ ") (" ^ run_expr range2.starts ^ ") ("
+                        ^ run_expr a ^ ") n);\n"
                     else
                         "let circ_aux = ref (m_skip n)\nin "
                         ^ "for ctl=" ^ run_expr (range.starts) ^ " to " ^ run_expr (range.ends)
@@ -188,7 +258,11 @@ and get_body body n : string
     match body with
     | [] -> ""
     | [i] -> run_instr i n
-    | i :: tl -> run_instr i n ^ get_body tl n ;;
+    | i :: tl ->
+        match i with (*if instr is unitary, inverse sequence it at the end*)
+        | Unitary (unit) ->
+            get_body tl n ^ run_unitary_inv unit n
+        | _ -> run_instr i n ^ get_body tl n ;;
 
 let rec sum_regs = function
     | [] -> ""

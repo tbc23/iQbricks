@@ -19,7 +19,7 @@ pre {true}
                     {forall x y i. 0<= i < n -> basis_ket circ x y i = x i},
                     {forall x y. ang_ind circ x y = (ind_isum (fun l -> x l * x q * power 2 (n- l -1+ q)) (q+1) i) /./n}
                 }
-                with control qr[i] (RZ(i-q+1, qr[q]))
+                with control qr[i+1] (RZ(i-q+1, qr[q]))
                 assert {
                     {forall x y i. 0<= i < n -> basis_ket circ x y i = if i = q then y 0 else x i},
                     {forall x y. ang_ind circ x y = (ind_isum (fun l -> x l * y 0 * power 2 (n-l - 1+ q)) q n) /./ n}
