@@ -42,7 +42,7 @@ let rec run_expr = function
     | Power (e, d) -> "power " ^ (run_expr e) ^ (run_expr d)
     | Minus (e) -> "-" ^ run_expr e
 (*    | Len (e) -> "size(" ^ e ^ ")"*)
-    | Len (e) -> e ^ "-1"
+    | Len (e) -> e (*^ "-1"*)
     | Sqrt (e) -> "sqrt (" ^ run_expr e ^ ")"
     | Num (e) -> string_of_int e
     | Var (e) -> e
@@ -228,14 +228,14 @@ let run_iter = function
 let rec run_instr i n =
     match i with
     | For {iter; inv; body; assertion} ->
-        "let c" ^ string_of_int (n+1) ^ " = ref (m_skip n) in\n" ^
-        run_iter iter ^ " do\n" ^
+        "let c" ^ string_of_int (n+1) ^ " = ref (m_skip n) in\n"
+        ^ run_iter iter ^ " do\n" ^
         "invariant{width !c" ^ string_of_int (n+1) ^ "=n}\n"
-        ^ run_inv inv (n+1)^
+        ^ run_inv inv (n+1)^  (*1->n+1*)
         (get_body body (n+1)) ^
         (run_assert assertion n) ^ "\ndone;\n"
-        ^ "c" ^ string_of_int n ^ " := !c" ^ string_of_int n
-        ^ " -- !c" ^ string_of_int (n+1) ^ ";\n"
+(*        ^ if (n+1=1) then "c" ^ string_of_int n ^ " := !c" ^ string_of_int n*)
+(*        ^ " -- !c" ^ string_of_int (n+1) ^ ";\n" else ^ ""*)
     | If {cond; body; assertion} ->
         "if (" ^ run_cond cond ^ ") then\n" ^
         (get_body body (n+1)) ^
@@ -261,8 +261,30 @@ and get_body body n : string
     | i :: tl ->
         match i with (*if instr is unitary, inverse sequence it at the end*)
         | Unitary (unit) ->
-            get_body tl n ^ run_unitary_inv unit n
-        | _ -> run_instr i n ^ get_body tl n ;;
+            get_body tl n ^ run_unitary_inv unit (1 + count_depth tl)
+            ^ circ_looper (1 + count_depth tl)
+        | _ -> run_instr i n ^ get_body tl n
+
+and count_depth l : int
+    = match l with
+    | [] -> 0
+    | [i] -> begin match i with
+            | For _ -> 1
+            | If _ -> 1
+            | IfElse _ -> 1
+            | _ -> 0 end
+    | i :: tl -> begin match i with
+                 | For _ -> 1 + count_depth tl
+                 | If _ -> 1 + count_depth tl
+                 | IfElse _ -> 1 + count_depth tl
+                 | _ -> count_depth tl end
+
+and circ_looper n : string =
+    match n with
+    | 0 -> ""
+    | _ -> "c" ^ string_of_int (n-1) ^ " := !c"
+        ^ string_of_int (n-1) ^ " -- !c" ^ (string_of_int n) ^ ";\n"
+        ^ circ_looper (n-1)
 
 let rec sum_regs = function
     | [] -> ""

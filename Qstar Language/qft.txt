@@ -11,19 +11,15 @@ pre {true}
             assert {
                 {width circ = n},
                 {forall x y: int->int. forall i:int. 0<=i<n ->basis_ket circ x y i = if i = q then y 0 else x i},
-                {forall m:int. forall x y: int->int.   1<=m ->  ang_ind circ x y  =  (x q * y 0 * power 2 (m-1)) /./ m}
+                {forall x y. ang_ind circ x y = (ind_isum (fun l -> x l * y 0 * power 2 (n-l - 1+ q)) q n) /./ n}
             }
-            for i in range(qr[q..-1]) {
+            for i in range(qr[q+1..-1]) {
                 invariant {
-                    {range !c2 = 0},
+                    {range circ = 0},
                     {forall x y i. 0<= i < n -> basis_ket circ x y i = x i},
                     {forall x y. ang_ind circ x y = (ind_isum (fun l -> x l * x q * power 2 (n- l -1+ q)) (q+1) i) /./n}
                 }
-                with control qr[i+1] (RZ(i-q+1, qr[q]))
-                assert {
-                    {forall x y i. 0<= i < n -> basis_ket circ x y i = if i = q then y 0 else x i},
-                    {forall x y. ang_ind circ x y = (ind_isum (fun l -> x l * y 0 * power 2 (n-l - 1+ q)) q n) /./ n}
-                }
+                with control qr[i+1] (RZ(i-q, qr[q]))
             }
         }
         return

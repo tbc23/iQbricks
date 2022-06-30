@@ -22,13 +22,13 @@ Unitary (Apply {gate=H; qreg="qr"; range={starts=Var "q"; ends=Var "q"}; asserti
 For {
 iter = {
 iterator= "i";
-starts = Var "q";
+starts = Plus (Var "q",Num 1);
 ends = Subtract (Len "qr", Num 1)
 };
-inv = ["{range !c2 = 0}"; "{forall x y i. 0<= i < n -> basis_ket circ x y i = x i}"; "{forall x y. ang_ind circ x y = (ind_isum (fun l -> x l * x q * power 2 (n- l -1+ q)) (q+1) i) /./n}"; ];
+inv = ["{range circ = 0}"; "{forall x y i. 0<= i < n -> basis_ket circ x y i = x i}"; "{forall x y. ang_ind circ x y = (ind_isum (fun l -> x l * x q * power 2 (n- l -1+ q)) (q+1) i) /./n}"; ];
 body=[
-Unitary (WithControl{gate=Apply {gate=Rz (Subtract (Var "i",Plus (Var "q",Num 1))); qreg="qr"; range={starts=Var "q"; ends=Var "q"}; assertion=["{forall x y i. 0<= i < n -> basis_ket circ x y i = if i = q then y 0 else x i}"; "{forall x y. ang_ind circ x y = (ind_isum (fun l -> x l * y 0 * power 2 (n-l - 1+ q)) q n) /./ n}"; ]
-}; ctls=["qr"; ]; range1={starts=Var "i"; ends=Var "i"}; tg="qr"; range2={starts=Var "q"; ends=Var "q"}; assertion=["{forall x y i. 0<= i < n -> basis_ket circ x y i = if i = q then y 0 else x i}"; "{forall x y. ang_ind circ x y = (ind_isum (fun l -> x l * y 0 * power 2 (n-l - 1+ q)) q n) /./ n}"; ]
+Unitary (WithControl{gate=Apply {gate=Rz (Subtract (Var "i",Plus (Var "q",Num 1))); qreg="qr"; range={starts=Var "q"; ends=Var "q"}; assertion=[]
+}; ctls=["qr"; ]; range1={starts=Plus (Var "i",Num 1); ends=Plus (Var "i",Num 1)}; tg="qr"; range2={starts=Var "q"; ends=Var "q"}; assertion=[]
 });
 ];
 assertion=[]

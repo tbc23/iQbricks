@@ -10,10 +10,8 @@
       <change beforePath="$PROJECT_DIR$/ML_eval.cmx" beforeDir="false" afterPath="$PROJECT_DIR$/ML_eval.cmx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ML_eval.ml" beforeDir="false" afterPath="$PROJECT_DIR$/ML_eval.ml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ML_eval.o" beforeDir="false" afterPath="$PROJECT_DIR$/ML_eval.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Qbricks/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/Main.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/program" beforeDir="false" afterPath="$PROJECT_DIR$/program" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qft.txt" beforeDir="false" afterPath="$PROJECT_DIR$/qft.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/translation.cmi" beforeDir="false" afterPath="$PROJECT_DIR$/translation.cmi" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/translation.cmx" beforeDir="false" afterPath="$PROJECT_DIR$/translation.cmx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/translation.ml" beforeDir="false" afterPath="$PROJECT_DIR$/translation.ml" afterDir="false" />
@@ -85,7 +83,7 @@
       <recent name="" />
     </key>
   </component>
-  <component name="RunManager" selected="Makefile Target.compile">
+  <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Main" />
       <module name="Qbricks" />
@@ -101,8 +99,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Makefile Target.compile" />
         <item itemvalue="Application.Main" />
+        <item itemvalue="Makefile Target.compile" />
         <item itemvalue="Application.Main" />
         <item itemvalue="Application.Main" />
       </list>
