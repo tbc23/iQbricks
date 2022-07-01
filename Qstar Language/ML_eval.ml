@@ -230,7 +230,8 @@ let rec run_instr i n =
     | For {iter; inv; body; assertion} ->
         "let c" ^ string_of_int (n+1) ^ " = ref (m_skip n) in\n"
         ^ run_iter iter ^ " do\n" ^
-        "invariant{width !c" ^ string_of_int (n+1) ^ "=n}\n"
+        begin if (n=0) then "invariant{width !c0=n}\n" else "" end
+        ^ "invariant{width !c" ^ string_of_int (n+1) ^ "=n}\n"
         ^ run_inv inv (n+1)^  (*1->n+1*)
         (get_body body (n+1)) ^
         (run_assert assertion n) ^ "\ndone;\n"

@@ -1229,7 +1229,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             s = "Num 0";
             e = Visit(end);
             if (e.equals("Minus (Num 1)")) {
-                e = "Subtract (Len \""+id+"\", Num 1)";
+                e = "Subtract (Len \""+id+"\", Num 2)";
             }
             r = s + ";" + e;
             //r = e;
@@ -1320,7 +1320,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
 
     @Override
     public String Visit(LenNode node) {
-        return "Len \""+Visit(node.getQrTerm())+"\"";
+        return "Subtract (Len \""+Visit(node.getQrTerm())+"\", Num 1)";
         //return  Visit(node.getQrTerm());
     }
 
