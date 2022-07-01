@@ -285,6 +285,20 @@ public interface QbricksVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitPhApply(QbricksParser.PhApplyContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code tApply}
+	 * labeled alternative in {@link QbricksParser#apply}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTApply(QbricksParser.TApplyContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code sApply}
+	 * labeled alternative in {@link QbricksParser#apply}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSApply(QbricksParser.SApplyContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code angTerm}
 	 * labeled alternative in {@link QbricksParser#ang}.
 	 * @param ctx the parse tree
@@ -305,6 +319,20 @@ public interface QbricksVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitCnotControl(QbricksParser.CnotControlContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code toffControl}
+	 * labeled alternative in {@link QbricksParser#control}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitToffControl(QbricksParser.ToffControlContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code fredControl}
+	 * labeled alternative in {@link QbricksParser#control}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFredControl(QbricksParser.FredControlContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code eqExpr}
 	 * labeled alternative in {@link QbricksParser#expr}.

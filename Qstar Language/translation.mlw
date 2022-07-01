@@ -1,46 +1,52 @@
-module QFT
+module Program
+
 use export binary.Bit_vector
 use wired_circuits.Circuit_c
 use export p_int.Int_comp
 use ref.Ref
+use qbricks.Circuit_macros
+use int.Int
+use wired_circuits.Qbricks_prim
+use qbricks.Circuit_semantics
+use exponentiation.Int_Exponentiation
+use unit_circle.Angle
 
-let main (qr n:int): circuit
-requires {n > 0}
-requires {qr = n}
-requires {true}
-ensures {true}
-ensures {width result = n}
-ensures {range result = n}
+let qft (qr n: int): circuit
+requires{0<n}
+requires{qr=n}
+requires{true}
 =
 begin
-let c = ref (m_skip n) in 
-let c1 = ref (m_skip n)
-in let ref q = 0
-in while (q<n) do
-variant{n - q}
-invariant{0 <= q <= n}
-invariant{width !c1 = n}
-invariant{ true }
-assert{ true };
-c1:= !c1 -- (place_hadamard (q) n);
-assert{true};
-let c2 = ref (m_skip n)
-in let ref i = q
-in while (i<n-1) do
-variant{n-1 - i}
-invariant{q <= i <= n-1}
-invariant{width !c2 = n}
-invariant{ true }
-c2:= !c2 -- cont (phase (pi/power 2 (n-i))) (i+1) (q) n;
-assert{true};
-i := i + 1
+let c0 = ref (m_skip n) in
+let c1 = ref (m_skip n) in
+for q = 0 to (qr - 1) do
+invariant{width !c0=n}
+invariant{width !c1=n}
+invariant{range !c1 = q}
+invariant{forall x y i. 0<= i < n -> basis_ket !c1 x y i = if 0<= i < q then y i else x i}
+invariant{forall x y. ang_ind !c1 x y = (ind_isum(fun k -> (ind_isum (fun l -> x l * y k * power 2 (n-l - 1+k)) k n))0 q) /./ n}
+let c2 = ref (m_skip n) in
+for i = q + 1 to (qr - 1) do
+invariant{width !c2=n}
+invariant{range !c2 = 0}
+invariant{forall x y i. 0<= i < n -> basis_ket !c2 x y i = x i}
+invariant{forall x y. ang_ind !c2 x y = (ind_isum (fun l -> x l * x q * power 2 (n- l -1+ q)) (q+1) i) /./n}
+c2 := !c2 -- (crz (i + 1) (q) (i - q) n);
+
 done;
-c1:= !c1 -- !c2;
-q := q + 1
+c2 := (place_hadamard (q) n) -- !c2;
+assert{width !c2 = n};
+assert{forall x y: int->int. forall i:int. 0<=i<n ->basis_ket !c2 x y i = if i = q then y 0 else x i};
+assert{forall x y. ang_ind !c2 x y = (ind_isum (fun l -> x l * y 0 * power 2 (n-l - 1+ q)) q n) /./ n};
+c1 := !c1 -- !c2;
+c0 := !c0 -- !c1;
+
 done;
-assert{true};
-c:= !c -- !c1;
-return (!c)
+return (!c0);
+ensures{width result = n}
+ensures{range result = n}
+ensures{forall x y i. 0<= i < n -> basis_ket result x y i = y i}
+ensures{forall x y. ang_ind result x y  = (ind_isum(fun k -> (ind_isum (fun l -> x l * y k * power 2 (n-l - 1+k)) k n))0 n) /./ n}
 end
 
 end

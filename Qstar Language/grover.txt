@@ -1,83 +1,54 @@
-|| grover || (qreg qr, qreg aux)
-pre {some pre expression} , {yet another expression}
-	circ qr, aux ->
-		if len(qr) == 0 {
-			assert { |qr> = |qr'> }
-			return
-		}
-		else {
-            init(qr,aux)
-            assert{assert after initialization}
-            for i in range(sqrt(N/2)) {
-                invariant{inv1}
-                grover_iter(qr,aux,oracle)
-                assert {formula}
-            }
+|| grover || (qreg qr, qreg aux, int iters)
+pre {true}
+	circ qr[4], aux[1] ->
+        init(qr,aux)
+        assert{true}
+        for i in range(iters) {
+            invariant{true}
+            grover_iter(qr,aux)
+            assert {true}
         }
-pos {some pos expression}
+        return
+pos {true}
 
-| grover_iter | (qreg qr, qreg aux, circ oracle)
-pre {some-expression}
+| grover_iter | (qreg qr, qreg aux)
+pre {true}
 	circ qr ->
-		if len(qr) == 0 {
-			assert { |qr> = |qr'> }
-			return
-		}
-		else {
-            oracle(qr,aux)
-            diffusor(qr)
-            assert{formula}
-        }
-pos {some expression}
+        oracle(qr,aux)
+        diffusor(qr,aux)
+        assert{true}
+        return
+pos {true}
 
 | init | (qreg qr, qreg aux)
-pre {some-expression}
+pre {true}
     circ qr, aux ->
-        for q in qr[:-1] {
-            invariant {inv1}
-            H(q)
-            assert { |qr> = ps_had |qr'> (len(qr')-1)}
-        }
+        H(qr[:-1])
         X(aux)
-        assert {exp}
+        assert {true}
         H(aux)
-        assert {exp}
-pos {some expression}
+        assert {true}
+        return
+pos {true}
 
 # can be passed as a parameter in main function
-| oracle | (qreg qr)
-pre {some-expression}
+| oracle | (qreg qr, qreg aux)
+pre {true}
     circ qr -> # DEFINE P /\ (neg Q \/ R)
-pos {some expression}
+
+        return
+pos {true}
 
 
 | diffusor | (qreg qr, qreg aux)
-pre {some-expression}
+pre {true}
     circ qr, aux ->
-        for q in qr {
-            invariant {inv1}
-            H(q)
-            assert { |qr> = ps_had |qr'> (len(qr')-1)}
-        }
-        for q in qr {
-            invariant {inv1}
-            X(q)
-            assert { |qr> = ps_xgate |qr'> (len(qr')-1)}
-        }
-        H(qr[-1])
-        assert { |qr> = ps_had |qr'> (len(qr')-1)}
-        with control qr[:-1] (X(qr[-1]))
-        assert { |qr> = ps_xgate |qr'> (len(qr')-1)}
-        H(qr[-1])
-        assert { |qr> = ps_had |qr'> (len(qr')-1)}
-        for q in qr {
-            invariant {inv1}
-            X(q)
-            assert { |qr> = ps_xgate |qr'> (len(qr')-1)}
-        }
-        for q in qr {
-            invariant {inv1}
-            H(q)
-            assert { |qr> = ps_had |qr'> (len(qr')-1)}
-        }
-pos {some expression}
+        H(qr)
+        X(qr)
+        assert {true}
+        with control qr[:-1] (Z(qr[-1]))
+        assert {true}
+        X(qr)
+        H(qr)
+        return
+pos {true}

@@ -21,7 +21,6 @@ params  :
         OP param (VG param)* CL     #funParams
         ;
 
-
 param   :
         ptype=type id=ID             #singlePar
         ;
@@ -29,7 +28,6 @@ param   :
 args    :
         term (VG term)*     #funArgs
         ;
-
 
 type    :
         INT         #intType
@@ -111,6 +109,8 @@ apply   :
         | ZGATE OP qr=qReg CL                           #zApply
         | SWAP OP qrL=qReg VG qrR=qReg CL               #swapApply
         | PHASE OP angle=ang VG qr=qReg CL              #phApply
+        | TGATE OP qr=qReg CL                           #tApply
+        | SGATE OP qr=qReg CL                           #sApply
         ;
 
 ang     :
@@ -119,8 +119,10 @@ ang     :
 
 
 control :
-        WITHCTL ctlqrs=id_list OP ctlgate=apply CL  #applyControl      // with control qreg[-1] (RX(ang,qreg[q]))
-        | CNOT OP ctlqr=qReg VG tqr=qReg CL         #cnotControl       // cnot(target_qubit,control_qubit)
+        WITHCTL ctlqrs=id_list OP ctlgate=apply CL      #applyControl      // with control qreg[-1] (RX(ang,qreg[q]))
+        | CNOT OP ctlqr=qReg VG tqr=qReg CL             #cnotControl       // cnot(target_qubit,control_qubit)
+        | TOFF OP ctl1=qReg VG ctl2=qReg VG tg=qReg CL  #toffControl
+        | FRED OP ctl1=qReg VG ctl2=qReg VG tg=qReg CL  #fredControl
         ;
 
 expr   :
@@ -199,6 +201,8 @@ RY   : 'RY';
 XGATE: 'X' ;
 YGATE: 'Y' ;
 ZGATE: 'Z' ;
+SGATE: 'S' ;
+TGATE: 'T' ;
 PI   : 'pi';
 IN   : 'in';
 IF   : 'if';
@@ -207,18 +211,21 @@ DEF  : 'def';
 LEN  : 'len';
 FOR  : 'for';
 ROT  : 'rot';
+PHASE: 'ph' ;
 PRE  : 'pre';
 POS  : 'pos';
 BOOL : 'bool';
 QREG : 'qreg';
 CNOT : 'cnot';
 SWAP : 'swap';
+TOFF : 'toff';
+FRED : 'fred';
 SQRT : 'sqrt';
 ELSE : 'else';
 CIRC : 'circ';
 APPLY: 'apply';
 FLOAT: 'float';
-PHASE: 'ph';
+
 RANGE: 'range';
 RET  : 'return';
 ASSERT : 'assert';
@@ -230,7 +237,7 @@ INVARIANT : 'invariant';
 
 ID : [a-zA-Z][a-zA-Z_0-9]* ;
 NUM : [0-9]+ ;
-FORMULA : COP ~[\n]+ CCL ;
+FORMULA : COP ~[{}\n]+ CCL ;
 
 
 COMM : '#' ~[\n]* -> skip ;

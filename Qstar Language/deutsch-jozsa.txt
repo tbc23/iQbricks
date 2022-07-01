@@ -1,44 +1,24 @@
-|| dj || (int n, qreg qr)
-pre {some-conditions} 
-# try adding parameters, and think about preconditions and postconds considering parameters
+|| dj || (qreg qr)
+pre {n > 0}
 	circ qr ->
-		if len(qr) == 0 {
-			assert { |qr> = |qr'> }
-			return
-		}
-		else {
-			for q in qr[:-1] {
-				invariant { inv1 }
-				assert { formula }
-				H(qr[q])
-				assert { after H }
-			}
-			assert { after loop }
-			X(qr[-1])
-			assert { after X }
-			H(qr[-1])
-			assert { after H }
-			oracle(qr) # SEQ(qr,oracle)
-			for q in qr[:-1] {
-				invariant { inv1 }
-				assert { formula }
-				H(qr[q])
-				assert { after H }
-			}
-			assert { after loop }
-			return
-		}
-pos {some-conditions} 
+        H(qr[:-1])
+        X(qr[-1])
+        assert { after X }
+        H(qr[-1])
+        oracle(qr) # SEQ(qr,oracle)
+        H(qr[:-1])
+        return
+pos {true}
 
 
 | oracle | (qreg qr)
-pre {some-conditions} 
+pre {n > 0}
 	circ qr -> 
 		for q in qr[:-1] {
-			invariant { inv2 }
-			assert { formula }
+			invariant {true}
 			cnot(qr[-1],qr[q])
-			assert { after CNOT }
+			assert {true}
 		}
-		assert { after loop }
-pos {some-conditions} 
+		assert { true }
+		return
+pos {true}

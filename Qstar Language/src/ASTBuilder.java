@@ -373,7 +373,7 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
             xApply.setAssertion((AssertNode) visit(ctx.getParent().getChild(1)));
         }
         else
-            xApply.setAssertion(null);
+            xApply.setAssertion((AssertNode) visit(ctx.getParent().getParent().getChild(1)));
         QregNode qr = (QregNode) visit(ctx.qr);
         xApply.setQreg(qr);
         //xApply.print();
@@ -404,6 +404,32 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
         zApply.setQreg(qr);
         //zApply.print();
         return zApply;
+    }
+
+    @Override public AST visitSApply(QbricksParser.SApplyContext ctx) {
+        SApply sApply = new SApply();
+        if(!ctx.getParent().getClass().getSimpleName().equals("ApplyControlContext")) {
+            sApply.setAssertion((AssertNode) visit(ctx.getParent().getChild(1)));
+        }
+        else
+            sApply.setAssertion((AssertNode) visit(ctx.getParent().getParent().getChild(1)));
+        QregNode qr = (QregNode) visit(ctx.qr);
+        sApply.setQreg(qr);
+        //zApply.print();
+        return sApply;
+    }
+
+    @Override public AST visitTApply(QbricksParser.TApplyContext ctx) {
+        TApply tApply = new TApply();
+        if(!ctx.getParent().getClass().getSimpleName().equals("ApplyControlContext")) {
+            tApply.setAssertion((AssertNode) visit(ctx.getParent().getChild(1)));
+        }
+        else
+            tApply.setAssertion((AssertNode) visit(ctx.getParent().getParent().getChild(1)));
+        QregNode qr = (QregNode) visit(ctx.qr);
+        tApply.setQreg(qr);
+        //zApply.print();
+        return tApply;
     }
 
     @Override public AST visitSwapApply(QbricksParser.SwapApplyContext ctx) {
@@ -466,9 +492,31 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
         return cnot;
     }
 
+    @Override public AST visitFredControl(QbricksParser.FredControlContext ctx) {
+        FredNode node = new FredNode();
+        node.setAssertion((AssertNode) visit(ctx.getParent().getChild(1)));
+        QregNode ctl1 = (QregNode) visit(ctx.ctl1);
+        QregNode ctl2 = (QregNode) visit(ctx.ctl2);
+        QregNode target = (QregNode) visit(ctx.tg);
+        node.setQregs(ctl1,ctl2,target);
+        return node;
+    }
+
+    @Override public AST visitToffControl(QbricksParser.ToffControlContext ctx) {
+        ToffNode node = new ToffNode();
+        node.setAssertion((AssertNode) visit(ctx.getParent().getChild(1)));
+        QregNode ctl1 = (QregNode) visit(ctx.ctl1);
+        QregNode ctl2 = (QregNode) visit(ctx.ctl2);
+        QregNode target = (QregNode) visit(ctx.tg);
+        node.setQregs(ctl1,ctl2,target);
+        return node;
+    }
+
     @Override public AST visitTermRange(QbricksParser.TermRangeContext ctx) {
         RangeNode node = new RangeNode();
         TermNode term = (TermNode) visit(ctx.term());
+        String id = ctx.getParent().getChild(0).getText();
+        node.setIterator(id);
         node.set(term,term);
         return node;
     }
@@ -477,7 +525,8 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
         // Start at 0 and go up until the value defined by "term"
         RangeNode node = new RangeNode();
         TermNode end = (TermNode) visit(ctx.term());
-
+        String id = ctx.getParent().getChild(0).getText();
+        node.setIterator(id);
         node.set(null,end);
         return node;
     }
@@ -486,7 +535,8 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
         // Start at term and go up until the value defined by the qr size (how do I find it?)
         RangeNode node = new RangeNode();
         TermNode start = (TermNode) visit(ctx.term());
-
+        String id = ctx.getParent().getChild(0).getText();
+        node.setIterator(id);
         node.set(start,null);
         return node;
     }
@@ -497,7 +547,8 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
         RangeNode node = new RangeNode();
         TermNode start = (TermNode) visit(ctx.getChild(0));
         TermNode end = (TermNode) visit(ctx.getChild(3));
-
+        String id = ctx.getParent().getChild(0).getText();
+        node.setIterator(id);
         node.set(start,end);
         return node;
     }
@@ -603,7 +654,7 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
 
     @Override public AST visitNegUnary(QbricksParser.NegUnaryContext ctx) {
         UnOpNode node = new UnOpNode();
-        node.setOp(ctx.MINUS().getText());   // char "-"
+        node.setOp("Minus ");   // char "-"
         node.setInnerTerm((TermNode) visit(ctx.term()));
         return node;
     }
@@ -627,23 +678,23 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
 
     @Override public AST visitNumAtom(QbricksParser.NumAtomContext ctx) {
         AtomNode node = new AtomNode();
-        node.setValue(ctx.value.getText());
-        node.setType("num");
+        node.setValue("Num "+ctx.value.getText());
+        node.setType("Num");
 
         return node;
     }
 
     @Override public AST visitPiAtom(QbricksParser.PiAtomContext ctx) {
         AtomNode node = new AtomNode();
-        node.setValue("pi");
-        node.setType("num");
+        node.setValue("Num pi");
+        node.setType("Num");
         return node;
     }
 
     @Override public AST visitVarAtom(QbricksParser.VarAtomContext ctx) {
         AtomNode node = new AtomNode();
-        node.setValue(ctx.var.getText());
-        node.setType("var");
+        node.setValue("Var \""+ctx.var.getText()+"\"");
+        node.setType("Var");
         return node;
     }
 

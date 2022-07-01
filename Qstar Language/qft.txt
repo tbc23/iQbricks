@@ -1,21 +1,32 @@
 || qft || (qreg qr)
 pre {true}
 	circ qr ->
-        for q in range(len(qr)) {  # use while , sequence of instr
-            invariant { true }
-            # multiple formulas are not working...
-            assert { true }
-            H(qr[q])  # keep track of registers!! (place hadamard q n)
-            # assert { |qr> = ps_had |qr'> q}
-            assert {true}
-            for i in range(qr[q..-1]) {
-                invariant { true }
-                with control qr[i+1] (ph(pi/2^(n-i), qr[q]))
-                #assert { |qr> = ps_rot(pi/2^(n-i)) |qr'> q }
-                assert {true}
+        for q in range(len(qr)) {
+            invariant {
+                {range circ = q},
+                {forall x y i. 0<= i < n -> basis_ket circ x y i = if 0<= i < q then y i else x i},
+                {forall x y. ang_ind circ x y = (ind_isum(fun k -> (ind_isum (fun l -> x l * y k * power 2 (n-l - 1+k)) k n))0 q) /./ n}
+            }
+            H(qr[q])
+            assert {
+                {width circ = n},
+                {forall x y: int->int. forall i:int. 0<=i<n ->basis_ket circ x y i = if i = q then y 0 else x i},
+                {forall x y. ang_ind circ x y = (ind_isum (fun l -> x l * y 0 * power 2 (n-l - 1+ q)) q n) /./ n}
+            }
+            for i in range(qr[q+1..-1]) {
+                invariant {
+                    {range circ = 0},
+                    {forall x y i. 0<= i < n -> basis_ket circ x y i = x i},
+                    {forall x y. ang_ind circ x y = (ind_isum (fun l -> x l * x q * power 2 (n- l -1+ q)) (q+1) i) /./n}
+                }
+                with control qr[i+1] (RZ(i-q, qr[q]))
             }
         }
-        #assert { |qr> = ps_had |qr'> (len(qr')-1)}
-        assert {true}
         return
-pos {true}
+pos {
+    {width result = n},
+    {range result = n},
+    {forall x y i. 0<= i < n -> basis_ket result x y i = y i},
+    {forall x y. ang_ind result x y  = (ind_isum(fun k -> (ind_isum (fun l -> x l * y k * power 2 (n-l - 1+k)) k n))0 n) /./ n}
+}
+
