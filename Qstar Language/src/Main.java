@@ -17,7 +17,7 @@ public class Main {
             ASTBuilder test = new ASTBuilder();
             AST ast = test.visit(tree);
             String val = new EvaluateVisitor().Visit((ProgramNode) ast);
-            PrintWriter writer = new PrintWriter("translation.ml");
+            PrintWriter writer = new PrintWriter("ocaml_ast.ml");
             writer.write(val);
             writer.close();
             System.out.println("Translation successful");

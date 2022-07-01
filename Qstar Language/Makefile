@@ -1,8 +1,8 @@
 debug=no
 verbose=no
 
-compile: ML_AST2.ml ML_eval.ml translation.ml
-	@ocamlopt str.cmxa -o  program ML_AST2.ml ML_eval.ml translation.ml
+compile: ML_AST2.ml ML_eval.ml ocaml_ast.ml
+	@ocamlopt str.cmxa -o  program ML_AST2.ml ML_eval.ml ocaml_ast.ml
 	@./program
 
 parser: /home/tomas/Downloads/antlr-runtime-4.9.3.jar
