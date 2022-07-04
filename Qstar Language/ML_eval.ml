@@ -225,8 +225,39 @@ let run_iter = function
     {iterator; starts; ends} ->
         "for " ^ iterator ^ " = " ^ run_expr starts ^ " to (" ^ run_expr ends ^ ")";;
 
+let run_conjugate gate n : string
+    =
+    match gate with
+    | Apply {gate; qreg; range; assertion} ->
+        if (range.starts=range.ends) then
+            "c" ^ string_of_int n ^ " := !c"
+            ^ string_of_int n
+            ^ " -- (place" ^ run_gate gate
+            ^ " (" ^ run_expr (range.starts) ^ ") n) -- !c"
+            ^ string_of_int (n+1) ^ " -- reverse ("
+            ^ "(place" ^ run_gate gate
+            ^ " (" ^ run_expr (range.starts) ^ ") n));\n"
+        else "let circ_aux = ref (m_skip n) in\n"
+            ^ "for i=" ^ run_expr (range.starts) ^ " to (" ^ run_expr (range.ends)
+            ^ ") do\n" ^ "invariant{width !c" ^ (string_of_int n) ^ "=n}\n"
+            ^ "circ_aux := !circ_aux -- (place" ^ run_gate gate
+            ^ " i n);\ndone;\n" ^ "c" ^ string_of_int n ^ " := !c"
+            ^ string_of_int n ^ " -- !circ_aux -- !c"
+            ^ string_of_int (n+1) ^" -- reverse (!circ_aux);\n" ^ run_assert assertion n
+    | FUN {id; args} ->
+            "c" ^ string_of_int n ^ " := !c"
+            ^ string_of_int n
+            ^ " -- (" ^ id ^ " (" ^ (run_args args) ^ ")) -- !c"
+            ^ string_of_int (n+1) ^ " -- reverse ("
+            ^ "(" ^ id ^ " (" ^ (run_args args) ^ ")));\n"
+    | _ -> "Error"
+
 let rec run_instr i n =
     match i with
+    | Conjugated {gate; body; assertion} ->
+        "let c" ^ string_of_int (n+1) ^ " = ref (m_skip n) in\n"
+        ^ (get_conj_body body (n+1))
+        ^ (run_conjugate gate n) ^ (run_assert assertion n)
     | For {iter; inv; body; assertion} ->
         "let c" ^ string_of_int (n+1) ^ " = ref (m_skip n) in\n"
         ^ run_iter iter ^ " do\n" ^
@@ -252,19 +283,35 @@ let rec run_instr i n =
             ^ " -- !c" ^ string_of_int (n+1) ^ ";\n"
     | Unitary (unit) ->
         run_unitary unit n
-    | Return (e) -> "return (!c0);\n"
+    | Return (e) -> "" (*"return (!c0);\n"*)
 
 and get_body body n : string
     =
     match body with
     | [] -> ""
-    | [i] -> run_instr i n
+    | [i] -> begin match i with
+             | Unitary (unit) -> run_unitary_inv unit n
+             | _ -> run_instr i n end
     | i :: tl ->
         match i with (*if instr is unitary, inverse sequence it at the end*)
         | Unitary (unit) ->
-            get_body tl n ^ run_unitary_inv unit (1 + count_depth tl)
-            ^ circ_looper (1 + count_depth tl)
+            get_body tl n
+            ^ circ_looper_conj (1 + count_depth tl) n
+            ^ run_unitary_inv unit (1 + count_depth tl)
         | _ -> run_instr i n ^ get_body tl n
+
+and get_conj_body body n : string
+    =
+    match body with
+    | [] -> ""
+    | [i] -> run_instr i n
+    | i :: tl ->
+            match i with (*if instr is unitary, inverse sequence it at the end*)
+            | Unitary (unit) ->
+                get_conj_body tl n
+                ^ circ_looper_conj (1 + count_depth tl) n
+                ^ run_unitary_inv unit (count_depth tl)
+            | _ -> run_instr i n ^ get_conj_body tl n
 
 and count_depth l : int
     = match l with
@@ -287,6 +334,13 @@ and circ_looper n : string =
         ^ string_of_int (n-1) ^ " -- !c" ^ (string_of_int n) ^ ";\n"
         ^ circ_looper (n-1)
 
+and circ_looper_conj n i : string =
+    if (n=i) then ""
+    else
+        "c" ^ string_of_int (n-1) ^ " := !c"
+        ^ string_of_int (n-1) ^ " -- !c" ^ (string_of_int n) ^ ";\n"
+        ^ circ_looper_conj (n-1) i ;;
+
 let rec sum_regs = function
     | [] -> ""
     | [i] -> i.qrid
@@ -305,7 +359,8 @@ let rec get_ids = function
 let run_circ = function
     {qregs; body} ->
         "=\nbegin\n" ^
-        "let c0 = ref (m_skip n) in\n" ^  get_body body 0 ;;
+        "let c0 = ref (m_skip n) in\n" ^  get_body body 0
+        ^ "return !c0;\n";;
 
 (*     (String.concat "" (List.map run_qreg qregs)) ^ (String.concat "\n" (List.map run_instr body)) ;;*)
 

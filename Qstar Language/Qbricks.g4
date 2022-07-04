@@ -74,8 +74,12 @@ invariant :
         ;
 
 instr :
-        (forinst=for_ | ifinst=if_ | applyinst=apply | ctlinst=control) assert_     #regInst
+        (forinst=for_ | ifinst=if_ | applyinst=apply | ctlinst=control | conjinst=conjugated) assert_     #regInst
         | RET (expr)?                                                               #retInst
+        ;
+
+conjugated :
+        WITHCJG OP? applyinst=apply CL? COP conjbody=body CCL
         ;
 
 for_ : 
@@ -232,6 +236,7 @@ ASSERT : 'assert';
 CONTROL: 'control';
 REVERSE: 'reverse';
 WITHCTL: 'with control';
+WITHCJG: 'with conjugated';
 
 INVARIANT : 'invariant';
 

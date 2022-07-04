@@ -67,6 +67,7 @@ type unitary =
     | REV of {id:string; args: expr list} ;;
 
 type instruction =
+    | Conjugated of {gate:unitary; body:instruction list; assertion: string list}
     | For of {iter:iter; inv: string list; body:instruction list; assertion: string list}
     | If of {cond: cond; body:instruction list ; assertion: string list}
     | IfElse of {cond:cond; ifbody:instruction list; elsebody:instruction list; assertion:string list}

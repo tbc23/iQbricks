@@ -38,8 +38,8 @@ assertion=[]
 };
 Return "";
 ];
-};
-params = [{id="qr";  type_=Qreg}; ];
+}; 
+params = [{id="qr";  type_=Qreg}; ]; 
 pre = ["{true}"; ];
 pos = ["{width result = n}"; "{range result = n}"; "{forall x y i. 0<= i < n -> basis_ket result x y i = y i}"; "{forall x y. ang_ind result x y  = (ind_isum(fun k -> (ind_isum (fun l -> x l * y k * power 2 (n-l - 1+k)) k n))0 n) /./ n}"; ];
 }};;

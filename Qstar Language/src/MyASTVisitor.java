@@ -13,6 +13,7 @@ public abstract class MyASTVisitor <T> {
 
     public abstract T Visit(ForNode node);
     public abstract T Visit(ForIter node);
+    public abstract T Visit(ConjNode node);
     public abstract T Visit(InvariantNode node);
     public abstract T Visit(IfNode node);
     public abstract T Visit(IfCond node);
@@ -27,6 +28,8 @@ public abstract class MyASTVisitor <T> {
             return Visit((ApplyNode) node);
         else if (node instanceof CtlNode)
             return Visit((CtlNode) node);
+        else if (node instanceof ConjNode)
+            return Visit((ConjNode) node);
         else return Visit((RetNode) node);
     }
 

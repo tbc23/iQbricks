@@ -147,6 +147,20 @@ class AssertNode extends BodyNode {
 
 class InstrNode extends BodyNode { }
 
+class ConjNode extends InstrNode {
+    private BodyNode body;
+    private ApplyNode apply;
+    private AssertNode assertion;
+
+    public BodyNode getBody() { return body; }
+    public ApplyNode getApply() { return apply; }
+    public AssertNode getAssertion() { return assertion; }
+
+    public void setApply(ApplyNode apply) { this.apply = apply; }
+    public void setAssertion(AssertNode assertion) { this.assertion = assertion; }
+    public void setBody(BodyNode body) { this.body = body; }
+}
+
 class ForNode extends InstrNode {
     private InvariantNode invariant;
     private ForIter iter;

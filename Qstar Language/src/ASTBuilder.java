@@ -213,6 +213,15 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
         return node;
     }
 
+    @Override public AST visitConjugated(QbricksParser.ConjugatedContext ctx) {
+        ConjNode node = new ConjNode();
+        BodyNode body = (BodyNode) visit(ctx.conjbody);
+        ApplyNode apply = (ApplyNode) visit(ctx.applyinst);
+        node.setAssertion((AssertNode) visit(ctx.getParent().getChild(1)));
+        node.setBody(body);
+        node.setApply(apply);
+        return node;
+    }
 
 
     @Override public AST visitForLoop(QbricksParser.ForLoopContext ctx) {

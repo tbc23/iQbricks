@@ -105,9 +105,11 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         CircNode circ = node.getCirc();
         String qregs = Visit(circ.getIds());
         String r = "main = {\n id = \"" + node.getID() + "\";\n" +
-                "circ = {\n" + Visit(node.getCirc()) + "};\n" +
-                Visit(node.getParams()) +
-                Visit(node.getPre()) + Visit(node.getPos()) +
+                "circ = {\n" + Visit(node.getCirc()) + "}; \n"
+                + "params = [";
+        if (node.hasParams)
+            r += Visit(node.getParams());
+        r += "]; \n" + Visit(node.getPre()) + Visit(node.getPos()) +
                 "}};;\n";
 
         return r;
@@ -121,24 +123,26 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         String s;
         if (!auxIds.contains(node.getID())) auxIds.add(node.getID());
         String r = "{\nid = \"" + node.getID() + "\";\n" +
-                "circ = {\n" + Visit(node.getCirc()) + "};\n" +
-                Visit(node.getParams()) +
-                Visit(node.getPre()) + Visit(node.getPos()) +
-                "};\n";
-
+                "circ = {\n" + Visit(node.getCirc()) + "};\n"
+                + "params = [";
+        if (node.hasParams)
+            r += Visit(node.getParams());
+        r += "]; \n" + Visit(node.getPre()) + Visit(node.getPos()) +
+                "}; \n";
         return r;
     }
 
     @Override
     public String Visit(ParamsNode node) {
         StringBuilder r = new StringBuilder();
-        r.append("params = [");
-        for (SingleParam c: node.getPs()) {
-            //r.append(c.getId()).append("; ");
-            r.append("{id=\"").append(c.getId()).append("\"; ");
-            r.append(" type_=").append(c.getType()).append("}; ");
+        if (node.getPs()!=null) {
+            for (SingleParam c : node.getPs()) {
+                //r.append(c.getId()).append("; ");
+                r.append("{id=\"").append(c.getId()).append("\"; ");
+                r.append(" type_=").append(c.getType()).append("}; ");
+            }
         }
-        return r+"];\n";
+        return r.toString();
     }
 
     @Override
@@ -216,6 +220,23 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                 r.append("\"").append(c).append("\"; ");
         }
         return r+"]\n";
+    }
+
+    @Override
+    public String Visit(ConjNode node) {
+        String body, s = printUnitaries(unitaries);
+        s += "Conjugated {gate=";
+        Visit(node.getApply());
+        s += unitaries.get(unitaries.size()-1); // get last unitary in list
+        unitaries.remove(unitaries.size()-1);
+        s += ";\n ";
+        body = Visit(node.getBody());
+        if (body.equals("body = [\n"))
+            s += "body=[\n" + printUnitaries(unitaries) + "];\n" + Visit(node.getAssertion()) + "};\n";
+        else s += body + printUnitaries(unitaries)
+                +"];\n" + Visit(node.getAssertion()) + "};\n";
+        unitaries.clear();
+        return s;
     }
 
     @Override

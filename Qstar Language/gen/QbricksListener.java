@@ -1,4 +1,4 @@
-// Generated from /home/tomas/Desktop/qstar/Qstar Language/Qbricks.g4 by ANTLR 4.9.2
+// Generated from /home/tbc23/Desktop/qstar/Qstar Language/Qbricks.g4 by ANTLR 4.9.2
 
         import java.util.*;
 
@@ -283,6 +283,16 @@ public interface QbricksListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitRetInst(QbricksParser.RetInstContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link QbricksParser#conjugated}.
+	 * @param ctx the parse tree
+	 */
+	void enterConjugated(QbricksParser.ConjugatedContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link QbricksParser#conjugated}.
+	 * @param ctx the parse tree
+	 */
+	void exitConjugated(QbricksParser.ConjugatedContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code forLoop}
 	 * labeled alternative in {@link QbricksParser#for_}.
