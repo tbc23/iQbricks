@@ -296,8 +296,8 @@ and get_body body n : string
         match i with (*if instr is unitary, inverse sequence it at the end*)
         | Unitary (unit) ->
             get_body tl n
-            ^ circ_looper_conj (1 + count_depth tl) n
             ^ run_unitary_inv unit (1 + count_depth tl)
+            ^ circ_looper_conj (1 + count_depth tl) (n-1)
         | _ -> run_instr i n ^ get_body tl n
 
 and get_conj_body body n : string
