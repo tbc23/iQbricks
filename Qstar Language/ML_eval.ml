@@ -264,7 +264,7 @@ let rec run_instr i n =
         begin if (n=0) then "invariant{width !c0=n}\n" else "" end
         ^ "invariant{width !c" ^ string_of_int (n+1) ^ "=n}\n"
         ^ run_inv inv (n+1)^  (*1->n+1*)
-        (get_body body (n+1)) ^
+        (get_body body (n+1)) ^ (circ_looper_conj ((count_depth body)+1) n) ^
         (run_assert assertion n) ^ "\ndone;\n"
 (*        ^ if (n+1=1) then "c" ^ string_of_int n ^ " := !c" ^ string_of_int n*)
 (*        ^ " -- !c" ^ string_of_int (n+1) ^ ";\n" else ^ ""*)
@@ -290,13 +290,13 @@ and get_body body n : string
     match body with
     | [] -> ""
     | [i] -> begin match i with
-             | Unitary (unit) -> run_unitary_inv unit n ^ circ_looper_conj n 0
-             | _ -> run_instr i n ^ circ_looper_conj n 0 end
+             | Unitary (unit) -> run_unitary_inv unit n (*^ circ_looper_conj n 0*)
+             | _ -> run_instr i n end(*^ circ_looper_conj n 0 end*)
     | i :: tl ->
         match i with (*if instr is unitary, inverse sequence it at the end*)
         | Unitary (unit) ->
             get_body tl n
-            ^ run_unitary_inv unit n(*(count_depth tl)*)
+            ^ run_unitary_inv unit (count_depth tl + 1)
 (*            ^ circ_looper_conj (count_depth tl) 0*)
         | _ -> run_instr i n ^ get_body tl n
 
@@ -320,11 +320,13 @@ and count_depth l : int
             | For _ -> 1
             | If _ -> 1
             | IfElse _ -> 1
+(*            | Conjugated _ -> 1*)
             | _ -> 0 end
     | i :: tl -> begin match i with
                  | For _ -> 1 + count_depth tl
                  | If _ -> 1 + count_depth tl
                  | IfElse _ -> 1 + count_depth tl
+(*                 | Conjugated _ -> 1 + count_depth tl*)
                  | _ -> count_depth tl end
 
 and circ_looper n : string =
@@ -335,7 +337,7 @@ and circ_looper n : string =
         ^ circ_looper (n-1)
 
 and circ_looper_conj n i : string =
-    if (n=i) then ""
+    if (i!=0 || n==i) then ""
     else
         "c" ^ string_of_int (n-1) ^ " := !c"
         ^ string_of_int (n-1) ^ " -- !c" ^ (string_of_int n) ^ ";\n"
