@@ -1,0 +1,111 @@
+
+///enable use of constant in any type expression
+
+
+
+spec := spec_keyword formula
+
+spec_keyword := requires | invariant | variant | assert | ensures
+
+
+formula : pl_formula
+| quantification pl_formula
+
+quantification := (quantifier expr)+ -- integrate variables in every expression types
+
+quantifier : forall | exists
+
+pl_formula := atomic_formula | not atomic_formula | conjonctive atomic_formula atomic_formula
+
+conjonctive := -> | <-> | && | || 
+
+atomic_formula : expr ~ expr
+| is_a_ket_l vec_expr int_exor
+| is_a_ket_basis_elt vec_expr
+
+expr := vec_expr| c_expr | ang_expr | bv_expr | int_expr | ifthenelse pl_formula expr expr
+
+~ := = | <| <=
+
+set_expr := n_bvs n -- the set of bit vectors of length n
+
+vec_expr:= basis_let
+| bv_to_ket bv_expr
+| ket int_expr int_expr    --- basis ket of length #1 and index #2
+| c_expr *.. vec_expr
+| vec_add vec_expr vec_expr
+| ket_sum_l set_expr function int_expr -- a sum of  #2 applied to elements of #1, each of length #3 
+| vec_kronecker  vec_expr vec_expr
+| path_sem unitary vec_expr
+
+c_expr := complex_expo ang_expr
+| pow_inv_sqrt_2 int_expr
+| e | c_zero | c_one | ttwo | im |pi | +. | -. | *. | i_to_c | /. | modulus
+| cpower c_expr int_expr -- #1 to the power of #2
+| ang_exp ang_expr -- e to the power of im*. the measure of #1
+
+
+ang_expr : int_expr /./ int_expr
+| ang_add ang_exp ang_expr
+| ang_sum  set_expr function
+| ang_zero
+| ang_minus_one
+|ang_ind function function 
+
+bv_expr : ket_to_bv vec_expr
+| int_to_bv int_expr int_expr -- #1 is the length of the bv; #2 is the value encoded as a bit vector
+| make_bv function int_expr -- function to apply and length of the bit vector
+| bv_inversion bv_expr
+
+int_expr :
+int.mlw
+| ind_sum  set_expr function  -- a sum from a set of  anything to int
+| ind_isum  int_expr int_expr function -- a sum of ints : applications of #3 from #1 to (#2 -1)
+| power int_expr int_expr
+| bv_to_int bv_expr
+| ket_to_int vec_expr
+| width unitary
+| range unitary
+| basis_ket unitary function function  int_expr -- #1 : circuit to specify; #2 : input function, standing for a basis ket ; #3 : int function, standing for the index of this path in a sum ; #4: integer index, cause we are waiting fro the application of the basis_ket function to this int value -- eg: basis_ket result x y i = x i for diagonal circuits
+| length bv_expr
+
+
+
+/_\ dont_care about :
+- the ones about the size -- using polysquare and so on
+- the ones about "pre"
+- the ones about ancillas
+- the ones about "sem"
+
+
+	ensures{width result = n}
+        ensures{range result = 0}
+        ensures{ancillas result = 0}
+        ensures{forall x y i. 0<= i < n -> basis_ket result x y i = x i }
+        ensures{forall x y. ang_ind result x y =  (- ind_isum (fun k ->  x (first_c + k) *  x t * power 2 (n- (k  + first_k))) 0 (l+1)) /./ n }
+
+
+ensures{forall x z. ang_ind result x z = ang_sum  (fun k ->   ( getbv y k  *  x  target 
+                                  * power 2 ((n-k-1)+(n-target-1)) ) /./ n ) (n-target-1) ( step +1)}
+
+
+ensures{forall x: matrix complex. is_a_ket_l x n -> is_a_ket_basis_elt x ->
+	       path_sem result x = (pow_inv_sqrt_2 n *.. (ket_sum_l (n_bvs n) (fun y -> qft_rev_coeff  (ket_to_bv x) y n  *.. bv_to_ket y)n))}
+ensures{forall x: bitvec. length x = n -> path_sem result (bv_to_ket x) = (pow_inv_sqrt_2 n *.. (ket_sum_l (n_bvs n) (fun y -> qft_rev_coeff x (bv_inversion y) n *.. bv_to_ket y)n))}
+ensures{forall x: bitvec. forall i :int. length x = n -> 0<= i < power 2 n -> get_ket
+	       (path_sem result (bv_to_ket x)) i = pow_inv_sqrt_2 n *. qft_rev_coeff x (bv_inversion (int_to_bv i n)) n }
+ensures{forall x: bitvec. length x = n ->
+	       path_sem result (bv_to_ket x) = (pow_inv_sqrt_2 n *.. (ket_sum_l (n_bvs n) (fun y -> int_qft_coeff (-(bv_to_int y)) (bv_to_int x) n *.. bv_to_ket y)n))}
+ensures{forall x:bitvec. length x = n -> f (bv_to_int x) -> path_sem result (bv_to_ket x) =  (-. c_one *.. (bv_to_ket x))}
+ensures{forall x: bitvec. length x = n ->
+	       path_sem result (bv_to_ket x) = if bv_to_int x = 0 then    bv_to_ket x else -. c_one *.. bv_to_ket x }
+
+
+
+ensures{forall i. path_sem (pre_adder_const_ n (int_to_bv j n)) (apply_qft n i) = apply_qft n  (i +  j)}
+ensures{forall b. forall y.  is_a_ket_l y k ->
+	       path_sem result (kronecker (apply_qft (n+1) b) y) =  (kronecker (apply_qft (n+1)  (b+added)) y)}
+
+
+
+assert{size (qft_rev_be (n-1)) <= cont_size *   ind_isum  (fun j -> j+1) 0   (n-1)};

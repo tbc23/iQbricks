@@ -84,7 +84,7 @@ let run_range = function
 
 let rec run_unitary_inv unit n =
     match unit with
-    | Sequence (e, d) ->  (run_unitary_inv d n) ^ (run_unitary_inv e n)
+    | Sequence (e, d) ->  (run_unitary_inv e n) ^ (run_unitary_inv d n)
     | Apply {gate; qreg; range; assertion} ->
         if (range.starts=range.ends) then
             "c" ^ string_of_int n ^ " := "
@@ -290,14 +290,14 @@ and get_body body n : string
     match body with
     | [] -> ""
     | [i] -> begin match i with
-             | Unitary (unit) -> run_unitary_inv unit n
-             | _ -> run_instr i n end
+             | Unitary (unit) -> run_unitary_inv unit n ^ circ_looper_conj n 0
+             | _ -> run_instr i n ^ circ_looper_conj n 0 end
     | i :: tl ->
         match i with (*if instr is unitary, inverse sequence it at the end*)
         | Unitary (unit) ->
             get_body tl n
-            ^ run_unitary_inv unit (1 + count_depth tl)
-            ^ circ_looper_conj (1 + count_depth tl) (n-1)
+            ^ run_unitary_inv unit n(*(count_depth tl)*)
+(*            ^ circ_looper_conj (count_depth tl) 0*)
         | _ -> run_instr i n ^ get_body tl n
 
 and get_conj_body body n : string

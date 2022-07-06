@@ -1,14 +1,13 @@
 || main || (qreg qr)
 pre {n>0}
     circ qr[4] ->
-        with conjugated (qft(qr)){
-            X(qr[1])
-            for q in qr {
-                invariant{true}
-                Z(qr[2])
-            }
+        H(qr[1])
+        for i in qr {
+            invariant{true}
             Y(qr[3])
+            X(qr[2])
         }
-        return
+        Z(qr[0])
+    return
 pos {vazio}
 
