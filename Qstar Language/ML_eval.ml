@@ -153,7 +153,7 @@ let rec run_unitary_inv unit n =
 
 let rec run_unitary unit n =
     match unit with
-    | Sequence (e, d) ->  (run_unitary e n) ^ (run_unitary d n)
+    | Sequence (e, d) ->  (run_unitary d n) ^ (run_unitary e n)
     | Apply {gate; qreg; range; assertion} ->
         if (range.starts=range.ends) then
             "c" ^ string_of_int n ^ " := !c"
@@ -264,20 +264,20 @@ let rec run_instr i n =
         begin if (n=0) then "invariant{width !c0=n}\n" else "" end
         ^ "invariant{width !c" ^ string_of_int (n+1) ^ "=n}\n"
         ^ run_inv inv (n+1)^  (*1->n+1*)
-        (get_body body (n+1)) ^ (circ_looper_conj ((count_depth body)+1) n) ^
+        (get_body body (n+1) "for") ^ (circ_looper_conj ((count_depth body)+1) n) ^
         (run_assert assertion n) ^ "\ndone;\n"
 (*        ^ if (n+1=1) then "c" ^ string_of_int n ^ " := !c" ^ string_of_int n*)
 (*        ^ " -- !c" ^ string_of_int (n+1) ^ ";\n" else ^ ""*)
     | If {cond; body; assertion} ->
         "if (" ^ run_cond cond ^ ") then\n" ^
-        (get_body body (n+1)) ^
+        (get_body body (n+1) "if") ^
         (run_assert assertion n) ^ " \n"
         ^ "c" ^ string_of_int n ^ " := !c" ^ string_of_int n
         ^ " -- !c" ^ string_of_int (n+1) ^ ";\n"
     | IfElse {cond; ifbody; elsebody; assertion} ->
             "if (" ^ run_cond cond ^ ") then\n" ^
-            (get_body ifbody (n+1)) ^
-            " else \n" ^ "\n" ^ (get_body elsebody (n+1))
+            (get_body ifbody (n+1) "if") ^
+            " else \n" ^ "\n" ^ (get_body elsebody (n+1) "else")
             ^ "\n" ^ (run_assert assertion n) ^ "\n"
             ^ "c" ^ string_of_int n ^ " := !c" ^ string_of_int n
             ^ " -- !c" ^ string_of_int (n+1) ^ ";\n"
@@ -285,20 +285,24 @@ let rec run_instr i n =
         run_unitary unit n
     | Return (e) -> "" (*"return (!c0);\n"*)
 
-and get_body body n : string
+and get_body body n id: string
     =
     match body with
     | [] -> ""
     | [i] -> begin match i with
-             | Unitary (unit) -> run_unitary_inv unit n (*^ circ_looper_conj n 0*)
+             | Unitary (unit) -> run_unitary unit n (*^ circ_looper_conj n 0*)
              | _ -> run_instr i n end(*^ circ_looper_conj n 0 end*)
     | i :: tl ->
         match i with (*if instr is unitary, inverse sequence it at the end*)
         | Unitary (unit) ->
-            get_body tl n
-            ^ run_unitary_inv unit (count_depth tl + 1)
+            if (n>0) then (* for when we have a unit inside a for/if/conj body *)
+                get_body tl n id
+                ^ run_unitary_inv unit (count_depth tl + 1)
+            else if (count_depth tl > 0) then get_body tl n id (* for when we have a unit BEFORE a for/if/conj body *)
+                ^ run_unitary_inv unit n
+                else run_unitary unit n ^ get_body tl n id (* for when we have a unit AFTER a for/if/conj body *)
 (*            ^ circ_looper_conj (count_depth tl) 0*)
-        | _ -> run_instr i n ^ get_body tl n
+        | _ -> run_instr i n ^ get_body tl n id
 
 and get_conj_body body n : string
     =
@@ -361,7 +365,7 @@ let rec get_ids = function
 let run_circ = function
     {qregs; body} ->
         "=\nbegin\n" ^
-        "let c0 = ref (m_skip n) in\n" ^  get_body body 0
+        "let c0 = ref (m_skip n) in\n" ^  (get_body body 0 "circ")
         ^ "return !c0;\n";;
 
 (*     (String.concat "" (List.map run_qreg qregs)) ^ (String.concat "\n" (List.map run_instr body)) ;;*)
@@ -388,6 +392,6 @@ use qbricks.Circuit_macros
 use int.Int
 use wired_circuits.Qbricks_prim
 use qbricks.Circuit_semantics
-use exponentiation.Int_Exponentiation
+use int_expo.Int_Exponentiation
 use unit_circle.Angle\n\n" ^
         (String.concat "" (List.map run_fun aux)) ^ run_fun main ^ "end\n";;

@@ -43,12 +43,11 @@ pos {true}
 | diffusor | (qreg qr, qreg aux)
 pre {true}
     circ qr, aux ->
-        H(qr)
-        X(qr)
-        assert {true}
-        with control qr[:-1] (Z(qr[-1]))
-        assert {true}
-        X(qr)
-        H(qr)
+        with conjugated (H(qr)) {
+            with conjugated (X(qr)) {
+                with control qr[:-1] (Z(qr[-1]))
+                assert {true}
+            }
+        }
         return
 pos {true}
