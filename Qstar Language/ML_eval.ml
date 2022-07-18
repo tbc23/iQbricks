@@ -116,20 +116,20 @@ let rec run_unitary_inv unit n =
                         ^ "(crz (" ^ run_expr range1.starts
                         ^ ") (" ^ run_expr range2.starts ^ ") (" ^ run_expr a ^ ") n) -- !c"
                         ^ string_of_int n ^";\n"
-                    else
+                    else(*not done*)
                         "let circ_aux = ref (m_skip n)\nin "
                         ^ "for ctl=" ^ run_expr (range.starts) ^ " to " ^ run_expr (range.ends)
                         ^ " do\n" ^ "circ_aux := !circ_aux -- " ^
-                        "cont ((" ^ run_gate gate ^ " (" ^ run_expr (range.starts) ^ ") n)"
-                        ^ " ctl " ^ run_expr range2.starts ^ ")\ndone;"
+                        "cont " ^ run_gate gate
+                        ^ " ctl " ^ run_expr range2.starts ^ " n;\ndone;"
                 | _ ->
-                    if (range.starts=range.ends) then
+                    if (range.starts=range.ends) then(*not done*)
                         "c" ^ string_of_int n ^ " := !c"
                         ^ string_of_int n ^ " -- ("
                         ^ "cont ((" ^ run_gate gate ^ " (" ^ run_expr (range.starts) ^ ") n)"
                         ^ " (" ^ run_expr range1.starts ^ ") (" ^ run_expr range2.starts ^ "))"
                         ^ ");\n"
-                    else
+                    else(*not done*)
                         "let circ_aux = ref (m_skip n)\nin "
                         ^ "for ctl=" ^ run_expr (range.starts) ^ " to " ^ run_expr (range.ends)
                         ^ " do\n" ^ "circ_aux := !circ_aux -- " ^
@@ -144,11 +144,11 @@ let rec run_unitary_inv unit n =
         end ^ run_assert assertion n
     | FUN {id; args} ->
         "c" ^ string_of_int n ^ " :="
-        ^ "(" ^ id ^ " (" ^ (run_args args) ^ ")) -- !c"
+        ^ "(" ^ id ^  " " ^ (run_args args) ^ ") -- !c"
         ^ string_of_int n ^ ";\n"
     | REV {id; args} ->
         "c" ^ string_of_int n ^ " :="
-                ^ "(reverse (" ^ id ^ " (" ^ (run_args args) ^ "))) -- !c"
+                ^ "(reverse (" ^ id ^ " " ^ (run_args args) ^ ")) -- !c"
                 ^ string_of_int n ^ ";\n"
 
 let rec run_unitary unit n =
@@ -186,25 +186,26 @@ let rec run_unitary unit n =
                         ^ "crz (" ^ run_expr range1.starts
                         ^ ") (" ^ run_expr range2.starts ^ ") ("
                         ^ run_expr a ^ ") n);\n"
-                    else
+                    else (*not done*)
                         "let circ_aux = ref (m_skip n)\nin "
-                        ^ "for ctl=" ^ run_expr (range.starts) ^ " to " ^ run_expr (range.ends)
+                        ^ "for ctl=" ^ run_expr (range.starts) ^ " to "
+                        ^ run_expr (range.ends)
                         ^ " do\n" ^ "circ_aux := !circ_aux -- " ^
-                        "cont ((" ^ run_gate gate ^ " (" ^ run_expr (range.starts) ^ ") n)"
+                        "crz (" ^ run_expr (range.starts) ^ ") n)"
                         ^ " ctl " ^ run_expr range2.starts ^ ")\ndone;"
                 | _ ->
                     if (range.starts=range.ends) then
                         "c" ^ string_of_int n ^ " := !c"
-                        ^ string_of_int n ^ " -- ("
-                        ^ "cont ((" ^ run_gate gate ^ " (" ^ run_expr (range.starts) ^ ") n)"
-                        ^ " (" ^ run_expr range1.starts ^ ") (" ^ run_expr range2.starts ^ "))"
-                        ^ ");\n"
+                        ^ string_of_int n ^ " -- "
+                        ^ "cont " ^ run_gate gate
+                        ^ " (" ^ run_expr range1.starts ^ ") (" ^ run_expr range2.starts ^ ")"
+                        ^ " n;\n"
                     else
                         "let circ_aux = ref (m_skip n)\nin "
                         ^ "for ctl=" ^ run_expr (range.starts) ^ " to " ^ run_expr (range.ends)
                         ^ " do\n" ^ "circ_aux := !circ_aux -- " ^
-                        "cont ((" ^ run_gate gate ^ " (" ^ run_expr (range.starts) ^ ") n)"
-                        ^ " ctl " ^ run_expr range2.starts ^ ")\ndone;"
+                        "cont " ^ run_gate gate
+                        ^ " ctl " ^ run_expr range2.starts ^ " n;\ndone;"
             end
         | MultiApply {gate; qreg1; range1; qreg2; range2; qreg3; range3; assertion} ->
             ""
@@ -215,11 +216,11 @@ let rec run_unitary unit n =
     | FUN {id; args} ->
         "c" ^ string_of_int n ^ " := !c"
         ^ string_of_int n
-        ^ " -- (" ^ id ^ " (" ^ (run_args args) ^ "));\n"
+        ^ " -- (" ^ id ^ " " ^ (run_args args) ^ ");\n"
     | REV {id; args} ->
         "c" ^ string_of_int n ^ " := !c"
         ^ string_of_int n
-        ^ " -- (reverse (" ^ id ^ " (" ^ (run_args args) ^ ")));\n"
+        ^ " -- (reverse (" ^ id ^ " " ^ (run_args args) ^ "));\n"
 
 let run_iter = function
     {iterator; starts; ends} ->
@@ -247,9 +248,9 @@ let run_conjugate gate n : string
     | FUN {id; args} ->
             "c" ^ string_of_int n ^ " := !c"
             ^ string_of_int n
-            ^ " -- (" ^ id ^ " (" ^ (run_args args) ^ ")) -- !c"
+            ^ " -- (" ^ id ^ (run_args args) ^ ") -- !c"
             ^ string_of_int (n+1) ^ " -- reverse ("
-            ^ "(" ^ id ^ " (" ^ (run_args args) ^ ")));\n"
+            ^ "(" ^ id ^ (run_args args) ^ "));\n"
     | _ -> "Error"
 
 let rec run_instr i n =
@@ -390,6 +391,7 @@ use export p_int.Int_comp
 use ref.Ref
 use qbricks.Circuit_macros
 use int.Int
+use reversion.Circuit_reverse
 use wired_circuits.Qbricks_prim
 use qbricks.Circuit_semantics
 use int_expo.Int_Exponentiation

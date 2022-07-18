@@ -42,7 +42,7 @@ body = [
 Return "";
 ];
 };
-params = [{id="qr";  type_=Qreg}; {id="aux";  type_=Qreg}; ]; 
+params = [{id="qr";  type_=Qreg}; ]; 
 pre = ["{true}"; ];
 pos = ["{true}"; ];
 }; 
@@ -50,9 +50,9 @@ pos = ["{true}"; ];
 {
 id = "grover_iter";
 circ = {
-qregs= [{qrid="qr"; size=Num 0}];
+qregs= [{qrid="qr"; size=Num 0}; {qrid="aux"; size=Num 0}];
 body = [
-Unitary(Sequence (FUN {id="diffusor"; args=[Var "qr"; Var "aux"; ]},FUN {id="oracle"; args=[Var "qr"; Var "aux"; ]}));
+Unitary(Sequence (FUN {id="diffusor"; args=[Var "qr"; Var "aux"; ]},FUN {id="oracle"; args=[Var "qr"; ]}));
 Return "";
 ];
 };
@@ -101,7 +101,7 @@ Return "";
 ];
 }; 
 params = [{id="qr";  type_=Qreg}; {id="aux";  type_=Qreg}; {id="iters";  type_=Int}; ]; 
-pre = ["{true}"; ];
+pre = ["{iters=2}"; ];
 pos = ["{true}"; ];
 }};;
 let () =

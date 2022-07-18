@@ -1,5 +1,5 @@
 || grover || (qreg qr, qreg aux, int iters)
-pre {true}
+pre {iters=2}
 	circ qr[4], aux[1] ->
         init(qr,aux)
         assert{true}
@@ -13,8 +13,8 @@ pos {true}
 
 | grover_iter | (qreg qr, qreg aux)
 pre {true}
-	circ qr ->
-        oracle(qr,aux)
+	circ qr, aux ->
+        oracle(qr)
         diffusor(qr,aux)
         assert{true}
         return
@@ -32,7 +32,7 @@ pre {true}
 pos {true}
 
 # can be passed as a parameter in main function
-| oracle | (qreg qr, qreg aux)
+| oracle | (qreg qr)
 pre {true}
     circ qr -> # DEFINE P /\ (neg Q \/ R)
 
