@@ -12,6 +12,33 @@ use qbricks.Circuit_semantics
 use int_expo.Int_Exponentiation
 use unit_circle.Angle
 
+let diffusor (qr aux n:int) : circuit
+requires{0<n}
+requires{qr+aux=n}
+requires{true}
+=
+begin
+let c0 = ref (m_skip n) in
+let c1 = ref (m_skip n) in
+let c2 = ref (m_skip n) in
+c2 := !c2 -- cont  zz (0) (qr - 1) n;
+assert{true};
+let circ_aux = ref (m_skip n) in
+for i=0 to (qr) do
+invariant{width !c1=n}
+circ_aux := !circ_aux -- (place xx i n);
+done;
+c1 := !c1 -- !circ_aux -- !c2 -- reverse (!circ_aux);
+let circ_aux = ref (m_skip n) in
+for i=0 to (qr) do
+invariant{width !c0=n}
+circ_aux := !circ_aux -- (place_hadamard i n);
+done;
+c0 := !c0 -- !circ_aux -- !c1 -- reverse (!circ_aux);
+return !c0;
+ensures{true}
+end
+
 let grover_iter (qr aux n:int) (oracle: circuit) : circuit
 requires{0<n}
 requires{qr+aux=n}

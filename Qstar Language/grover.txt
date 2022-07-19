@@ -32,13 +32,6 @@ pre {true}
         return
 pos {true}
 
-# can be passed as a parameter in main function
-< oracle > (qreg qr)
-{width result = n},
-{forall x:bitvec. length x = n -> f (bv_to_int x) -> path_sem result (bv_to_ket x) =  (-. c_one *.. (bv_to_ket x))},
-{forall x:bitvec. length x = n -> not f (bv_to_int x) -> path_sem result (bv_to_ket x) =  (bv_to_ket x)}
-
-
 | diffusor | (qreg qr, qreg aux)
 pre {true}
     circ qr, aux ->
