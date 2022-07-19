@@ -39,16 +39,11 @@ return !c0;
 ensures{true}
 end
 
-let oracle (qr n: int): circuit
+val oracle (qr n: int): circuit
 requires{0<n}
 requires{qr=n}
 requires{true}
-=
-begin
-let c0 = ref (m_skip n) in
-return !c0;
-ensures{true}
-end
+
 
 let grover_iter (qr aux n: int): circuit
 requires{0<n}

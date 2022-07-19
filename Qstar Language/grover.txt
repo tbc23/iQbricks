@@ -1,24 +1,25 @@
-|| grover || (qreg qr, qreg aux, int iters)
+|| grover || (qreg qr, qreg aux, int iters, circ f)
 pre {iters=2}
 	circ qr[4], aux[1] ->
         init(qr,aux)
         assert{true}
         for i in range(iters) {
             invariant{true}
-            grover_iter(qr,aux)
+            grover_iter(qr,aux,f)
             assert {true}
         }
         return
 pos {true}
 
-| grover_iter | (qreg qr, qreg aux)
+| grover_iter | (qreg qr, qreg aux, oracle oracle-f)
 pre {true}
-	circ qr, aux ->
-        oracle(qr)
+    circ qr, aux ->
+        oracle-f(qr)
         diffusor(qr,aux)
         assert{true}
         return
 pos {true}
+
 
 | init | (qreg qr, qreg aux)
 pre {true}
@@ -32,12 +33,10 @@ pre {true}
 pos {true}
 
 # can be passed as a parameter in main function
-| oracle | (qreg qr)
-pre {true}
-    circ qr -> # DEFINE P /\ (neg Q \/ R)
-
-        return
-pos {true}
+< oracle > (qreg qr)
+{width result = n},
+{forall x:bitvec. length x = n -> f (bv_to_int x) -> path_sem result (bv_to_ket x) =  (-. c_one *.. (bv_to_ket x))},
+{forall x:bitvec. length x = n -> not f (bv_to_int x) -> path_sem result (bv_to_ket x) =  (bv_to_ket x)}
 
 
 | diffusor | (qreg qr, qreg aux)

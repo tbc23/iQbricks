@@ -1,0 +1,17 @@
+|| grover_cz ||
+pre {iters=2}
+    circ qr, aux ->
+        grover(qr,aux,iters,oracle_cz)
+pos {true}
+
+| oracle_cz | (qreg qr)
+pre {true}
+    circ qr ->
+        with control qr[0] (RZ(1,qr[1]))
+pos {true}
+
+| oracle_2 | (qreg qr)
+pre {true}
+    circ qr ->
+        with control qr[1] (RZ(1,qr[0]))
+pos {true}
