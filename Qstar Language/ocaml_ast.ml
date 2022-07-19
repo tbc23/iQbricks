@@ -6,48 +6,6 @@ let p = {
 aux = [
 
 {
-id = "diffusor";
-circ = {
-qregs= [{qrid="qr"; size=Num 0}; {qrid="aux"; size=Num 0}];
-body = [
-Conjugated {gate=Apply {gate=H; qreg="qr"; range={starts=Num 0; ends=Len "qr"}; assertion=[]
-};
- body = [
-Conjugated {gate=Apply {gate=X; qreg="qr"; range={starts=Num 0; ends=Len "qr"}; assertion=[]
-};
- body=[
-Unitary (WithControl{gate=Apply {gate=Z; qreg="qr"; range={starts=Subtract (Len "qr", Num 1); ends=Subtract (Len "qr", Num 1)}; assertion=["{true}"; ]
-}; ctls=["qr"; ]; range1={starts=Num 0; ends=Subtract (Len "qr", Num 2)}; tg="qr"; range2={starts=Subtract (Len "qr", Num 1); ends=Subtract (Len "qr", Num 1)}; assertion=["{true}"; ]
-}
-);
-];
-assertion=[]
-};
-];
-assertion=[]
-};
-Return "";
-];
-};
-params = [{id="qr";  type_=Qreg}; {id="aux";  type_=Qreg}; ]; 
-pre = ["{true}"; ];
-pos = ["{true}"; ];
-}; 
-
-{
-id = "oracle";
-circ = {
-qregs= [{qrid="qr"; size=Num 0}];
-body = [
-Return "";
-];
-};
-params = [{id="qr";  type_=Qreg}; ]; 
-pre = ["{true}"; ];
-pos = ["{true}"; ];
-}; 
-
-{
 id = "grover_iter";
 circ = {
 qregs= [{qrid="qr"; size=Num 0}; {qrid="aux"; size=Num 0}];
@@ -56,7 +14,7 @@ Unitary(Sequence (FUN {id="diffusor"; args=[Var "qr"; Var "aux"; ]},FUN {id="ora
 Return "";
 ];
 };
-params = [{id="qr";  type_=Qreg}; {id="aux";  type_=Qreg}; ]; 
+params = [{id="qr";  type_=Qreg}; {id="aux";  type_=Qreg}; {id="oracle";  type_=Circ}; ]; 
 pre = ["{true}"; ];
 pos = ["{true}"; ];
 }; 
@@ -82,7 +40,7 @@ pos = ["{true}"; ];
 main = {
  id = "grover";
 circ = {
-qregs= [{qrid="qr"; size=Num 4}; {qrid="aux"; size=Num 1}];
+qregs= [{qrid="qr"; size=Num 0}; {qrid="aux"; size=Num 0}];
 body = [
 Unitary (FUN {id="init"; args=[Var "qr"; Var "aux"; ]});
 For {
@@ -93,14 +51,14 @@ ends = Var "iters"
 };
 inv = ["{true}"; ];
 body=[
-Unitary (FUN {id="grover_iter"; args=[Var "qr"; Var "aux"; ]});
+Unitary (FUN {id="grover_iter"; args=[Var "qr"; Var "aux"; Var "oracle"; ]});
 ];
 assertion=[]
 };
 Return "";
 ];
 }; 
-params = [{id="qr";  type_=Qreg}; {id="aux";  type_=Qreg}; {id="iters";  type_=Int}; ]; 
+params = [{id="qr";  type_=Qreg}; {id="aux";  type_=Qreg}; {id="iters";  type_=Int}; {id="oracle";  type_=Circ}; ]; 
 pre = ["{iters=2}"; ];
 pos = ["{true}"; ];
 }};;

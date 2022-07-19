@@ -1,20 +1,20 @@
-|| grover || (qreg qr, qreg aux, int iters, circ f)
+|| grover || (qreg qr, qreg aux, int iters, circ oracle)
 pre {iters=2}
-	circ qr[4], aux[1] ->
+	circ qr, aux ->
         init(qr,aux)
         assert{true}
         for i in range(iters) {
             invariant{true}
-            grover_iter(qr,aux,f)
+            grover_iter(qr,aux,oracle)
             assert {true}
         }
         return
 pos {true}
 
-| grover_iter | (qreg qr, qreg aux, oracle oracle-f)
+| grover_iter | (qreg qr, qreg aux, circ oracle)
 pre {true}
     circ qr, aux ->
-        oracle-f(qr)
+        oracle(qr)
         diffusor(qr,aux)
         assert{true}
         return

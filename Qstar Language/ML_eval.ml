@@ -363,6 +363,53 @@ let rec get_ids = function
     | [i] -> i.qrid ^ " "
     | i :: ls -> i.qrid ^ " " ^ get_ids ls
 
+let rec get_params_ints = function
+    | [] -> ""
+    | [i] -> begin match i.type_ with
+            | Qreg -> i.id ^ " "
+            | Int -> i.id ^ " "
+            | _ -> "" end
+    | i :: ls -> begin match i.type_ with
+                 | Qreg -> i.id ^ " " ^ get_params_ints ls
+                 | Int -> i.id ^ " " ^ get_params_ints ls
+                 | _ -> "" ^ get_params_ints ls end
+
+let rec get_params_circs = function
+    | [] -> ""
+    | [i] -> begin match i.type_ with
+            | Circ -> i.id
+            | _ -> "" end
+    | i :: ls -> begin match i.type_ with
+                 | Circ -> i.id ^ " " ^ get_params_circs ls
+                 | _ -> "" ^ get_params_circs ls end
+
+let rec contains_circs = function
+    | [] -> false
+    | [i] -> begin match i.type_ with
+            | Circ -> true
+            | _ -> false end
+    | i :: ls -> begin match i.type_ with
+                 | Circ -> true
+                 | _ -> false || contains_circs ls end
+
+let rec get_params_bools = function
+    | [] -> ""
+    | [i] -> begin match i.type_ with
+            | Bool -> i.id
+            | _ -> "" end
+    | i :: ls -> begin match i.type_ with
+                 | Bool -> i.id ^ " " ^ get_params_bools ls
+                 | _ -> "" ^ get_params_bools ls end
+
+let rec contains_bools = function
+    | [] -> false
+    | [i] -> begin match i.type_ with
+            | Bool -> true
+            | _ -> false end
+    | i :: ls -> begin match i.type_ with
+                 | Bool -> true
+                 | _ -> false || contains_bools ls end
+
 let run_circ = function
     {qregs; body} ->
         "=\nbegin\n" ^
@@ -374,8 +421,14 @@ let run_circ = function
 let run_fun = function
     {id; circ; params; pre; pos} ->
         "let " ^ id
-        ^ " (" ^ (get_ids circ.qregs)
-        ^ "n: int): circuit\nrequires{0<n}\n" ^
+        ^ " (" ^ (get_params_ints params) ^ "n:int) " ^
+        begin if (contains_circs params) then
+        "(" ^ get_params_circs params ^ ": circuit) "
+        else "" end ^
+        begin if (contains_bools params) then
+        "(" ^ get_params_bools params ^ ": boolean) "
+        else "" end ^
+        ": circuit\nrequires{0<n}\n" ^
         "requires{" ^ (sum_regs circ.qregs) ^ "=n}\n"
         ^ get_size circ.qregs
         ^ run_requires pre
