@@ -100,6 +100,7 @@ type fun_ =
 type program =
 {
      id: string;
+     imports: string list;
      main: fun_;
      aux: fun_ list;
 }

@@ -1,4 +1,4 @@
-module Program
+module Grover
 
 use export binary.Bit_vector
 use wired_circuits.Circuit_c

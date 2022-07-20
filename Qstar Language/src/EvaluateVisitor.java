@@ -44,8 +44,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                 open ML_eval
                                 
                 let p = {
-                    id = "program";
-                """);
+                    id = \"""").append(node.getMain().getID()).append("\";\n");
         if (!node.getAuxList().isEmpty()) {
             for (AuxNode c : node.getAuxList()) {
                 auxs.add(Visit(c));
@@ -65,7 +64,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                     r.append("use export ").append(s.toUpperCase()).append("\n");
                 }
             }
-            t.append("aux = [\n");
+            t.append("aux = [");
 
             for (AuxNode c : node.getAuxList())  // fill index list with final destination
                 index.add(auxIds.indexOf(c.getID()));
@@ -87,7 +86,27 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             }
             t.append("aux = [];\n");
         }
+        // Check params for possible aux functions and remove them from undeclared functions
+        if (node.getMain().getHasParams()) {
+            for (SingleParam p : node.getMain().getParams().getPs()) {
+                undeclared_funs.remove(p.getId());
+            }
+        }
+        for (AuxNode n: node.getAuxList()){
+            if (n.getHasParams()) {
+                for (SingleParam p : n.getParams().getPs()) {
+                    undeclared_funs.remove(p.getId());
+                }
+            }
+        }
+        // fill undeclared functions in ml ast
+        t.append("imports = [");
+        for (String s: undeclared_funs) {
+            t.append("\"").append(s).append("\"; ");
+        }
+        t.append("];\n");
 
+        // add main function
         t.append(main);
         t.append("""
             let () =

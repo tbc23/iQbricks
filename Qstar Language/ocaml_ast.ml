@@ -2,9 +2,8 @@ open ML_AST2
 open ML_eval
 
 let p = {
-    id = "program";
+    id = "grover";
 aux = [
-
 {
 id = "diffusor";
 circ = {
@@ -66,6 +65,7 @@ pos = ["{true}"; ];
 }; 
 
 ];
+imports = [];
 main = {
  id = "grover";
 circ = {

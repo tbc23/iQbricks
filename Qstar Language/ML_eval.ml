@@ -436,8 +436,14 @@ let run_fun = function
         ^ run_ensures pos ^ "end\n\n";;
 (*        id ^ ":\n" ^ run_circ circ ^ (String.concat "" pre) ^ "\n" ^ String.concat "" pos ^ "\n\n";;*)
 
-let run_program {id; main; aux} =
+let rec run_imports = function
+    | [] -> ""
+    | [i] -> "use " ^ i ^ "." ^ String.capitalize_ascii i ^ "\n"
+    | i :: tl -> "use " ^ i ^ "." ^ String.capitalize_ascii i ^ "\n" ^ run_imports tl
+
+let run_program {id; imports; main; aux} =
         "module " ^ String.capitalize_ascii id ^ "\n\n"
+        ^ (run_imports imports)
         ^ "use export binary.Bit_vector
 use wired_circuits.Circuit_c
 use export p_int.Int_comp
