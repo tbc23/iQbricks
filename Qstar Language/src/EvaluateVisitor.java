@@ -192,7 +192,9 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         for(InstrNode c:node.getBodyInstr()){
             r.append(Visit(c));
         }
-        //System.out.println(unitaries);
+        //System.out.println(printUnitaries(unitaries));
+        if (r.toString().equals("body = [\n"))
+            r.append(printUnitaries(unitaries));
         return r.toString();
     }
 

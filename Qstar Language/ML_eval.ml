@@ -420,11 +420,11 @@ let run_circ = function
 
 let run_fun = function
     {id; circ; params; pre; pos} ->
-        "let " ^ id
-        ^ " (" ^ (get_params_ints params) ^ "n:int) " ^
+        "let " ^ id ^
         begin if (contains_circs params) then
-        "(" ^ get_params_circs params ^ ": circuit) "
-        else "" end ^
+           "(" ^ get_params_circs params ^ ": circuit) "
+           else "" end
+        ^ " (" ^ (get_params_ints params) ^ "n:int) " ^
         begin if (contains_bools params) then
         "(" ^ get_params_bools params ^ ": boolean) "
         else "" end ^
