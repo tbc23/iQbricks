@@ -48,7 +48,7 @@ let rec run_expr = function
     | Var (e) -> e
 
 let rec run_args = function
-    | [] -> ""
+    | [] -> "n"
     | [i] -> run_expr i ^ " n"
     | h :: tl -> (run_expr h) ^ " " ^ run_args tl
 
@@ -422,7 +422,7 @@ let run_fun = function
     {id; circ; params; pre; pos} ->
         "let " ^ id ^
         begin if (contains_circs params) then
-           "(" ^ get_params_circs params ^ ": circuit) "
+           "(" ^ get_params_circs params ^ ": int -> circuit) "
            else "" end
         ^ " (" ^ (get_params_ints params) ^ "n:int) " ^
         begin if (contains_bools params) then

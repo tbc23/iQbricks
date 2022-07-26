@@ -102,8 +102,8 @@ else_:
         ;
 
 apply   :
-        fun=idFun OP fargs=args CL                      #funApply
-        | REVERSE OP fun=idFun OP fargs=args CL CL      #revApply
+        fun=idFun OP (fargs=args)? CL                   #funApply
+        | REVERSE OP fun=idFun OP (fargs=args)? CL CL   #revApply
         | HAD OP qr=qReg CL                             #hadApply
         | RZ OP angle=ang VG qr=qReg CL                 #rzApply
         | RX OP angle=ang VG qr=qReg CL                 #rxApply

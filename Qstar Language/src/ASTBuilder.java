@@ -278,14 +278,16 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
         }
         else
             funApply.setAssertion((AssertNode) visit(ctx.getParent().getParent().getChild(1)));
-        TermNode arg = (TermNode) visit(args.getChild(0));
-        List<TermNode> termArgs = new ArrayList<>(); //list of term arguments
 
-        termArgs.add(arg);
-        if (args.getChildCount() > 1) {
-            for (int c = 2; c < args.getChildCount(); c+=2) {
-                arg = (TermNode) visit(args.getChild(c));
-                termArgs.add(arg);
+        List<TermNode> termArgs = new ArrayList<>(); //list of term arguments
+        if (ctx.getChildCount()>3) { //this has args
+            TermNode arg = (TermNode) visit(args.getChild(0));
+            termArgs.add(arg);
+            if (args.getChildCount() > 1) {
+                for (int c = 2; c < args.getChildCount(); c += 2) {
+                    arg = (TermNode) visit(args.getChild(c));
+                    termArgs.add(arg);
+                }
             }
         }
 
@@ -303,17 +305,19 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
         }
         else
             revApply.setAssertion((AssertNode) visit(ctx.getParent().getParent().getChild(1)));
-        TermNode arg = (TermNode) visit(args.getChild(0));
-        List<TermNode> termArgs = new ArrayList<>(); //list of term arguments
 
-        termArgs.add(arg);
-        revApply.setFunID(ctx.fun.getText());
-        if (args.getChildCount() > 1) {
-            for (int c = 2; c < args.getChildCount(); c+=2) {
-                arg = (TermNode) visit(args.getChild(c));
-                termArgs.add(arg);
+        List<TermNode> termArgs = new ArrayList<>(); //list of term arguments
+        if (ctx.getChildCount()>6) { //has args
+            TermNode arg = (TermNode) visit(args.getChild(0));
+            termArgs.add(arg);
+            if (args.getChildCount() > 1) {
+                for (int c = 2; c < args.getChildCount(); c += 2) {
+                    arg = (TermNode) visit(args.getChild(c));
+                    termArgs.add(arg);
+                }
             }
         }
+        revApply.setFunID(ctx.fun.getText());
         revApply.setTermArgs(termArgs);
         return revApply;
     }

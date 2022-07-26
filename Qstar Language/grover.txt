@@ -14,7 +14,7 @@ pos {true}
 | grover_iter | (circ oracle, qreg qr, qreg aux)
 pre {true}
     circ qr, aux ->
-        oracle(qr)
+        oracle()
         diffusor(qr,aux)
         assert{true}
         return

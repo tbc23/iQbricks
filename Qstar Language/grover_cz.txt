@@ -5,14 +5,14 @@ pre {true}
         assert {true}
 pos {true}
 
-| oracle_cz | (qreg qr)
+| oracle_cz |
 pre {true}
     circ qr ->
         with control qr[0] (RZ(1,qr[1]))
         assert {true}
 pos {true}
 
-| oracle_2 | (qreg qr)
+| oracle_2 |
 pre {true}
     circ qr ->
         with control qr[1] (RZ(1,qr[0]))

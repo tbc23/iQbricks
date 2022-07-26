@@ -194,7 +194,8 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         }
         //System.out.println(printUnitaries(unitaries));
         if (r.toString().equals("body = [\n"))
-            r.append(printUnitaries(unitaries));
+            r.append(printUnitaries(unitaries)).append("];\n");
+        else r.append("];\n");
         return r.toString();
     }
 
@@ -202,7 +203,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
     public String Visit(CircNode node) {
         String r;
         r = "qregs= ["+Visit(node.getIds())+"];\n"+
-            Visit(node.getBody())+"];\n";
+            Visit(node.getBody());//+"];\n";
         return r;
     }
 
@@ -252,10 +253,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         unitaries.remove(unitaries.size()-1);
         s += ";\n ";
         body = Visit(node.getBody());
-        if (body.equals("body = [\n"))
-            s += "body=[\n" + printUnitaries(unitaries) + "];\n" + Visit(node.getAssertion()) + "};\n";
-        else s += body + printUnitaries(unitaries)
-                +"];\n" + Visit(node.getAssertion()) + "};\n";
+        s += body+ Visit(node.getAssertion()) + "};\n";
         unitaries.clear();
         return s;
     }
@@ -281,10 +279,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         }
         r += body + iterator +" := " + iterator + " + 1\ndone;\n"
                 + Visit(node.getAssertion());
-        if (body.equals("body = [\n"))
-            s += "body=[\n" + printUnitaries(unitaries) + "];\n" + Visit(node.getAssertion()) + "};\n";
-        else s += body + printUnitaries(unitaries)
-                +"];\n" + Visit(node.getAssertion()) + "};\n";
+        s += body + Visit(node.getAssertion()) + "};\n";
         old = circs.pop();
         r += circs.peek()+":= !"+circs.peek()+" -- !"+old+";\n";
         unitaries.clear();
@@ -365,17 +360,15 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         if(!node.getWithElse()) {
             s += "If {\ncond= " + Visit(node.getCond()) + ";\n";
             body = Visit(node.getIfBody());
-            if (body.equals("body = [\n"))
-                s += "body=[\n" + printUnitaries(unitaries) + "];\n" + Visit(node.getAssertion()) + "};\n";
-            else s += body +"];\n" + Visit(node.getAssertion()) + "};\n";
+            s += body + Visit(node.getAssertion()) + "};\n";
             r = "let " + circs.peek() + " = ref (m_skip n)\nin " +
                     "if (" + Visit(node.getCond()) + ")\nthen begin\n" +
                     Visit(node.getAssertion()) + Visit(node.getIfBody()) + "end\n";
         }
         else {
             s += "IfElse {\ncond= " + Visit(node.getCond()) + ";\nif"
-                    + Visit(node.getIfBody()) + printUnitaries(unitaries)
-                    + "else" + Visit(node.getElseBody()) + printUnitaries(unitaries)
+                    + Visit(node.getIfBody())
+                    + "else" + Visit(node.getElseBody())
                     + Visit(node.getAssertion())
                     + "};\n";
             r = "let " + circs.peek() + " = ref (m_skip n)\nin " +
