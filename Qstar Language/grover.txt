@@ -1,5 +1,5 @@
 || grover || (circ oracle, qreg qr, qreg aux, int iters)
-pre {iters=2}
+pre {true}
 	circ qr, aux ->
         init(qr,aux)
         assert{true}

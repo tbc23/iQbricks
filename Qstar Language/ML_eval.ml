@@ -77,10 +77,16 @@ let run_multigate = function
     | Cnot -> "cnot " | Toff -> "toffoli "
     | Fred -> "fredkin " | SWAP -> "swap "
 
-let run_range = function
-    {starts; ends} ->
-        if (starts=ends) then "[" ^ run_expr starts ^ "]"
-        else "[" ^ run_expr starts ^ " to " ^ run_expr ends ^ "]"
+let run_range (range: expr) (id: string) =
+    "(!" ^ id ^ "_index + " ^ (run_expr range)^ ")"
+
+let rec get_index qregs prev =
+    match qregs with
+    | [] -> ""
+    | [i] -> "let " ^ i.qrid ^ "_index = ref ("
+             ^  prev ^ ": int) in \n"
+    | i :: tl -> "let " ^ i.qrid ^ "_index = ref ("
+                ^  prev ^ ": int) in \n" ^ get_index tl (prev ^ "+" ^ i.qrid)
 
 let rec run_unitary_inv unit n =
     match unit with
@@ -89,21 +95,22 @@ let rec run_unitary_inv unit n =
         if (range.starts=range.ends) then
             "c" ^ string_of_int n ^ " := "
             ^ "(place" ^ run_gate gate
-            ^ " (" ^ run_expr (range.starts) ^ ") n)"
+            ^ (run_range range.starts qreg) ^ " n)"
             ^ " -- !c" ^ string_of_int n ^ ";\n"
             ^ run_assert assertion n
         else "let circ_aux = ref (m_skip n) in\n"
-            ^ "for i=" ^ run_expr (range.starts) ^ " to (" ^ run_expr (range.ends)
-            ^ ") do\n" ^ "invariant{width !c" ^ (string_of_int n) ^ "=n}\n"
+            ^ "for i= " ^ (run_range range.starts qreg)
+            ^ " to " ^ (run_range range.ends qreg)
+            ^ " do\n" ^ "invariant{width !c" ^ (string_of_int n) ^ "=n}\n"
             ^ "circ_aux := !circ_aux -- (place" ^ run_gate gate
             ^ " i n);\ndone;\n" ^ "c" ^ string_of_int n
             ^ " := !circ_aux -- !c" ^ string_of_int n ^ ";\n"
             ^ run_assert assertion n
     | MultiApply {gate; qreg1; range1; qreg2; range2; qreg3; range3; assertion} ->
         "c" ^ string_of_int n ^ " := ("
-        ^ run_multigate gate ^ " (" ^ qreg1 ^ " " ^ run_range range1 ^ ")"
-         ^ " (" ^ qreg2 ^ " " ^ run_range range2 ^ ")"
-         ^ " (" ^ qreg3 ^ " " ^ run_range range3 ^ ")" ^
+        ^ run_multigate gate ^ " (" ^ qreg1 ^ " " ^ (run_range range1.starts qreg1) ^ ")"
+         ^ " (" ^ qreg2 ^ " " ^ (run_range range2.starts qreg2) ^ ")"
+         ^ " (" ^ qreg3 ^ " " ^ (run_range range3.starts qreg3) ^ ")" ^
           ") -- !c" ^ string_of_int n ^ ";\n" ^ run_assert assertion n
 
     | WithControl {gate; ctls; range1; tg; range2; assertion} ->
@@ -113,15 +120,20 @@ let rec run_unitary_inv unit n =
                 | Rz (a) ->
                     if (range.starts=range.ends) then
                         "c" ^ string_of_int n ^ " := "
-                        ^ "(crz (" ^ run_expr range1.starts
-                        ^ ") (" ^ run_expr range2.starts ^ ") (" ^ run_expr a ^ ") n) -- !c"
+                        ^ "(crz (" ^ (run_range range1.starts qreg)
+                        ^ ") (" ^ (run_range range2.starts qreg)
+                        ^ ") (" ^ run_expr a ^ ") n) -- !c"
                         ^ string_of_int n ^";\n"
-                    else(*not done*)
-                        "let circ_aux = ref (m_skip n)\nin "
-                        ^ "for ctl=" ^ run_expr (range.starts) ^ " to " ^ run_expr (range.ends)
-                        ^ " do\n" ^ "circ_aux := !circ_aux -- " ^
-                        "cont " ^ run_gate gate
-                        ^ " ctl " ^ run_expr range2.starts ^ " n;\ndone;"
+                    else (*not done -> needs testing*)
+                        "let circ_aux = ref (m_skip n) in\n"
+                        ^ "for ctl= " ^ (run_range range.starts qreg)
+                        ^ " to " ^ (run_range range.ends qreg)
+                        ^ " do\n" ^ "invariant{width !c" ^ (string_of_int n) ^ "=n}\n"
+                        ^ "circ_aux := !circ_aux -- (crz "
+                        ^ " ctl " ^  (run_range range2.starts qreg)
+                        ^ " (" ^ (run_expr a) ^ ")"
+                        ^ " n);\ndone;\n" ^ "c" ^ string_of_int n
+                        ^ " := !circ_aux -- !c" ^ string_of_int n ^ ";\n"
                 | _ ->
                     if (range.starts=range.ends) then(*not done*)
                         "c" ^ string_of_int n ^ " := !c"
@@ -130,11 +142,15 @@ let rec run_unitary_inv unit n =
                         ^ " (" ^ run_expr range1.starts ^ ") (" ^ run_expr range2.starts ^ "))"
                         ^ ");\n"
                     else(*not done*)
-                        "let circ_aux = ref (m_skip n)\nin "
-                        ^ "for ctl=" ^ run_expr (range.starts) ^ " to " ^ run_expr (range.ends)
-                        ^ " do\n" ^ "circ_aux := !circ_aux -- " ^
-                        "cont ((" ^ run_gate gate ^ " (" ^ run_expr (range.starts) ^ ") n)"
-                        ^ " ctl " ^ run_expr range2.starts ^ ")\ndone;"
+                        "let circ_aux = ref (m_skip n) in\n"
+                        ^ "for ctl= " ^ (run_range range.starts qreg)
+                        ^ " to " ^ (run_range range.ends qreg)
+                        ^ " do\n" ^ "invariant{width !c" ^ (string_of_int n) ^ "=n}\n"
+                        ^ "circ_aux := !circ_aux -- (crz "
+                        ^ " ctl " ^  (run_range range2.starts qreg)
+                        ^ " (" ^ (run_expr a) ^ ")"
+                        ^ " n);\ndone;\n" ^ "c" ^ string_of_int n
+                        ^ " := !circ_aux -- !c" ^ string_of_int n ^ ";\n"
             end
         | MultiApply {gate; qreg1; range1; qreg2; range2; qreg3; range3; assertion} ->
             ""
@@ -159,20 +175,22 @@ let rec run_unitary unit n =
             "c" ^ string_of_int n ^ " := !c"
             ^ string_of_int n
             ^ " -- (place" ^ run_gate gate
-            ^ " (" ^ run_expr (range.starts) ^ ") n);\n"
+            ^ (run_range range.starts qreg) ^ " n);\n"
             ^ run_assert assertion n
-        else "let circ_aux = ref (m_skip n) in\n"
-            ^ "for i=" ^ run_expr (range.starts) ^ " to (" ^ run_expr (range.ends)
-            ^ ") do\n" ^ "invariant{width !c" ^ (string_of_int n) ^ "=n}\n"
+        else
+            "let circ_aux = ref (m_skip n) in\n"
+            ^ "for i= " ^ (run_range range.starts qreg)
+            ^ " to " ^ (run_range range.ends qreg)
+            ^ " do\n" ^ "invariant{width !c" ^ (string_of_int n) ^ "=n}\n"
             ^ "circ_aux := !circ_aux -- (place" ^ run_gate gate
             ^ " i n);\ndone;\n" ^ "c" ^ string_of_int n ^ " := !c"
             ^ string_of_int n ^ " -- !circ_aux;\n" ^ run_assert assertion n
     | MultiApply {gate; qreg1; range1; qreg2; range2; qreg3; range3; assertion} ->
         "c" ^ string_of_int n ^ " := !c"
         ^ string_of_int n ^ " -- (" ^
-         run_multigate gate ^ " (" ^ qreg1 ^ " " ^ run_range range1 ^ ")"
-         ^ " (" ^ qreg2 ^ " " ^ run_range range2 ^ ")"
-         ^ " (" ^ qreg3 ^ " " ^ run_range range3 ^ ")" ^
+         run_multigate gate ^ " (" ^ qreg1 ^ " " ^ (run_range range1.starts qreg1) ^ ")"
+         ^ " (" ^ qreg2 ^ " " ^ (run_range range2.starts qreg2) ^ ")"
+         ^ " (" ^ qreg3 ^ " " ^ (run_range range3.starts qreg3) ^ ")" ^
           ");\n" ^ run_assert assertion n
 
     | WithControl {gate; ctls; range1; tg; range2; assertion} ->
@@ -183,18 +201,21 @@ let rec run_unitary unit n =
                     if (range.starts=range.ends) then
                         "c" ^ string_of_int n ^ " := !c"
                         ^ string_of_int n ^ " -- ("
-                        ^ "crz (" ^ run_expr range1.starts
-                        ^ ") (" ^ run_expr range2.starts ^ ") ("
+                        ^ "crz (" ^ (run_range range1.starts qreg)
+                        ^ ") (" ^ (run_range range2.starts qreg) ^ ") ("
                         ^ run_expr a ^ ") n);\n"
-                    else (*not done*)
-                        "let circ_aux = ref (m_skip n)\nin "
-                        ^ "for ctl=" ^ run_expr (range.starts) ^ " to "
-                        ^ run_expr (range.ends)
-                        ^ " do\n" ^ "circ_aux := !circ_aux -- " ^
-                        "crz (" ^ run_expr (range.starts) ^ ") n)"
-                        ^ " ctl " ^ run_expr range2.starts ^ ")\ndone;"
+                    else (*not done -> needs testing*)
+                        "let circ_aux = ref (m_skip n) in\n"
+                        ^ "for ctl= " ^ (run_range range.starts qreg)
+                        ^ " to " ^ (run_range range.ends qreg)
+                        ^ " do\n" ^ "invariant{width !c" ^ (string_of_int n) ^ "=n}\n"
+                        ^ "circ_aux := !circ_aux -- (crz "
+                        ^ " ctl " ^  (run_range range2.starts qreg)
+                        ^ " (" ^ (run_expr a) ^ ")"
+                        ^ " n);\ndone;\n" ^ "c" ^ string_of_int n
+                        ^ " := !c" ^ string_of_int n ^ " -- !circ_aux;\n"
                 | _ ->
-                    if (range.starts=range.ends) then
+                    if (range1.starts=range1.ends) then
                         "c" ^ string_of_int n ^ " := !c"
                         ^ string_of_int n ^ " -- "
                         ^ "cont " ^ run_gate gate
@@ -202,10 +223,11 @@ let rec run_unitary unit n =
                         ^ " n;\n"
                     else
                         "let circ_aux = ref (m_skip n)\nin "
-                        ^ "for ctl=" ^ run_expr (range.starts) ^ " to " ^ run_expr (range.ends)
+                        ^ "for ctl=" ^ (run_range range1.starts (List.hd ctls)) ^ " to "
+                        ^ (run_range range1.ends (List.hd ctls))
                         ^ " do\n" ^ "circ_aux := !circ_aux -- " ^
                         "cont " ^ run_gate gate
-                        ^ " ctl " ^ run_expr range2.starts ^ " n;\ndone;"
+                        ^ " ctl (" ^ run_expr range2.starts ^ ") n;\ndone;"
             end
         | MultiApply {gate; qreg1; range1; qreg2; range2; qreg3; range3; assertion} ->
             ""
@@ -234,13 +256,14 @@ let run_conjugate gate n : string
             "c" ^ string_of_int n ^ " := !c"
             ^ string_of_int n
             ^ " -- (place" ^ run_gate gate
-            ^ " (" ^ run_expr (range.starts) ^ ") n) -- !c"
+            ^  (run_range range.starts qreg) ^ " n) -- !c"
             ^ string_of_int (n+1) ^ " -- reverse ("
             ^ "(place" ^ run_gate gate
-            ^ " (" ^ run_expr (range.starts) ^ ") n));\n"
+            ^ (run_range range.starts qreg) ^ " n));\n"
         else "let circ_aux = ref (m_skip n) in\n"
-            ^ "for i=" ^ run_expr (range.starts) ^ " to (" ^ run_expr (range.ends)
-            ^ ") do\n" ^ "invariant{width !c" ^ (string_of_int n) ^ "=n}\n"
+             ^ "for i= " ^ (run_range range.starts qreg)
+             ^ " to " ^ (run_range range.ends qreg)
+             ^ " do\n" ^ "invariant{width !c" ^ (string_of_int n) ^ "=n}\n"
             ^ "circ_aux := !circ_aux -- (place" ^ run_gate gate
             ^ " i n);\ndone;\n" ^ "c" ^ string_of_int n ^ " := !c"
             ^ string_of_int n ^ " -- !circ_aux -- !c"
@@ -412,7 +435,7 @@ let rec contains_bools = function
 
 let run_circ = function
     {qregs; body} ->
-        "=\nbegin\n" ^
+        "=\nbegin\n" ^ (get_index qregs "0") ^
         "let c0 = ref (m_skip n) in\n" ^  (get_body body 0 "circ")
         ^ "return !c0;\n";;
 
