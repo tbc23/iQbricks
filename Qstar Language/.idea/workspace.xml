@@ -6,10 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="51950d2f-e0a2-4e54-a47f-0db7ffbc82fd" name="Changes" comment="Make visit functions return Nodes (almost complete)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ML_AST2.ml" beforeDir="false" afterPath="$PROJECT_DIR$/ML_AST2.ml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ML_eval.ml" beforeDir="false" afterPath="$PROJECT_DIR$/ML_eval.ml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/grover.txt" beforeDir="false" afterPath="$PROJECT_DIR$/grover.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/change_notes.txt" beforeDir="false" afterPath="$PROJECT_DIR$/change_notes.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ocaml_ast.ml" beforeDir="false" afterPath="$PROJECT_DIR$/ocaml_ast.ml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Qbricks/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Qbricks/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/EvaluateVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/EvaluateVisitor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/translation.mlw" beforeDir="false" afterPath="$PROJECT_DIR$/translation.mlw" afterDir="false" />
     </list>

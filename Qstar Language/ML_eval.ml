@@ -42,7 +42,7 @@ let rec run_expr = function
     | Power (e, d) -> "power " ^ (run_expr e) ^ (run_expr d)
     | Minus (e) -> "-" ^ run_expr e
 (*    | Len (e) -> "size(" ^ e ^ ")"*)
-    | Len (e) -> e (*^ "-1"*)
+    | Len (e) -> e ^ "-1"
     | Sqrt (e) -> "sqrt (" ^ run_expr e ^ ")"
     | Num (e) -> string_of_int e
     | Var (e) -> e
@@ -88,6 +88,45 @@ let rec get_index qregs prev =
     | i :: tl -> "let " ^ i.qrid ^ "_index = ref ("
                 ^  prev ^ ": int) in \n" ^ get_index tl (prev ^ "+" ^ i.qrid)
 
+let rec run_ctl_regs (ctls: iter list) (tg:iter) (gate:gate) (n:int) =
+	match ctls with
+	| [] -> ""
+	| [{iterator; starts; ends}] ->
+		if (starts=ends) then
+			"c" ^ string_of_int n ^ " := !c"
+			^ string_of_int n ^ " -- ("
+			^ "cont ((" ^ run_gate gate
+			^ ") " ^ (run_range starts iterator) ^ " "
+			^ (run_range tg.starts tg.iterator)
+			^ " n);\n"
+		else
+			"let circ_aux = ref (m_skip n) in\n"
+            ^ "for ctl= " ^ (run_range starts iterator)
+            ^ " to " ^ (run_range ends iterator)
+            ^ " do\n" ^ "invariant{width !c" ^ (string_of_int n) ^ "=n}\n"
+            ^ "circ_aux := !circ_aux -- (cont " ^ run_gate gate
+            ^ " ctl " ^  (run_range tg.starts tg.iterator)
+            ^ " n);\ndone;\n" ^ "c" ^ string_of_int n
+            ^ " := !circ_aux -- !c" ^ string_of_int n ^ ";\n"
+	| {iterator; starts; ends} :: tl ->
+		if (starts=ends) then
+			"c" ^ string_of_int n ^ " := !c"
+			^ string_of_int n ^ " -- ("
+			^ "cont ((" ^ run_gate gate
+			^ ") " ^ (run_range starts iterator) ^ " "
+			^ (run_range tg.starts tg.iterator)
+			^ " n);\n" ^ (run_ctl_regs tl tg gate n)
+		else
+			"let circ_aux = ref (m_skip n) in\n"
+            ^ "for ctl= " ^ (run_range starts iterator)
+            ^ " to " ^ (run_range ends iterator)
+            ^ " do\n" ^ "invariant{width !c" ^ (string_of_int n) ^ "=n}\n"
+            ^ "circ_aux := !circ_aux -- (cont " ^ run_gate gate
+            ^ " ctl " ^  (run_range tg.starts tg.iterator)
+            ^ " n);\ndone;\n" ^ "c" ^ string_of_int n
+            ^ " := !circ_aux -- !c" ^ string_of_int n ^ ";\n"
+			^ (run_ctl_regs tl tg gate n)
+
 let rec run_unitary_inv unit n =
     match unit with
     | Sequence (e, d) ->  (run_unitary_inv e n) ^ (run_unitary_inv d n)
@@ -113,44 +152,45 @@ let rec run_unitary_inv unit n =
          ^ " (" ^ qreg3 ^ " " ^ (run_range range3.starts qreg3) ^ ")" ^
           ") -- !c" ^ string_of_int n ^ ";\n" ^ run_assert assertion n
 
-    | WithControl {gate; ctls; range1; tg; range2; assertion} ->
-        begin match gate with
+    | WithControl {ctlgate; ctls; tg; assertion} ->
+        begin match ctlgate with
         | Apply {gate; qreg; range; assertion} ->
             begin match gate with
                 | Rz (a) ->
-                    if (range.starts=range.ends) then
+                    if ((List.hd ctls).starts=(List.hd ctls).ends) then
                         "c" ^ string_of_int n ^ " := "
-                        ^ "(crz (" ^ (run_range range1.starts qreg)
-                        ^ ") (" ^ (run_range range2.starts qreg)
-                        ^ ") (" ^ run_expr a ^ ") n) -- !c"
+                        ^ "(crz " ^ (run_range (List.hd ctls).starts qreg)
+                        ^ " " ^ (run_range tg.starts qreg)
+                        ^ " (" ^ run_expr a ^ ") n) -- !c"
                         ^ string_of_int n ^";\n"
                     else (*not done -> needs testing*)
                         "let circ_aux = ref (m_skip n) in\n"
-                        ^ "for ctl= " ^ (run_range range.starts qreg)
-                        ^ " to " ^ (run_range range.ends qreg)
+                        ^ "for ctl= " ^ (run_range (List.hd ctls).starts qreg)
+                        ^ " to " ^ (run_range (List.hd ctls).ends qreg)
                         ^ " do\n" ^ "invariant{width !c" ^ (string_of_int n) ^ "=n}\n"
                         ^ "circ_aux := !circ_aux -- (crz "
-                        ^ " ctl " ^  (run_range range2.starts qreg)
+                        ^ " ctl " ^  (run_range tg.starts qreg)
                         ^ " (" ^ (run_expr a) ^ ")"
                         ^ " n);\ndone;\n" ^ "c" ^ string_of_int n
                         ^ " := !circ_aux -- !c" ^ string_of_int n ^ ";\n"
                 | _ ->
-                    if (range.starts=range.ends) then(*not done*)
-                        "c" ^ string_of_int n ^ " := !c"
-                        ^ string_of_int n ^ " -- ("
-                        ^ "cont ((" ^ run_gate gate ^ " (" ^ run_expr (range.starts) ^ ") n)"
-                        ^ " (" ^ run_expr range1.starts ^ ") (" ^ run_expr range2.starts ^ "))"
-                        ^ ");\n"
-                    else(*not done*)
-                        "let circ_aux = ref (m_skip n) in\n"
-                        ^ "for ctl= " ^ (run_range range.starts qreg)
-                        ^ " to " ^ (run_range range.ends qreg)
-                        ^ " do\n" ^ "invariant{width !c" ^ (string_of_int n) ^ "=n}\n"
-                        ^ "circ_aux := !circ_aux -- (crz "
-                        ^ " ctl " ^  (run_range range2.starts qreg)
-                        ^ " (" ^ (run_expr a) ^ ")"
-                        ^ " n);\ndone;\n" ^ "c" ^ string_of_int n
-                        ^ " := !circ_aux -- !c" ^ string_of_int n ^ ";\n"
+                    run_ctl_regs ctls tg gate n
+(*                    if (range.starts=range.ends) then(*not done*)*)
+(*                        "c" ^ string_of_int n ^ " := !c"*)
+(*                        ^ string_of_int n ^ " -- ("*)
+(*                        ^ "cont ((" ^ run_gate gate ^ " (" ^ run_expr (range.starts) ^ ") n)"*)
+(*                        ^ " (" ^ run_expr range1.starts ^ ") (" ^ run_expr range2.starts ^ "))"*)
+(*                        ^ ");\n"*)
+(*                    else(*not done*)*)
+(*                        "let circ_aux = ref (m_skip n) in\n"*)
+(*                        ^ "for ctl= " ^ (run_range range.starts qreg)*)
+(*                        ^ " to " ^ (run_range range.ends qreg)*)
+(*                        ^ " do\n" ^ "invariant{width !c" ^ (string_of_int n) ^ "=n}\n"*)
+(*                        ^ "circ_aux := !circ_aux -- (crz "*)
+(*                        ^ " ctl " ^  (run_range range2.starts qreg)*)
+
+(*                        ^ " n);\ndone;\n" ^ "c" ^ string_of_int n*)
+(*                        ^ " := !circ_aux -- !c" ^ string_of_int n ^ ";\n"*)
             end
         | MultiApply {gate; qreg1; range1; qreg2; range2; qreg3; range3; assertion} ->
             ""
@@ -193,41 +233,42 @@ let rec run_unitary unit n =
          ^ " (" ^ qreg3 ^ " " ^ (run_range range3.starts qreg3) ^ ")" ^
           ");\n" ^ run_assert assertion n
 
-    | WithControl {gate; ctls; range1; tg; range2; assertion} ->
-        begin match gate with
+    | WithControl {ctlgate; ctls; tg; assertion} ->
+        begin match ctlgate with
         | Apply {gate; qreg; range; assertion} ->
             begin match gate with
                 | Rz (a) ->
-                    if (range.starts=range.ends) then
+                    if ((List.hd ctls).starts=(List.hd ctls).ends) then
                         "c" ^ string_of_int n ^ " := !c"
                         ^ string_of_int n ^ " -- ("
-                        ^ "crz (" ^ (run_range range1.starts qreg)
-                        ^ ") (" ^ (run_range range2.starts qreg) ^ ") ("
+                        ^ "crz (" ^ (run_range (List.hd ctls).starts qreg)
+                        ^ ") (" ^ (run_range tg.starts qreg) ^ ") ("
                         ^ run_expr a ^ ") n);\n"
                     else (*not done -> needs testing*)
                         "let circ_aux = ref (m_skip n) in\n"
-                        ^ "for ctl= " ^ (run_range range.starts qreg)
-                        ^ " to " ^ (run_range range.ends qreg)
+                        ^ "for ctl= " ^ (run_range (List.hd ctls).starts qreg)
+                        ^ " to " ^ (run_range (List.hd ctls).ends qreg)
                         ^ " do\n" ^ "invariant{width !c" ^ (string_of_int n) ^ "=n}\n"
                         ^ "circ_aux := !circ_aux -- (crz "
-                        ^ " ctl " ^  (run_range range2.starts qreg)
+                        ^ " ctl " ^  (run_range tg.starts qreg)
                         ^ " (" ^ (run_expr a) ^ ")"
                         ^ " n);\ndone;\n" ^ "c" ^ string_of_int n
                         ^ " := !c" ^ string_of_int n ^ " -- !circ_aux;\n"
                 | _ ->
-                    if (range1.starts=range1.ends) then
-                        "c" ^ string_of_int n ^ " := !c"
-                        ^ string_of_int n ^ " -- "
-                        ^ "cont " ^ run_gate gate
-                        ^ " (" ^ run_expr range1.starts ^ ") (" ^ run_expr range2.starts ^ ")"
-                        ^ " n;\n"
-                    else
-                        "let circ_aux = ref (m_skip n)\nin "
-                        ^ "for ctl=" ^ (run_range range1.starts (List.hd ctls)) ^ " to "
-                        ^ (run_range range1.ends (List.hd ctls))
-                        ^ " do\n" ^ "circ_aux := !circ_aux -- " ^
-                        "cont " ^ run_gate gate
-                        ^ " ctl (" ^ run_expr range2.starts ^ ") n;\ndone;"
+                    run_ctl_regs ctls tg gate n
+(*                    if (range1.starts=range1.ends) then*)
+(*                        "c" ^ string_of_int n ^ " := !c"*)
+(*                        ^ string_of_int n ^ " -- "*)
+(*                        ^ "cont " ^ run_gate gate*)
+(*                        ^ " (" ^ run_expr range1.starts ^ ") (" ^ run_expr range2.starts ^ ")"*)
+(*                        ^ " n;\n"*)
+(*                    else*)
+(*                        "let circ_aux = ref (m_skip n)\nin "*)
+(*                        ^ "for ctl=" ^ (run_range range1.starts (List.hd ctls)) ^ " to "*)
+(*                        ^ (run_range range1.ends (List.hd ctls))*)
+(*                        ^ " do\n" ^ "circ_aux := !circ_aux -- " ^*)
+(*                        "cont " ^ run_gate gate*)
+(*                        ^ " ctl (" ^ run_expr range2.starts ^ ") n;\ndone;"*)
             end
         | MultiApply {gate; qreg1; range1; qreg2; range2; qreg3; range3; assertion} ->
             ""

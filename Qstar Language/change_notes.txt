@@ -1,6 +1,6 @@
 WithControl of {gate:unitary; ctls:iter list; tg:iter; assertion:string}
 
-let rec run_ctl_regs (ctls: iter list) (tg:iter) gate n = 
+let rec run_ctl_regs (ctls: iter list) (tg:iter) (gate:unit) (n:int) =
 	match ctls with
 	| [] -> ""
 	| [{iter; starts; ends}] -> 

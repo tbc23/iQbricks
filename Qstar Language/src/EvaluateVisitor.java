@@ -1042,10 +1042,10 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
     public String Visit(WithCtlNode node) {
         List<String> controls = new ArrayList<>();
         String[] limits, ls;
-        String aux,angle,id = null,r,start,end,old,qr,target=null;
+        String aux,angle,id = null,r,start,end,old,range,qr,target=null;
         StringBuilder s;
         ApplyNode gate = node.getCtlGate();
-        s = new StringBuilder("WithControl{gate=");
+        s = new StringBuilder("WithControl{ctlgate=");
         /*ls = Visit(node.getCtlGate()).split("Unitary ");
         s.append(ls[1]);*/
         Visit(node.getCtlGate());
@@ -1123,66 +1123,80 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         }
         s.append("; ctls=[");
         for (QregNode n:node.getCtlArgs()){
-            controls.add(Visit(n));
-            s.append("\"").append(n.getId()).append("\"; ");
-        }
-        if (controls.get(0).contains(";")) {
-            // this means it's NOT a qreg[term] or qreg
-            limits = controls.get(0).split(";");
-            start = limits[0]; end = limits[1];
-            s.append("]; range1={starts=").append(start).append("; ends=").append(end);
-            s.append("}; tg=\"").append(id).append("\"; range2={starts=");
-            s.append(target).append("; ends=").append(target).append("}; ").append(Visit(node.getAssertion())).append("}\n");
-            circs.push("c"+circs.size());
-            if (!diag) {
-            r = "let "+circs.peek()+" = ref"+aux+"\nin "
-                    + "let ref ctl = "+start+" \n"
-                    + "in while (ctl < "+end+") do\n"
-                    + "variant{"+end+" - ctl}\n"
-                    + "invariant{"+start+" <= ctl <= "+end+"}\n"
-                    + circs.peek()+":= cont !"+circs.peek()
-                    +" ctl ("+ target + ") n;\n"+Visit(node.getAssertion())
-                    + "ctl := ctl + 1\ndone;\n"
-                    + Visit(node.getAssertion());
-            } else {
-                /*
-                invariant{ true }
-                invariant{range !c2 = 0}
-                let ref aux = (cont (rz (n-i-1)) (i+1) (q) n) in
-                assert {forall x y i. 0<= i < width aux ->basis_ket aux x y i = x i};
-                c2:= seq_diag !c2 aux;
-                assert{true};
-                i := i + 1
-                done;
-                 */
-
-                r = "let "+circs.peek()+" = ref"+aux+"\nin "
-                        + "let ref ctl = "+start+" \n"
-                        + "in while (ctl < "+end+") do\n"
-                        + "variant{"+end+" - ctl}\n"
-                        + "invariant{"+start+" <= ctl <= "+end+"}\n"
-                        + "invariant{range !" + circs.peek() + " = 0}\n"
-                        + circs.peek()+":= cont_diag !"+circs.peek()
-                        +" ctl ("+ target + ") n;\n"+Visit(node.getAssertion())
-                        + "ctl := ctl + 1\ndone;\n"
-                        + Visit(node.getAssertion());
+            s.append("{iterator=\"").append(n.getId()).append("\"; ");
+            range = Visit(n);
+            if (range.contains(";")) {
+                limits = range.split(";");
+                start = limits[0]; end = limits[1];
             }
-
-            old = circs.pop();
-            r += circs.peek()+":= !"+circs.peek()+" -- !"+old+";\n";
-        } else {
-            qr = controls.get(0); // be careful here because a whole register can't be used as controls
-            s.append("]; range1={starts=").append(qr).append("; ends=").append(qr);
-            s.append("}; tg=\"").append(id).append("\"; range2={starts=");
-            s.append(target).append("; ends=").append(target).append("}; ").append(Visit(node.getAssertion())).append("}");
-            if (!diag) {
-                r = circs.peek()+":= !"+circs.peek()+" -- (cont"+aux+"("+qr
-                +") ("+ target + ") n);\n"+Visit(node.getAssertion());
-            } else {
-                r = circs.peek()+":= seq_diag !"+circs.peek()+" (cont_diag"+aux+"("+
-                    qr+") ("+ target + ") n);\n"+Visit(node.getAssertion());
+            else {
+                start = range;
+                end = range;
             }
+            s.append("starts=").append(start);
+            s.append("; ends=").append(end).append("}; ");
         }
+        s.append("]; tg={iterator=\"").append(id).append("\"; ");
+        s.append("starts=").append(target).append("; ends=").append(target).append("}; ");
+        s.append(Visit(node.getAssertion())).append("}\n");
+//        if (controls.get(0).contains(";")) {
+//            // this means it's NOT a qreg[term] or qreg
+//            limits = controls.get(0).split(";");
+//            start = limits[0]; end = limits[1];
+//
+//            s.append("]; range1={starts=").append(start).append("; ends=").append(end);
+//            s.append("}; tg=\"").append(id).append("\"; range2={starts=");
+//            s.append(target).append("; ends=").append(target).append("}; ").append(Visit(node.getAssertion())).append("}\n");
+//            circs.push("c"+circs.size());
+//            if (!diag) {
+//            r = "let "+circs.peek()+" = ref"+aux+"\nin "
+//                    + "let ref ctl = "+start+" \n"
+//                    + "in while (ctl < "+end+") do\n"
+//                    + "variant{"+end+" - ctl}\n"
+//                    + "invariant{"+start+" <= ctl <= "+end+"}\n"
+//                    + circs.peek()+":= cont !"+circs.peek()
+//                    +" ctl ("+ target + ") n;\n"+Visit(node.getAssertion())
+//                    + "ctl := ctl + 1\ndone;\n"
+//                    + Visit(node.getAssertion());
+//            } else {
+//                /*
+//                invariant{ true }
+//                invariant{range !c2 = 0}
+//                let ref aux = (cont (rz (n-i-1)) (i+1) (q) n) in
+//                assert {forall x y i. 0<= i < width aux ->basis_ket aux x y i = x i};
+//                c2:= seq_diag !c2 aux;
+//                assert{true};
+//                i := i + 1
+//                done;
+//                 */
+//
+//                r = "let "+circs.peek()+" = ref"+aux+"\nin "
+//                        + "let ref ctl = "+start+" \n"
+//                        + "in while (ctl < "+end+") do\n"
+//                        + "variant{"+end+" - ctl}\n"
+//                        + "invariant{"+start+" <= ctl <= "+end+"}\n"
+//                        + "invariant{range !" + circs.peek() + " = 0}\n"
+//                        + circs.peek()+":= cont_diag !"+circs.peek()
+//                        +" ctl ("+ target + ") n;\n"+Visit(node.getAssertion())
+//                        + "ctl := ctl + 1\ndone;\n"
+//                        + Visit(node.getAssertion());
+//            }
+//
+//            old = circs.pop();
+//            r += circs.peek()+":= !"+circs.peek()+" -- !"+old+";\n";
+//        } else {
+//            qr = controls.get(0); // be careful here because a whole register can't be used as controls
+////            s.append("]; range1={starts=").append(qr).append("; ends=").append(qr);
+////            s.append("}; tg=\"").append(id).append("\"; range2={starts=");
+////            s.append(target).append("; ends=").append(target).append("}; ").append(Visit(node.getAssertion())).append("}");
+////            if (!diag) {
+////                r = circs.peek()+":= !"+circs.peek()+" -- (cont"+aux+"("+qr
+////                +") ("+ target + ") n);\n"+Visit(node.getAssertion());
+////            } else {
+////                r = circs.peek()+":= seq_diag !"+circs.peek()+" (cont_diag"+aux+"("+
+////                    qr+") ("+ target + ") n);\n"+Visit(node.getAssertion());
+////            }
+//        }
         unitaries.add(s.toString());
         //asserts.add(node.getAssertion().getAssertions());
         return "";
@@ -1264,7 +1278,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             s = "Num 0";
             e = Visit(end);
             if (e.equals("Minus (Num 1)")) {
-                e = "Subtract (Len \""+id+"\", Num 2)";
+                e = "Subtract (Len \""+id+"\", Num 1)";
             }
             r = s + ";" + e;
             //r = e;
