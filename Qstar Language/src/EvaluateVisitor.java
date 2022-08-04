@@ -960,19 +960,16 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
     public String Visit(SwapApply node) {
         String r,s, id1=node.getLQreg().getId(), id2=node.getRQreg().getId();
         diag = false;
-        s = "MultiApply {gate=SWAP; qreg1=\""+ id1 +
-                "\"; range1={starts="+
+        s = "MultiApply {gate=SWAP; " + "regs=[{iterator=\""
+                + id1 + "\"; starts="+
                 Visit(node.getLQreg()) +
                 "; ends=" + Visit(node.getLQreg())
-                +"}; qreg2=\""+ id2 +
-                "\"; range2={starts="+
+                +"}; " + "{iterator=\""
+                + id2 + "\"; starts="+
                 Visit(node.getRQreg()) +
                 "; ends=" + Visit(node.getRQreg())
-                +"}; qreg3=\"NONE\"; range3={starts=Num 0; ends=Num 0}; "+Visit(node.getAssertion())+"}";
-        r = circs.peek()+":= !"+circs.peek()+" -- (swap ("
-                + Visit(node.getLQreg())+") ("
-                +Visit(node.getRQreg())+") n);\n"
-                +Visit(node.getAssertion());
+                +"}]; "
+                +Visit(node.getAssertion())+"}";
         unitaries.add(s);
         //asserts.add(node.getAssertion().getAssertions());
         return "";
@@ -1205,15 +1202,15 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
     @Override
     public String Visit(CnotNode node) {
         String s,ctl=node.getCtl().getId(),tg=node.getTarget().getId();
-        s = "MultiApply {gate=Cnot; qreg1=\""+ ctl +
-                "\"; range1={starts="+
+        s = "MultiApply {gate=Cnot; regs=[{iterator=\""
+                + ctl + "\"; starts="+
                 Visit(node.getCtl()) +
                 "; ends=" + Visit(node.getCtl())
-                +"}; qreg2=\""+ tg +
-                "\"; range2={starts="+
+                +"}; {iterator=\""+ tg +
+                "\"; starts="+
                 Visit(node.getTarget()) +
                 "; ends=" + Visit(node.getTarget())
-                +"}; qreg3=\"NONE\"; range3={starts=Num 0; ends=Num 0}; "+Visit(node.getAssertion())+"}";
+                +"}]; " +Visit(node.getAssertion())+"}";
         unitaries.add(s);
         //asserts.add(node.getAssertion().getAssertions());
         return "";
@@ -1223,18 +1220,20 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
     public String Visit(ToffNode node) {
         String s, id1=node.getCtl1().getId(), id2=node.getCtl2().getId();
         String id3=node.getTarget().getId();
-        s = "MultiApply {gate=Toff; qreg1=\""+ id1 +
-                "\"; range1={starts="+
+        s = "MultiApply {gate=Toff; " + "regs=[{iterator=\""
+                + id1 + "\"; starts="+
                 Visit(node.getCtl1()) +
                 "; ends=" + Visit(node.getCtl1())
-                +"}; qreg2=\""+ id2 +
-                "\"; range2={starts="+
+                +"}; " + "{iterator=\""
+                + id2 + "\"; starts="+
                 Visit(node.getCtl2()) +
                 "; ends=" + Visit(node.getCtl2())
-                +"}; qreg3=\"" + id3 +
-                "\"; range3={starts=" +
+                +"}; " + "{iterator=\""
+                + id3 + "\"; starts="+
                 Visit(node.getTarget()) +
-                "; ends=" + Visit(node.getTarget())+ "}; "+Visit(node.getAssertion())+"}";
+                "; ends=" + Visit(node.getTarget())
+                +"}]; "
+                +Visit(node.getAssertion())+"}";
         unitaries.add(s);
         //asserts.add(node.getAssertion().getAssertions());
         return "";
@@ -1244,18 +1243,20 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
     public String Visit(FredNode node) {
         String s, id1=node.getCtl1().getId(), id2=node.getCtl2().getId();
         String id3=node.getTarget().getId();
-        s = "MultiApply {gate=Fred; qreg1=\""+ id1 +
-                "\"; range1={starts="+
+        s = "MultiApply {gate=Fred; " + "regs=[{iterator=\""
+                + id1 + "\"; starts="+
                 Visit(node.getCtl1()) +
                 "; ends=" + Visit(node.getCtl1())
-                +"}; qreg2=\""+ id2 +
-                "\"; range2={starts="+
+                +"}; " + "{iterator=\""
+                + id2 + "\"; starts="+
                 Visit(node.getCtl2()) +
                 "; ends=" + Visit(node.getCtl2())
-                +"}; qreg3=\"" + id3 +
-                "\"; range3={starts=" +
+                +"}; " + "{iterator=\""
+                + id3 + "\"; starts="+
                 Visit(node.getTarget()) +
-                "; ends=" + Visit(node.getTarget())+ "}; "+Visit(node.getAssertion())+"}";
+                "; ends=" + Visit(node.getTarget())
+                +"}]; "
+                + Visit(node.getAssertion())+"}";
         unitaries.add(s);
         //asserts.add(node.getAssertion().getAssertions());
         return "";

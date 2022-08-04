@@ -2,92 +2,51 @@ open ML_AST2
 open ML_eval
 
 let p = {
-    id = "grover";
+    id = "grover_cz";
 aux = [
 {
-id = "diffusor";
+id = "oracle_cz";
 circ = {
-qregs= [{qrid="qr"; size=Num 0}; {qrid="aux"; size=Num 0}];
+qregs= [{qrid="qr"; size=Num 0}];
 body = [
-Conjugated {gate=Apply {gate=H; qreg="qr"; range={starts=Num 0; ends=Len "qr"}; assertion=[]
-};
- body = [
-Conjugated {gate=Apply {gate=X; qreg="qr"; range={starts=Num 0; ends=Len "qr"}; assertion=[]
-};
- body = [
-Unitary (WithControl{ctlgate=Apply {gate=Z; qreg="qr"; range={starts=Subtract (Len "qr", Num 1); ends=Subtract (Len "qr", Num 1)}; assertion=["{true}"; ]
-}; ctls=[{iterator="qr"; starts=Num 0; ends=Subtract (Len "qr", Num 1)}; ]; tg={iterator="qr"; starts=Subtract (Len "qr", Num 1); ends=Subtract (Len "qr", Num 1)}; assertion=["{true}"; ]
+Unitary (WithControl{ctlgate=Apply {gate=Rz (Num 1); qreg="qr"; range={starts=Num 1; ends=Num 1}; assertion=["{true}"; ]
+}; ctls=[{iterator="qr"; starts=Num 0; ends=Num 0}; ]; tg={iterator="qr"; starts=Num 1; ends=Num 1}; assertion=["{true}"; ]
 }
 );
 ];
-assertion=[]
 };
-];
-assertion=[]
-};
-Return "";
-];
-};
-params = [{id="qr";  type_=Qreg}; {id="aux";  type_=Qreg}; ]; 
+params = []; 
 pre = ["{true}"; ];
 pos = ["{true}"; ];
 }; 
 
 {
-id = "grover_iter";
+id = "oracle_2";
 circ = {
-qregs= [{qrid="qr"; size=Num 0}; {qrid="aux"; size=Num 0}];
+qregs= [{qrid="qr"; size=Num 0}];
 body = [
-Unitary(Sequence (FUN {id="diffusor"; args=[Var "qr"; Var "aux"; ]},FUN {id="oracle"; args=[]}));
-Return "";
+Unitary (WithControl{ctlgate=Apply {gate=Rz (Num 1); qreg="qr"; range={starts=Num 0; ends=Num 0}; assertion=["{true}"; ]
+}; ctls=[{iterator="qr"; starts=Num 1; ends=Num 1}; ]; tg={iterator="qr"; starts=Num 0; ends=Num 0}; assertion=["{true}"; ]
+}
+);
 ];
 };
-params = [{id="oracle";  type_=Circ}; {id="qr";  type_=Qreg}; {id="aux";  type_=Qreg}; ]; 
-pre = ["{true}"; ];
-pos = ["{true}"; ];
-}; 
-
-{
-id = "init";
-circ = {
-qregs= [{qrid="qr"; size=Num 0}; {qrid="aux"; size=Num 0}];
-body = [
-Unitary(Sequence (Apply {gate=H; qreg="aux"; range={starts=Num 0; ends=Len "aux"}; assertion=["{true}"; ]
-},Sequence (Apply {gate=X; qreg="aux"; range={starts=Num 0; ends=Len "aux"}; assertion=["{true}"; ]
-},Apply {gate=H; qreg="qr"; range={starts=Num 0; ends=Subtract (Len "qr", Num 1)}; assertion=[]
-})));
-Return "";
-];
-};
-params = [{id="qr";  type_=Qreg}; {id="aux";  type_=Qreg}; ]; 
+params = []; 
 pre = ["{true}"; ];
 pos = ["{true}"; ];
 }; 
 
 ];
-imports = [];
+imports = ["grover"; ];
 main = {
- id = "grover";
+ id = "grover_cz";
 circ = {
 qregs= [{qrid="qr"; size=Num 0}; {qrid="aux"; size=Num 0}];
 body = [
-Unitary (FUN {id="init"; args=[Var "qr"; Var "aux"; ]});
-For {
-iter = {
-iterator= "i";
-starts = Num 0;
-ends = Var "iters"
-};
-inv = ["{true}"; ];
-body = [
-Unitary (FUN {id="grover_iter"; args=[Var "oracle"; Var "qr"; Var "aux"; ]});
-];
-assertion=[]
-};
-Return "";
+Unitary (FUN {id="grover"; args=[Var "oracle_cz"; Var "qr"; Var "aux"; Var "iters"; ]});
 ];
 }; 
-params = [{id="oracle";  type_=Circ}; {id="qr";  type_=Qreg}; {id="aux";  type_=Qreg}; {id="iters";  type_=Int}; ]; 
+params = [{id="qr";  type_=Qreg}; {id="aux";  type_=Qreg}; {id="iters";  type_=Int}; ]; 
 pre = ["{true}"; ];
 pos = ["{true}"; ];
 }};;

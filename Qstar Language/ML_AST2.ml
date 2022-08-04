@@ -61,7 +61,7 @@ type multigate =
 type unitary =
     | Sequence of unitary * unitary
     | Apply of {gate:gate; qreg:string; range:range; assertion:string list}
-    | MultiApply of {gate:multigate; qreg1: string; range1:range; qreg2: string; range2:range; qreg3: string; range3:range; assertion:string list}
+    | MultiApply of {gate:multigate; regs:iter list; assertion:string list}
     | WithControl of {ctlgate:unitary; ctls:iter list; tg:iter; assertion:string list}
     | FUN of {id:string; args: expr list}
     | REV of {id:string; args: expr list} ;;
