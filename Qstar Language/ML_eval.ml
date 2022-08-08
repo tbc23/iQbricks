@@ -42,7 +42,7 @@ let rec run_expr = function
     | Power (e, d) -> "power " ^ (run_expr e) ^ (run_expr d)
     | Minus (e) -> "-" ^ run_expr e
 (*    | Len (e) -> "size(" ^ e ^ ")"*)
-    | Len (e) -> e ^ "-1"
+    | Len (e) -> e
     | Sqrt (e) -> "sqrt (" ^ run_expr e ^ ")"
     | Num (e) -> string_of_int e
     | Var (e) -> e
@@ -66,12 +66,12 @@ let run_cond = function
     | Lt (e, d) -> run_expr e ^ " < " ^ run_expr d
 
 let run_gate = function
-    | H -> "_hadamard" | T -> " t" | S -> " s"
-    | X -> " xx" | Y -> " yy" | Z -> " zz"
-    | Rx (a) -> " (rx " ^ "(" ^ run_expr a ^ "))"
-    | Ry (a) -> " (ry " ^ "(" ^ run_expr a ^ "))"
-    | Rz (a) -> " (rz " ^ "(" ^ run_expr a ^ "))"
-    | Ph (a) -> " (phase " ^ "(" ^ run_expr a ^ "))"
+    | H -> "_hadamard " | T -> " t " | S -> " s "
+    | X -> " xx " | Y -> " yy " | Z -> " zz "
+    | Rx (a) -> " (rx " ^ "(" ^ run_expr a ^ ")) "
+    | Ry (a) -> " (ry " ^ "(" ^ run_expr a ^ ")) "
+    | Rz (a) -> " (rz " ^ "(" ^ run_expr a ^ ")) "
+    | Ph (a) -> " (phase " ^ "(" ^ run_expr a ^ ")) "
 
 let run_multigate = function
     | Cnot -> "cnot " | Toff -> "toffoli "
@@ -88,10 +88,11 @@ let rec get_index qregs prev =
     | i :: tl -> "let " ^ i.qrid ^ "_index = ref ("
                 ^  prev ^ ": int) in \n" ^ get_index tl (prev ^ "+" ^ i.qrid)
 
-let rec run_multi_regs = function
+let rec run_multi_regs (regs: iter list) =
+    match regs with
     | [] -> ""
-    | [i] -> "(" ^ i.iterator ^ " " ^ (run_range i.starts i.iterator) ^ ")"
-    | i :: tl -> "(" ^ i.iterator ^ " " ^ (run_range i.starts i.iterator) ^ ") "
+    | [i] ->  (run_range i.starts i.iterator) ^ " n"
+    | i :: tl ->  (run_range i.starts i.iterator) ^ " "
                 ^ run_multi_regs tl
 
 
@@ -155,7 +156,7 @@ let rec run_unitary_inv unit n =
     | MultiApply {gate; regs; assertion} ->
         "c" ^ string_of_int n ^ " := ("
         ^ run_multigate gate ^ run_multi_regs regs ^
-          " -- !c" ^ string_of_int n ^ ";\n" ^ run_assert assertion n
+          ") -- !c" ^ string_of_int n ^ ";\n" ^ run_assert assertion n
 
     | WithControl {ctlgate; ctls; tg; assertion} ->
         begin match ctlgate with
@@ -178,6 +179,7 @@ let rec run_unitary_inv unit n =
                         ^ " (" ^ (run_expr a) ^ ")"
                         ^ " n);\ndone;\n" ^ "c" ^ string_of_int n
                         ^ " := !circ_aux -- !c" ^ string_of_int n ^ ";\n"
+
                 | _ ->
                     run_ctl_regs_inv ctls tg gate n
             end
@@ -252,12 +254,13 @@ let rec run_unitary unit n =
             ^ " do\n" ^ "invariant{width !c" ^ (string_of_int n) ^ "=n}\n"
             ^ "circ_aux := !circ_aux -- (place" ^ run_gate gate
             ^ " i n);\ndone;\n" ^ "c" ^ string_of_int n ^ " := !c"
-            ^ string_of_int n ^ " -- !circ_aux;\n" ^ run_assert assertion n
+            ^ string_of_int n ^ " -- !circ_aux;\n"
+            ^ run_assert assertion n
     | MultiApply {gate; regs; assertion} ->
         "c" ^ string_of_int n ^ " := !c"
         ^ string_of_int n ^ " -- (" ^
          run_multigate gate ^ run_multi_regs regs ^
-          ";\n" ^ run_assert assertion n
+          ");\n" ^ run_assert assertion n
 
     | WithControl {ctlgate; ctls; tg; assertion} ->
         begin match ctlgate with
@@ -280,6 +283,7 @@ let rec run_unitary unit n =
                         ^ " (" ^ (run_expr a) ^ ")"
                         ^ " n);\ndone;\n" ^ "c" ^ string_of_int n
                         ^ " := !c" ^ string_of_int n ^ " -- !circ_aux;\n"
+
                 | _ ->
                     run_ctl_regs ctls tg gate n
             end
@@ -321,7 +325,8 @@ let run_conjugate gate n : string
             ^ "circ_aux := !circ_aux -- (place" ^ run_gate gate
             ^ " i n);\ndone;\n" ^ "c" ^ string_of_int n ^ " := !c"
             ^ string_of_int n ^ " -- !circ_aux -- !c"
-            ^ string_of_int (n+1) ^" -- reverse (!circ_aux);\n" ^ run_assert assertion n
+            ^ string_of_int (n+1) ^" -- reverse (!circ_aux);\n"
+            ^ run_assert assertion n
     | FUN {id; args} ->
             "c" ^ string_of_int n ^ " := !c"
             ^ string_of_int n
@@ -423,6 +428,7 @@ and circ_looper_conj n i : string =
     else
         "c" ^ string_of_int (n-1) ^ " := !c"
         ^ string_of_int (n-1) ^ " -- !c" ^ (string_of_int n) ^ ";\n"
+        ^ "c" ^ (string_of_int n) ^ " := m_skip n;\n"
         ^ circ_looper_conj (n-1) i ;;
 
 let rec sum_regs = function
@@ -506,7 +512,9 @@ let run_fun = function
         "(" ^ get_params_bools params ^ ": boolean) "
         else "" end ^
         ": circuit\nrequires{0<n}\n" ^
-        "requires{" ^ (sum_regs circ.qregs) ^ "=n}\n"
+        begin if (List.length params > 0) then
+            "requires{" ^ (sum_regs circ.qregs) ^ "=n}\n"
+        else "" end
         ^ get_size circ.qregs
         ^ run_requires pre
         ^ run_circ circ

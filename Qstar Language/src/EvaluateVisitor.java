@@ -101,6 +101,8 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         }
         // fill undeclared functions in ml ast
         t.append("imports = [");
+        if(node.getImports().hasImports)
+            t.append(Visit(node.getImports()));
         for (String s: undeclared_funs) {
             t.append("\"").append(s).append("\"; ");
         }
@@ -117,6 +119,15 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                      print_endline "translation.mlw generated";""");
         //return r+"end";
         return t.toString();
+    }
+
+    @Override
+    public String Visit(ImportsNode node) {
+        StringBuilder s = new StringBuilder();
+        for (String i: node.getFiles()) {
+            s.append("\"").append(i).append("\"; ");
+        }
+        return s.toString();
     }
 
     @Override
@@ -449,7 +460,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         if (global_qrs.contains(qr)) {
             circs.push("c"+circs.size());
             s = "Apply {gate=H; qreg=\"" + id +
-                "\"; range={starts=Num 0; ends=Len \""+id+"\"}; " +
+                "\"; range={starts=Num 0; ends=Subtract(Len \""+id+"\", Num 1)}; " +
                 Visit(node.getAssertion())+"}";
             r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                     + "let ref i = 0 \n"
@@ -507,7 +518,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             circs.push("c"+circs.size());
             s = "Apply {gate=Rx ("+Visit(node.getAngle())
                     +"); qreg=\"" + id
-                    + "\"; range={starts=Num 0; ends=Len \""+id+"\"}; "
+                    + "\"; range={starts=Num 0; ends=Subtract(Len \""+id+"\", Num 1)}; "
                     +Visit(node.getAssertion())+"}";
             r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                     + "let ref i = 0 \n"
@@ -568,7 +579,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             circs.push("c"+circs.size());
             s = "Apply {gate=Ry ("+Visit(node.getAngle())
                     +"); qreg=\"" + id
-                    + "\"; range={starts=Num 0; ends=Len \""+id+"\"}; "
+                    + "\"; range={starts=Num 0; ends=Subtract(Len \""+id+"\", Num 1)}; "
                     +Visit(node.getAssertion())+"}";
             r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                     + "let ref i = 0 \n"
@@ -629,7 +640,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             circs.push("c"+circs.size());
             s = "Apply {gate=Rz ("+Visit(node.getAngle())
                     +"); qreg=\"" + id
-                    + "\"; range={starts=Num 0; ends=Len \""+id+"\"}; "
+                    + "\"; range={starts=Num 0; ends=Subtract(Len \""+id+"\", Num 1)}; "
                     +Visit(node.getAssertion())+"}";
             r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                     + "let ref i = 0 \n"
@@ -690,7 +701,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         if (global_qrs.contains(qr)) {
             circs.push("c"+circs.size());
             s = "Apply {gate=X; qreg=\"" + id +
-                    "\"; range={starts=Num 0; ends=Len \""+id+"\"}; "+Visit(node.getAssertion())+"}";
+                    "\"; range={starts=Num 0; ends=Subtract(Len \""+id+"\", Num 1)}; "+Visit(node.getAssertion())+"}";
             r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                     + "let ref i = 0 \n"
                     + "in while (i < "+qr+") do\n"
@@ -745,7 +756,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         if (global_qrs.contains(qr)) {
             circs.push("c"+circs.size());
             s = "Apply {gate=Y; qreg=\"" + id +
-                    "\"; range={starts=Num 0; ends=Len \""+id+"\"}; "+Visit(node.getAssertion())+"}";
+                    "\"; range={starts=Num 0; ends=Subtract(Len \""+id+"\", Num 1)}; "+Visit(node.getAssertion())+"}";
             r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                     + "let ref i = 0 \n"
                     + "in while (i < "+qr+") do\n"
@@ -800,7 +811,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         if (global_qrs.contains(qr)) {
             circs.push("c"+circs.size());
             s = "Apply {gate=Z; qreg=\"" + id +
-                    "\"; range={starts=Num 0; ends=Len \""+id+"\"}; "+Visit(node.getAssertion())+"}";
+                    "\"; range={starts=Num 0; ends=Subtract(Len \""+id+"\", Num 1)}; "+Visit(node.getAssertion())+"}";
             r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                     + "let ref i = 0 \n"
                     + "in while (i < "+qr+") do\n"
@@ -855,7 +866,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         if (global_qrs.contains(qr)) {
             circs.push("c"+circs.size());
             s = "Apply {gate=S; qreg=\"" + id +
-                    "\"; range={starts=Num 0; ends=Len \""+id+"\"}; "+Visit(node.getAssertion())+"}";
+                    "\"; range={starts=Num 0; ends=Subtract(Len \""+id+"\", Num 1)}; "+Visit(node.getAssertion())+"}";
             r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                     + "let ref i = 0 \n"
                     + "in while (i < "+qr+") do\n"
@@ -910,7 +921,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         if (global_qrs.contains(qr)) {
             circs.push("c"+circs.size());
             s = "Apply {gate=T; qreg=\"" + id +
-                    "\"; range={starts=Num 0; ends=Len \""+id+"\"}; "+Visit(node.getAssertion())+"}";
+                    "\"; range={starts=Num 0; ends=Subtract(Len \""+id+"\", Num 1)}; "+Visit(node.getAssertion())+"}";
             r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                     + "let ref i = 0 \n"
                     + "in while (i < "+qr+") do\n"
@@ -984,7 +995,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             circs.push("c"+circs.size());
             s = "Apply {gate=Ph ("+Visit(node.getAngle())
                     +"); qreg=\"" + id
-                    + "\"; range={starts=Num 0; ends=Len \""+id+"\"}; "+Visit(node.getAssertion())+"}";
+                    + "\"; range={starts=Num 0; ends=Subtract(Len \""+id+"\", Num 1)}; "+Visit(node.getAssertion())+"}";
             r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                     + "let ref i = 0 \n"
                     + "in while (i < "+qr+") do\n"
@@ -1279,13 +1290,14 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             s = "Num 0";
             e = Visit(end);
             if (e.equals("Minus (Num 1)")) {
-                e = "Subtract (Len \""+id+"\", Num 1)";
+                e = "Subtract (Len \""+id+"\", Num 2)";
             }
+            else e = "Subtract ("+e+", Num 1)";
             r = s + ";" + e;
             //r = e;
         } else if (end==null) { //from
             s = Visit(start);
-            e = "Var \"n\"";
+            e = "Subtract (Len \""+id+"\", Num 1)";
             r = s + ";" + e;
         } else if (start.equals(end)){ //term
             s = Visit(start);
@@ -1297,8 +1309,9 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             s = Visit(start);
             e = Visit(end);
             if (e.equals("Minus (Num 1)")) {
-                e = "Subtract (Len \""+id+"\", Num 1)";
+                e = "Subtract (Len \""+id+"\", Num 2)";
             }
+            else e = "Subtract ("+e+", Num 1)";
             r = s + ";" + e;
         }
         return r;

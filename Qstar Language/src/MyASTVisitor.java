@@ -1,6 +1,7 @@
 public abstract class MyASTVisitor <T> {
 
     public abstract T Visit(ProgramNode node);
+    public abstract T Visit(ImportsNode node);
     public abstract T Visit(MainNode node);
     public abstract T Visit(AuxNode node);
     public abstract T Visit(ParamsNode node);

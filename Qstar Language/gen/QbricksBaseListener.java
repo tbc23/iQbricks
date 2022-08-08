@@ -30,6 +30,18 @@ public class QbricksBaseListener implements QbricksListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterImports(QbricksParser.ImportsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitImports(QbricksParser.ImportsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterMainFun(QbricksParser.MainFunContext ctx) { }
 	/**
 	 * {@inheritDoc}

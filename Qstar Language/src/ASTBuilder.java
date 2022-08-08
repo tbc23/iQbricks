@@ -11,17 +11,35 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
     @Override
     public AST visitProgram(QbricksParser.ProgramContext ctx) {
         ProgramNode node = new ProgramNode();
+        ImportsNode imports = new ImportsNode();
         MainNode main = (MainNode) visit(ctx.main());
         List<AuxNode> auxList = new ArrayList<>();
         AuxNode aux;
+        if (ctx.imports()!=null)
+            imports = (ImportsNode) visit(ctx.imports());
         for (int c = 0; c < ctx.aux().size(); ++c){
             aux = (AuxNode) visit(ctx.aux(c));
             auxList.add(aux);
         }
+        node.setImports(imports);
         node.setMain(main);
         node.setAuxList(auxList);
         return node;
     }
+
+    @Override public AST visitImports(QbricksParser.ImportsContext ctx) {
+        ImportsNode node = new ImportsNode();
+        List<String> files = new ArrayList<>();
+        if(!ctx.isEmpty()){
+            node.setHasImports(true);
+            for (int i=0; i<ctx.ID().size(); i+=2){
+                files.add(ctx.ID(i).getText());
+            }
+        }
+        node.setFiles(files);
+        return node;
+    }
+
 
     @Override
     public AST visitMainFun(QbricksParser.MainFunContext ctx) {

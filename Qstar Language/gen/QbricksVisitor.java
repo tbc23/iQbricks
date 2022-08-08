@@ -19,6 +19,12 @@ public interface QbricksVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitProgram(QbricksParser.ProgramContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link QbricksParser#imports}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitImports(QbricksParser.ImportsContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code mainFun}
 	 * labeled alternative in {@link QbricksParser#main}.
 	 * @param ctx the parse tree

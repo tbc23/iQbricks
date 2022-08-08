@@ -1,22 +1,22 @@
 || dj || (qreg qr)
-pre {n > 0}
+pre {true}
 	circ qr ->
-        H(qr[:-1])
-        X(qr[-1])
-        assert { after X }
-        H(qr[-1])
-        oracle(qr) # SEQ(qr,oracle)
-        H(qr[:-1])
+        with conjugated (H(qr[:-1])) {
+            X(qr[-1])
+            assert {true}
+            H(qr[-1])
+            oracle(qr) # SEQ(qr,oracle)
+        }
         return
 pos {true}
 
 
 | oracle | (qreg qr)
-pre {n > 0}
+pre {true}
 	circ qr -> 
 		for q in qr[:-1] {
 			invariant {true}
-			cnot(qr[-1],qr[q])
+			cnot(qr[q],qr[-1])
 			assert {true}
 		}
 		assert { true }

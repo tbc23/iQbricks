@@ -26,6 +26,13 @@ public class QbricksBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitImports(QbricksParser.ImportsContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitMainFun(QbricksParser.MainFunContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}

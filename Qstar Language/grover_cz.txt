@@ -5,10 +5,10 @@ pre {true}
         assert {true}
 pos {true}
 
-| oracle_cz |
+| oracle_cz | # for size 3
 pre {true}
     circ qr ->
-        with control qr[0] (RZ(1,qr[1]))
+        toff(qr[0],qr[1],qr[2])
         assert {true}
 pos {true}
 

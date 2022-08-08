@@ -3,14 +3,35 @@ import java.util.*;
 public abstract class AST {}
 
 class ProgramNode extends AST {
+    public ImportsNode imports;
     public MainNode main;
     public List<AuxNode> auxList;
+
+    public ImportsNode getImports() { return imports; }
+    public void setImports(ImportsNode imports) { this.imports = imports; }
 
     public MainNode getMain() { return main; }
     public List<AuxNode> getAuxList() { return auxList; }
 
     public void setMain(MainNode main) { this.main = main; }
     public void setAuxList(List<AuxNode> auxList) { this.auxList = auxList; }
+}
+
+class ImportsNode extends ProgramNode {
+    private List<String> files;
+    public boolean hasImports;
+
+    public void setFiles(List<String> files) {
+        this.files = files;
+    }
+
+    public List<String> getFiles() {
+        return files;
+    }
+
+    public void setHasImports(boolean hasImports) {
+        this.hasImports = hasImports;
+    }
 }
 
 class MainNode extends ProgramNode {

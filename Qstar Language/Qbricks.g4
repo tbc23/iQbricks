@@ -6,7 +6,11 @@ grammar Qbricks;
 }
 
 program :
-        main (aux)* // a program is defined by a main and (0 or more) aux functions
+        (imports)? main (aux)* // a program is defined by a main and (0 or more) aux functions
+        ;
+
+imports:
+        (IMPORT file=ID)+
         ;
 
 main    :
@@ -239,6 +243,7 @@ WITHCTL: 'with control';
 WITHCJG: 'with conjugated';
 
 INVARIANT : 'invariant';
+IMPORT : 'import';
 
 ID : [a-zA-Z][a-zA-Z_0-9]* ;
 NUM : [0-9]+ ;

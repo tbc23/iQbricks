@@ -24,7 +24,7 @@ pos {true}
 | init | (qreg qr, qreg aux)
 pre {true}
     circ qr, aux ->
-        H(qr[:-1])
+        H(qr)
         X(aux)
         assert {true}
         H(aux)

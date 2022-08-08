@@ -20,6 +20,16 @@ public interface QbricksListener extends ParseTreeListener {
 	 */
 	void exitProgram(QbricksParser.ProgramContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link QbricksParser#imports}.
+	 * @param ctx the parse tree
+	 */
+	void enterImports(QbricksParser.ImportsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link QbricksParser#imports}.
+	 * @param ctx the parse tree
+	 */
+	void exitImports(QbricksParser.ImportsContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code mainFun}
 	 * labeled alternative in {@link QbricksParser#main}.
 	 * @param ctx the parse tree
