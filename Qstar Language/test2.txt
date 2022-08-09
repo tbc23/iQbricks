@@ -1,11 +1,11 @@
 || main || (qreg qr)
 pre {n>0}
     circ qr[4] ->
-        H(qr[1])
+        with control qr[0] (reverse(qft(qr)))
         for i in qr {
             invariant{true}
-            Y(qr[3])
-            X(qr[2])
+            Y(qr[i])
+            X(qr[i])
         }
         Z(qr[0])
     return

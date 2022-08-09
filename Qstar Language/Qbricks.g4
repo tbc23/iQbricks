@@ -126,7 +126,7 @@ ang     :
         ;
 
 
-control :
+control : // add here a multiControl rule!!!!
         WITHCTL ctlqrs=id_list OP ctlgate=apply CL      #applyControl      // with control qreg[-1] (RX(ang,qreg[q]))
         | CNOT OP ctlqr=qReg VG tqr=qReg CL             #cnotControl       // cnot(target_qubit,control_qubit)
         | TOFF OP ctl1=qReg VG ctl2=qReg VG tg=qReg CL  #toffControl

@@ -135,6 +135,80 @@ let rec run_ctl_regs_inv (ctls: iter list) (tg:iter) (gate:gate) (n:int) =
             ^ " := !circ_aux -- !c" ^ string_of_int n ^ ";\n"
 			^ (run_ctl_regs_inv tl tg gate n)
 
+let rec run_ctl_multi_inv (ctls: iter list) (tg:iter list) (gate:multigate) (n:int) =
+	match ctls with
+	| [] -> ""
+	| [{iterator; starts; ends}] ->
+		if (starts=ends) then
+			"c" ^ string_of_int n ^ " := "
+			^ "cont ((" ^ run_multigate gate
+			^ (run_multi_regs tg) ^ ") "
+			^ (run_range starts iterator) ^ " 0"
+			^ " n) -- !c" ^ string_of_int n ^ ";\n"
+		else
+			"let circ_aux = ref (m_skip n) in\n"
+            ^ "for ctl= " ^ (run_range starts iterator)
+            ^ " to " ^ (run_range ends iterator)
+            ^ " do\n" ^ "invariant{width !c" ^ (string_of_int n) ^ "=n}\n"
+            ^ "circ_aux := !circ_aux -- (cont (" ^ run_multigate gate
+            ^ (run_multi_regs tg) ^ ") "
+            ^ "ctl 0 n);\ndone;\n" ^ "c" ^ string_of_int n
+            ^ " := !circ_aux -- !c" ^ string_of_int n ^ ";\n"
+	| {iterator; starts; ends} :: tl ->
+		if (starts=ends) then
+			"c" ^ string_of_int n ^ " := "
+            ^ "cont ((" ^ run_multigate gate
+            ^ (run_multi_regs tg) ^ ") "
+            ^ (run_range starts iterator) ^ " 0"
+            ^ " n) -- !c" ^ string_of_int n ^ ";\n" ^ (run_ctl_multi_inv tl tg gate n)
+		else
+			"let circ_aux = ref (m_skip n) in\n"
+            ^ "for ctl= " ^ (run_range starts iterator)
+            ^ " to " ^ (run_range ends iterator)
+            ^ " do\n" ^ "invariant{width !c" ^ (string_of_int n) ^ "=n}\n"
+            ^ "circ_aux := !circ_aux -- (cont (" ^ run_multigate gate
+            ^ (run_multi_regs tg) ^ ") "
+            ^ "ctl 0 n);\ndone;\n" ^ "c" ^ string_of_int n
+            ^ " := !circ_aux -- !c" ^ string_of_int n ^ ";\n"
+			^ (run_ctl_multi_inv tl tg gate n)
+
+let rec run_ctl_fun_inv (ctls: iter list) (tg:expr list) (gate:string) (n:int) =
+	match ctls with
+	| [] -> ""
+	| [{iterator; starts; ends}] ->
+		if (starts=ends) then
+			"c" ^ string_of_int n ^ " :="
+			^ " cont ((" ^ gate ^ " "
+			^ (run_args tg) ^ ") "
+			^ (run_range starts iterator) ^ " 0"
+			^ " n) -- !c" ^ string_of_int n ^ ";\n"
+		else
+			"let circ_aux = ref (m_skip n) in\n"
+            ^ "for ctl= " ^ (run_range starts iterator)
+            ^ " to " ^ (run_range ends iterator)
+            ^ " do\n" ^ "invariant{width !c" ^ (string_of_int n) ^ "=n}\n"
+            ^ "circ_aux := !circ_aux -- (cont (" ^ gate
+            ^ " " ^ (run_args tg) ^ ") "
+            ^ "ctl 0 n);\ndone;\n" ^ "c" ^ string_of_int n
+            ^ " := !circ_aux -- !c" ^ string_of_int n ^ ";\n"
+	| {iterator; starts; ends} :: tl ->
+		if (starts=ends) then
+			"c" ^ string_of_int n ^ " :="
+            ^ " cont ((" ^ gate ^ " "
+            ^ (run_args tg) ^ ") "
+            ^ (run_range starts iterator) ^ " 0"
+            ^ " n) -- !c" ^ string_of_int n ^ ";\n" ^ (run_ctl_fun_inv tl tg gate n)
+		else
+			"let circ_aux = ref (m_skip n) in\n"
+            ^ "for ctl= " ^ (run_range starts iterator)
+            ^ " to " ^ (run_range ends iterator)
+            ^ " do\n" ^ "invariant{width !c" ^ (string_of_int n) ^ "=n}\n"
+            ^ "circ_aux := !circ_aux -- (cont (" ^ gate
+            ^ " " ^ (run_args tg) ^ ") "
+            ^ "ctl 0 n);\ndone;\n" ^ "c" ^ string_of_int n
+            ^ " := !circ_aux -- !c" ^ string_of_int n ^ ";\n"
+			^ (run_ctl_fun_inv tl tg gate n)
+
 let rec run_unitary_inv unit n =
     match unit with
     | Sequence (e, d) ->  (run_unitary_inv e n) ^ (run_unitary_inv d n)
@@ -184,9 +258,9 @@ let rec run_unitary_inv unit n =
                     run_ctl_regs_inv ctls tg gate n
             end
         | MultiApply {gate; regs; assertion} ->
-            ""
-        | FUN {id; args} ->  ""
-        | REV {id; args} -> ""
+            run_ctl_multi_inv ctls regs gate n
+        | FUN {id; args} ->  run_ctl_fun_inv ctls args id n
+        | REV {id; args} -> run_ctl_fun_inv ctls args ("reverse " ^ id) n
         | _ -> "\nError\n"
         end ^ run_assert assertion n
     | FUN {id; args} ->
@@ -236,6 +310,84 @@ let rec run_ctl_regs (ctls: iter list) (tg:iter) (gate:gate) (n:int) =
             ^ " n);\ndone;\n" ^ "c" ^ string_of_int n
             ^ " := !c" ^ string_of_int n ^ " -- !circ_aux;\n"
 			^ (run_ctl_regs tl tg gate n)
+
+let rec run_ctl_multi (ctls: iter list) (tg:iter list) (gate:multigate) (n:int) =
+	match ctls with
+	| [] -> ""
+	| [{iterator; starts; ends}] ->
+		if (starts=ends) then
+			"c" ^ string_of_int n ^ " := !c"
+			^ string_of_int n ^ " -- ("
+			^ "cont ((" ^ run_multigate gate
+			^ (run_multi_regs tg) ^ ") "
+			^ (run_range starts iterator) ^ " 0"
+			^ " n);\n"
+		else
+			"let circ_aux = ref (m_skip n) in\n"
+            ^ "for ctl= " ^ (run_range starts iterator)
+            ^ " to " ^ (run_range ends iterator)
+            ^ " do\n" ^ "invariant{width !c" ^ (string_of_int n) ^ "=n}\n"
+            ^ "circ_aux := !circ_aux -- (cont (" ^ run_multigate gate
+            ^ (run_multi_regs tg) ^ ") "
+            ^ "ctl 0 n);\ndone;\n" ^ "c" ^ string_of_int n
+            ^ " := !c" ^ string_of_int n ^ " -- !circ_aux;\n"
+	| {iterator; starts; ends} :: tl ->
+		if (starts=ends) then
+			"c" ^ string_of_int n ^ " := !c"
+			^ string_of_int n ^ " -- ("
+			^ "cont ((" ^ run_multigate gate
+            ^ (run_multi_regs tg) ^ ") "
+            ^ (run_range starts iterator) ^ " 0"
+            ^ " n);\n" ^ (run_ctl_multi tl tg gate n)
+		else
+			"let circ_aux = ref (m_skip n) in\n"
+            ^ "for ctl= " ^ (run_range starts iterator)
+            ^ " to " ^ (run_range ends iterator)
+            ^ " do\n" ^ "invariant{width !c" ^ (string_of_int n) ^ "=n}\n"
+            ^ "circ_aux := !circ_aux -- (cont " ^ run_multigate gate
+            ^ (run_multi_regs tg) ^ ") "
+            ^ "ctl 0 n);\ndone;\n" ^ "c" ^ string_of_int n
+            ^ " := !c" ^ string_of_int n ^ " -- !circ_aux;\n"
+			^ (run_ctl_multi tl tg gate n)
+
+let rec run_ctl_fun (ctls: iter list) (tg:expr list) (gate:string) (n:int) =
+	match ctls with
+	| [] -> ""
+	| [{iterator; starts; ends}] ->
+		if (starts=ends) then
+			"c" ^ string_of_int n ^ " := !c"
+			^ string_of_int n ^ " -- ("
+			^ "cont ((" ^ gate ^ " "
+			^ (run_args tg) ^ ") "
+			^ (run_range starts iterator) ^ " 0"
+			^ " n);\n"
+		else
+			"let circ_aux = ref (m_skip n) in\n"
+            ^ "for ctl= " ^ (run_range starts iterator)
+            ^ " to " ^ (run_range ends iterator)
+            ^ " do\n" ^ "invariant{width !c" ^ (string_of_int n) ^ "=n}\n"
+            ^ "circ_aux := !circ_aux -- (cont (" ^ gate
+            ^ " " ^ (run_args tg) ^ ") "
+            ^ "ctl 0 n);\ndone;\n" ^ "c" ^ string_of_int n
+            ^ " := !c" ^ string_of_int n ^ " -- !circ_aux;\n"
+	| {iterator; starts; ends} :: tl ->
+		if (starts=ends) then
+			"c" ^ string_of_int n ^ " := !c"
+			^ string_of_int n ^ " -- ("
+			^ "cont ((" ^ gate ^ " "
+            ^ (run_args tg) ^ ") "
+            ^ (run_range starts iterator) ^ " 0"
+            ^ " n);\n" ^ (run_ctl_fun tl tg gate n)
+		else
+			"let circ_aux = ref (m_skip n) in\n"
+            ^ "for ctl= " ^ (run_range starts iterator)
+            ^ " to " ^ (run_range ends iterator)
+            ^ " do\n" ^ "invariant{width !c" ^ (string_of_int n) ^ "=n}\n"
+            ^ "circ_aux := !circ_aux -- (cont (" ^ gate
+            ^ " " ^ (run_args tg) ^ ") "
+            ^ "ctl 0 n);\ndone;\n" ^ "c" ^ string_of_int n
+            ^ " := !c" ^ string_of_int n ^ " -- !circ_aux;\n"
+			^ (run_ctl_fun tl tg gate n)
 
 let rec run_unitary unit n =
     match unit with
@@ -288,9 +440,9 @@ let rec run_unitary unit n =
                     run_ctl_regs ctls tg gate n
             end
         | MultiApply {gate; regs; assertion} ->
-            ""
-        | FUN {id; args} ->  ""
-        | REV {id; args} -> ""
+            run_ctl_multi ctls regs gate n
+        | FUN {id; args} ->  run_ctl_fun ctls args id n
+        | REV {id; args} -> run_ctl_fun ctls args ("reverse " ^ id) n
         | _ -> "\nError\n"
         end ^ run_assert assertion n
     | FUN {id; args} ->

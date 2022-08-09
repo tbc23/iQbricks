@@ -334,7 +334,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             }
             else {
                 s = "Num 0";
-                e = "Var \"" + limits[0] + "\"";
+                e = "Subtract(Var \"" + limits[0] + "\", Num 1)";
             }
             r = "let ref " + iterator + " = 0\n" +
                     "in while (" + iterator + "<"
@@ -1059,10 +1059,14 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         Visit(node.getCtlGate());
         s.append(unitaries.get(unitaries.size()-1)); // get last unitary in list
         unitaries.remove(unitaries.size()-1); // delete it since its not needed anymore
-        if (gate instanceof FunApply) // not defined
-            aux = ((FunApply) gate).getFunID()+(((FunApply) gate).getTermArgs());
-        else if (gate instanceof RevApply) // not defined
-            aux = ((RevApply) gate).getFunID()+(((RevApply) gate).getTermArgs());
+        if (gate instanceof FunApply) {// not defined
+            target = "Var \"null\"";
+            aux = ((FunApply) gate).getFunID() + (((FunApply) gate).getTermArgs());
+        }
+        else if (gate instanceof RevApply) { // not defined
+            target = "Var \"null\"";
+            aux = ((RevApply) gate).getFunID() + (((RevApply) gate).getTermArgs());
+        }
         else if (gate instanceof HadApply) {
             target = Visit(((HadApply) gate).getQreg());
             id = ((HadApply) gate).getQreg().getId();
