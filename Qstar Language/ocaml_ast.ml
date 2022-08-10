@@ -4,13 +4,14 @@ open ML_eval
 let p = {
     id = "main";
 aux = [];
-imports = ["qft"; ];
+imports = [];
 main = {
  id = "main";
 circ = {
 qregs= [{qrid="qr"; size=Num 4}];
 body = [
-Unitary (WithControl{ctlgate=REV {id="qft"; args=[Var "qr"; ]}; ctls=[{iterator="qr"; starts=Num 0; ends=Num 0}; ]; tg={iterator="null"; starts=Var "null"; ends=Var "null"}; assertion=[]
+Unitary (WithControl{ctlgate=MultiApply {gate=Toff; regs=[{iterator="qr"; starts=Num 1; ends=Num 1}; {iterator="qr"; starts=Num 2; ends=Num 2}; {iterator="qr"; starts=Num 3; ends=Num 3}]; assertion=[]
+}; ctls=[{iterator="qr"; starts=Num 0; ends=Num 0}; ]; tg={iterator="tg"; starts=Num 0; ends=Num 0}; assertion=[]
 }
 );
 For {

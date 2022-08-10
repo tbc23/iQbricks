@@ -544,6 +544,18 @@ public interface QbricksListener extends ParseTreeListener {
 	 */
 	void exitApplyControl(QbricksParser.ApplyControlContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code multiControl}
+	 * labeled alternative in {@link QbricksParser#control}.
+	 * @param ctx the parse tree
+	 */
+	void enterMultiControl(QbricksParser.MultiControlContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code multiControl}
+	 * labeled alternative in {@link QbricksParser#control}.
+	 * @param ctx the parse tree
+	 */
+	void exitMultiControl(QbricksParser.MultiControlContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code cnotControl}
 	 * labeled alternative in {@link QbricksParser#control}.
 	 * @param ctx the parse tree

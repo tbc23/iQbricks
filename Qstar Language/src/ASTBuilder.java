@@ -514,9 +514,34 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
         return node;
     }
 
+    @Override public AST visitMultiControl(QbricksParser.MultiControlContext ctx) {
+        WithCtlNode node = new WithCtlNode();
+        node.setAssertion((AssertNode) visit(ctx.getParent().getChild(1)));
+        CtlNode apply = (CtlNode) visit(ctx.ctlgate);
+        ParseTree ctls = ctx.ctlqrs;
+        QregNode qr = (QregNode) visit(ctls.getChild(0));
+
+        List<QregNode> ctlNodes = new ArrayList<>(); //list of control qubits
+
+        ctlNodes.add(qr);
+        node.setCtlMulti(apply);
+        if (ctls.getChildCount() > 1) {
+            for (int c = 2; c < ctls.getChildCount(); c += 2) {
+                qr = (QregNode) visit(ctls.getChild(c));
+                ctlNodes.add(qr);
+            }
+        }
+        node.setCtlArgs(ctlNodes);
+        return node;
+    }
+
     @Override public AST visitCnotControl(QbricksParser.CnotControlContext ctx) {
         CnotNode cnot = new CnotNode();
-        cnot.setAssertion((AssertNode) visit(ctx.getParent().getChild(1)));
+        if(!ctx.getParent().getClass().getSimpleName().equals("MultiControlContext")) {
+            cnot.setAssertion((AssertNode) visit(ctx.getParent().getChild(1)));
+        }
+        else
+            cnot.setAssertion((AssertNode) visit(ctx.getParent().getParent().getChild(1)));
         QregNode ctl = (QregNode) visit(ctx.ctlqr);
         QregNode target = (QregNode) visit(ctx.tqr);
         cnot.setQregs(ctl,target);
@@ -525,7 +550,11 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
 
     @Override public AST visitFredControl(QbricksParser.FredControlContext ctx) {
         FredNode node = new FredNode();
-        node.setAssertion((AssertNode) visit(ctx.getParent().getChild(1)));
+        if(!ctx.getParent().getClass().getSimpleName().equals("MultiControlContext")) {
+            node.setAssertion((AssertNode) visit(ctx.getParent().getChild(1)));
+        }
+        else
+            node.setAssertion((AssertNode) visit(ctx.getParent().getParent().getChild(1)));
         QregNode ctl1 = (QregNode) visit(ctx.ctl1);
         QregNode ctl2 = (QregNode) visit(ctx.ctl2);
         QregNode target = (QregNode) visit(ctx.tg);
@@ -535,7 +564,11 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
 
     @Override public AST visitToffControl(QbricksParser.ToffControlContext ctx) {
         ToffNode node = new ToffNode();
-        node.setAssertion((AssertNode) visit(ctx.getParent().getChild(1)));
+        if(!ctx.getParent().getClass().getSimpleName().equals("MultiControlContext")) {
+            node.setAssertion((AssertNode) visit(ctx.getParent().getChild(1)));
+        }
+        else
+            node.setAssertion((AssertNode) visit(ctx.getParent().getParent().getChild(1)));
         QregNode ctl1 = (QregNode) visit(ctx.ctl1);
         QregNode ctl2 = (QregNode) visit(ctx.ctl2);
         QregNode target = (QregNode) visit(ctx.tg);

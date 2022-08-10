@@ -325,6 +325,13 @@ public interface QbricksVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitApplyControl(QbricksParser.ApplyControlContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code multiControl}
+	 * labeled alternative in {@link QbricksParser#control}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMultiControl(QbricksParser.MultiControlContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code cnotControl}
 	 * labeled alternative in {@link QbricksParser#control}.
 	 * @param ctx the parse tree

@@ -1,7 +1,7 @@
 || main || (qreg qr)
 pre {n>0}
     circ qr[4] ->
-        with control qr[0] (reverse(qft(qr)))
+        with control qr[0] (toff(qr[1],qr[2],qr[3]))
         for i in qr {
             invariant{true}
             Y(qr[i])

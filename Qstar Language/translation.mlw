@@ -1,6 +1,5 @@
 module Main
 
-use qft.Qft
 use export binary.Bit_vector
 use wired_circuits.Circuit_c
 use export p_int.Int_comp
@@ -34,7 +33,7 @@ c1 := m_skip n;
 
 done;
 c0 := !c0 -- (place zz (!qr_index + 0) n);
-c0 := cont ((reverse qft qr n) (!qr_index + 0) 0 n) -- !c0;
+c0 := cont ((toffoli (!qr_index + 1) (!qr_index + 2) (!qr_index + 3) n) (!qr_index + 0) 0 n) -- !c0;
 return !c0;
 ensures{vazio}
 end

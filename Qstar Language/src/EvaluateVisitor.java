@@ -1050,88 +1050,84 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
     public String Visit(WithCtlNode node) {
         List<String> controls = new ArrayList<>();
         String[] limits, ls;
-        String aux,angle,id = null,r,start,end,old,range,qr,target=null;
-        StringBuilder s;
-        ApplyNode gate = node.getCtlGate();
-        s = new StringBuilder("WithControl{ctlgate=");
-        /*ls = Visit(node.getCtlGate()).split("Unitary ");
-        s.append(ls[1]);*/
-        Visit(node.getCtlGate());
-        s.append(unitaries.get(unitaries.size()-1)); // get last unitary in list
-        unitaries.remove(unitaries.size()-1); // delete it since its not needed anymore
-        if (gate instanceof FunApply) {// not defined
-            target = "Var \"null\"";
-            aux = ((FunApply) gate).getFunID() + (((FunApply) gate).getTermArgs());
+        String aux,angle,id=null,r,start,end,old,range,qr,target;
+        StringBuilder s = new StringBuilder("WithControl{ctlgate=");
+        if (node.isMulti){
+            Visit(node.getCtlMulti());
+            s.append(unitaries.get(unitaries.size() - 1)); // get last unitary in list
+            unitaries.remove(unitaries.size() - 1);
+            id = "tg";
+            target = "Num 0";
         }
-        else if (gate instanceof RevApply) { // not defined
-            target = "Var \"null\"";
-            aux = ((RevApply) gate).getFunID() + (((RevApply) gate).getTermArgs());
-        }
-        else if (gate instanceof HadApply) {
-            target = Visit(((HadApply) gate).getQreg());
-            id = ((HadApply) gate).getQreg().getId();
-            aux = " hadamard ";
-            aux = " H; ";
-            diag = true;
-        }
-        else if (gate instanceof RxApply) {
-            target = Visit(((RxApply) gate).getQreg());
-            angle = Visit(((RxApply) gate).getAngle());
-            id = ((RxApply) gate).getQreg().getId();
-            aux = " (rx ("+ angle +")) ";
-            aux = " Rx ("+ angle +"); ";
-            diag = false;
-        }
-        else if (gate instanceof RyApply) {
-            target = Visit(((RyApply) gate).getQreg());
-            angle = Visit(((RyApply) gate).getAngle());
-            id = ((RyApply) gate).getQreg().getId();
-            aux = " (ry ("+ angle +")) ";
-            aux = " Ry ("+ angle +"); ";
-            diag = false;
-        }
-        else if (gate instanceof RzApply){
-            target = Visit(((RzApply) gate).getQreg());
-            angle = Visit(((RzApply) gate).getAngle());
-            id = ((RzApply) gate).getQreg().getId();
-            aux = " (rz ("+ angle +")) ";
-            aux = " Rz ("+ angle +"); ";
-            diag = true;
-        }
-        else if (gate instanceof XApply){
-            target = Visit(((XApply) gate).getQreg());
-            id = ((XApply) gate).getQreg().getId();
-            aux = " xx ";
-            aux = " X; ";
-            diag = false;
-        }
-        else if (gate instanceof YApply){
-            target = Visit(((YApply) gate).getQreg());
-            id = ((YApply) gate).getQreg().getId();
-            aux = " yy ";
-            aux = " Y; ";
-            diag = false;
-        }
-        else if (gate instanceof ZApply){
-            target = Visit(((ZApply) gate).getQreg());
-            id = ((ZApply) gate).getQreg().getId();
-            aux = " zz ";
-            aux = " Z; ";
-            diag = true;
-        }
-        else if (gate instanceof SwapApply){
-            target = Visit(((SwapApply) gate).getLQreg());
-            id = ((SwapApply) gate).getLQreg().getId();
-            aux = " swap "; //not yet defined
-            diag = false;
-        }
-        else{
-            target = Visit(((PhApply) gate).getQreg());
-            angle = Visit(((PhApply) gate).getAngle());
-            id = ((PhApply) gate).getQreg().getId();
-            aux = " (phase ("+ angle +")) ";
-            aux = " Ph ("+ angle +"); ";
-            diag = true;
+        else {
+            ApplyNode gate = node.getCtlGate();
+            Visit(node.getCtlGate());
+            s.append(unitaries.get(unitaries.size() - 1)); // get last unitary in list
+            unitaries.remove(unitaries.size() - 1); // delete it since its not needed anymore
+            if (gate instanceof FunApply) {
+                target = "Var \"null\"";
+                aux = ((FunApply) gate).getFunID() + (((FunApply) gate).getTermArgs());
+            } else if (gate instanceof RevApply) {
+                target = "Var \"null\"";
+                aux = ((RevApply) gate).getFunID() + (((RevApply) gate).getTermArgs());
+            } else if (gate instanceof HadApply) {
+                target = Visit(((HadApply) gate).getQreg());
+                id = ((HadApply) gate).getQreg().getId();
+                aux = " hadamard ";
+                aux = " H; ";
+                diag = true;
+            } else if (gate instanceof RxApply) {
+                target = Visit(((RxApply) gate).getQreg());
+                angle = Visit(((RxApply) gate).getAngle());
+                id = ((RxApply) gate).getQreg().getId();
+                aux = " (rx (" + angle + ")) ";
+                aux = " Rx (" + angle + "); ";
+                diag = false;
+            } else if (gate instanceof RyApply) {
+                target = Visit(((RyApply) gate).getQreg());
+                angle = Visit(((RyApply) gate).getAngle());
+                id = ((RyApply) gate).getQreg().getId();
+                aux = " (ry (" + angle + ")) ";
+                aux = " Ry (" + angle + "); ";
+                diag = false;
+            } else if (gate instanceof RzApply) {
+                target = Visit(((RzApply) gate).getQreg());
+                angle = Visit(((RzApply) gate).getAngle());
+                id = ((RzApply) gate).getQreg().getId();
+                aux = " (rz (" + angle + ")) ";
+                aux = " Rz (" + angle + "); ";
+                diag = true;
+            } else if (gate instanceof XApply) {
+                target = Visit(((XApply) gate).getQreg());
+                id = ((XApply) gate).getQreg().getId();
+                aux = " xx ";
+                aux = " X; ";
+                diag = false;
+            } else if (gate instanceof YApply) {
+                target = Visit(((YApply) gate).getQreg());
+                id = ((YApply) gate).getQreg().getId();
+                aux = " yy ";
+                aux = " Y; ";
+                diag = false;
+            } else if (gate instanceof ZApply) {
+                target = Visit(((ZApply) gate).getQreg());
+                id = ((ZApply) gate).getQreg().getId();
+                aux = " zz ";
+                aux = " Z; ";
+                diag = true;
+            } else if (gate instanceof SwapApply) {
+                target = Visit(((SwapApply) gate).getLQreg());
+                id = ((SwapApply) gate).getLQreg().getId();
+                aux = " swap "; //not yet defined
+                diag = false;
+            } else {
+                target = Visit(((PhApply) gate).getQreg());
+                angle = Visit(((PhApply) gate).getAngle());
+                id = ((PhApply) gate).getQreg().getId();
+                aux = " (phase (" + angle + ")) ";
+                aux = " Ph (" + angle + "); ";
+                diag = true;
+            }
         }
         s.append("; ctls=[");
         for (QregNode n:node.getCtlArgs()){

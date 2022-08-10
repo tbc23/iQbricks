@@ -522,25 +522,31 @@ class CtlNode extends InstrNode {}
 class WithCtlNode extends CtlNode {
     private List<QregNode> ctlArgs;
     public ApplyNode ctlGate;
+    public CtlNode ctlMulti;
     public AssertNode assertion;
+    public Boolean isMulti;
 
     public AssertNode getAssertion() { return assertion; }
-
     public void setAssertion(AssertNode assertion) { this.assertion = assertion; }
+
     public List<QregNode> getCtlArgs() {
         return ctlArgs;
     }
-
     public ApplyNode getCtlGate() {
         return ctlGate;
     }
+    public CtlNode getCtlMulti() { return ctlMulti; }
 
     public void setCtlArgs(List<QregNode> ctlArgs) {
         this.ctlArgs = ctlArgs;
     }
-
     public void setCtlGate(ApplyNode ctlGate) {
+        this.isMulti = false;
         this.ctlGate = ctlGate;
+    }
+    public void setCtlMulti(CtlNode ctlMulti) {
+        this.isMulti = true;
+        this.ctlMulti = ctlMulti;
     }
 }
 

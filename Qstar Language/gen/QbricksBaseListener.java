@@ -558,6 +558,18 @@ public class QbricksBaseListener implements QbricksListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterMultiControl(QbricksParser.MultiControlContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMultiControl(QbricksParser.MultiControlContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterCnotControl(QbricksParser.CnotControlContext ctx) { }
 	/**
 	 * {@inheritDoc}
