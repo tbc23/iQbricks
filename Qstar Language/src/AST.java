@@ -203,14 +203,14 @@ class ForNode extends InstrNode {
 
 class ForIter extends ForNode {
     private String iterator;
-    private ExpressionNode iterableExpr;
+    private TermNode iterableExpr;
     private QregNode iterableQr;
     private Boolean range;
     private Boolean iterQr;
 
     public String getIterator () { return iterator; }
     public Boolean getRange() { return range; }
-    public ExpressionNode getIterableExpr (){
+    public TermNode getIterableExpr (){
         return iterableExpr;
     }
     public QregNode getIterableQr (){
@@ -220,8 +220,8 @@ class ForIter extends ForNode {
     public void setIterator (String niter) { this.iterator = niter; }
     public void setRange (Boolean cond) { this.range = cond; }
     public void setIterable(AST iterable){
-        if (iterable instanceof ExpressionNode) {
-            this.iterableExpr = (ExpressionNode) iterable;
+        if (iterable instanceof TermNode) {
+            this.iterableExpr = (TermNode) iterable;
             iterQr = false;
         } else {
             this.iterableQr = (QregNode) iterable;

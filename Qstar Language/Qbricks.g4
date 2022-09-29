@@ -91,7 +91,7 @@ for_ :
         ;
 
 iter    :
-        RANGE OP (expvalue=expr | qrvalue=qReg) CL      #rangeIter
+        RANGE OP (expvalue=term | qrvalue=qReg) CL      #rangeIter
         | qReg                                          #qrIter
         ;
 
