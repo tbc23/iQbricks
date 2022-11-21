@@ -454,9 +454,25 @@ let rec run_unitary unit n =
         ^ string_of_int n
         ^ " -- (reverse (" ^ id ^ " " ^ (run_args args) ^ "));\n"
 
-let run_iter = function
-    {iterator; starts; ends} ->
-        "for " ^ iterator ^ " = " ^ run_expr starts ^ " to (" ^ run_expr ends ^ ")";;
+let run_iter iter qr =
+    match qr with
+    | " " -> "for " ^ iter.iterator ^ " = " ^ run_expr iter.starts ^ " to ("
+             ^ run_expr iter.ends ^ ") do\n" ^ "variant{"
+             ^ run_expr iter.ends ^ " - " ^ iter.iterator ^ "}\n"
+             ^ "invariant{" ^ run_expr iter.starts ^ " <= " ^ iter.iterator ^ " <= "
+             ^ run_expr iter.ends ^ "}\n"
+    | _ -> "for " ^ iter.iterator ^ " = " ^ (run_range iter.starts qr) ^ " to ("
+                   ^ (run_range iter.ends qr) ^ ") do\n" ^ "variant{"
+                   ^ (run_range iter.ends qr) ^ " - " ^ iter.iterator ^ "}\n"
+                   ^ "invariant{" ^ (run_range iter.starts qr) ^ " <= " ^ iter.iterator ^ " <= "
+                   ^ (run_range iter.ends qr) ^ "}\n"
+(*    {iterator; starts; ends} ->*)
+(*        "for " ^ iterator ^ " = " ^ run_expr starts ^ " to ("*)
+(*        ^ run_expr ends ^ ") do\n" ^ "variant{"*)
+(*        ^ run_expr ends ^ " - " ^ iterator ^ "}\n"*)
+(*        ^ "invariant{" ^ run_expr starts ^ " <= " ^ iterator ^ " <= "*)
+(*        ^ run_expr ends ^ "}\n"*)
+        ;;
 
 let run_conjugate gate n : string
     =
@@ -493,12 +509,12 @@ let rec run_instr i n =
         "let c" ^ string_of_int (n+1) ^ " = ref (m_skip n) in\n"
         ^ (get_conj_body body (n+1))
         ^ (run_conjugate gate n) ^ (run_assert assertion n)
-    | For {iter; inv; body; assertion} ->
+    | For {iter; qr; inv; body; assertion} ->
         "let c" ^ string_of_int (n+1) ^ " = ref (m_skip n) in\n"
-        ^ run_iter iter ^ " do\n" ^
+        ^ (run_iter iter qr) ^
         begin if (n=0) then "invariant{width !c0=n}\n" else "" end
         ^ "invariant{width !c" ^ string_of_int (n+1) ^ "=n}\n"
-        ^ run_inv inv (n+1)^  (*1->n+1*)
+        ^ run_inv inv (n+1) ^  (*1->n+1*)
         (get_body body (n+1) "for") ^ (circ_looper_conj ((count_depth body)+1) n) ^
         (run_assert assertion n) ^ "\ndone;\n"
 (*        ^ if (n+1=1) then "c" ^ string_of_int n ^ " := !c" ^ string_of_int n*)

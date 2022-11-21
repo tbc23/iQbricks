@@ -22,7 +22,9 @@ begin
 let qr_index = ref (0: int) in 
 let c0 = ref (m_skip n) in
 let c1 = ref (m_skip n) in
-for i = 0 to (qr - 1) do
+for i = (!qr_index + 0) to ((!qr_index + qr - 2)) do
+variant{(!qr_index + qr - 2) - i}
+invariant{(!qr_index + 0) <= i <= (!qr_index + qr - 2)}
 invariant{width !c0=n}
 invariant{width !c1=n}
 invariant{true}

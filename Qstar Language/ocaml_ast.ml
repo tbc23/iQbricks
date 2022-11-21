@@ -18,8 +18,9 @@ For {
 iter = {
 iterator= "i";
 starts = Num 0;
-ends = Subtract(Var "qr", Num 1)
+ends = Subtract (Len "qr", Num 2)
 };
+qr = "qr";
 inv = ["{true}"; ];
 body = [
 Unitary(Sequence (Apply {gate=X; qreg="qr"; range={starts=Var "i"; ends=Var "i"}; assertion=[]

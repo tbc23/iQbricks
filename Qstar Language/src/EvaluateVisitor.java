@@ -348,7 +348,9 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         r +=    "variant{"+e+" - "+iterator+"}\n" +
                 "invariant{"+s+" <= "+iterator+" <= "+e+"}\n"+
                 "invariant{width !"+circs.peek()+" = n}\n";
-        t += "};\n";
+        if (node.getIterQr())
+            t += "};\nqr = \"" + node.getIterableQr().getId() + "\";\n";
+        else t += "};\nqr = \" \";\n";
         return t;
     }
 
