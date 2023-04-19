@@ -10,12 +10,12 @@ public class Main {
     public static void main(String[] args)
     {
         try {
-            QbricksLexer lexer = new QbricksLexer(CharStreams.fromFileName("test2.txt"));
+            QbricksLexer lexer = new QbricksLexer(CharStreams.fromFileName("grover.txt"));
             CommonTokenStream stream = new CommonTokenStream(lexer);
             QbricksParser parser = new QbricksParser(stream);
             ParseTree tree = parser.program();
-            ASTBuilder test = new ASTBuilder();
-            AST ast = test.visit(tree);
+            ASTBuilder builder = new ASTBuilder();
+            AST ast = builder.visit(tree);
             String val = new EvaluateVisitor().Visit((ProgramNode) ast);
             PrintWriter writer = new PrintWriter("ocaml_ast.ml");
             writer.write(val);

@@ -41,7 +41,6 @@ let rec run_expr = function
     | Divide (e, d) -> run_expr e ^ " / " ^ run_expr d
     | Power (e, d) -> "power " ^ (run_expr e) ^ (run_expr d)
     | Minus (e) -> "-" ^ run_expr e
-(*    | Len (e) -> "size(" ^ e ^ ")"*)
     | Len (e) -> e
     | Sqrt (e) -> "sqrt (" ^ run_expr e ^ ")"
     | Num (e) -> string_of_int e
@@ -674,7 +673,7 @@ let run_fun = function
         "let " ^ id ^
         begin if (contains_circs params) then
            "(" ^ get_params_circs params ^ ": int -> circuit) "
-           else "" end
+        else "" end
         ^ " (" ^ (get_params_ints params) ^ "n:int) " ^
         begin if (contains_bools params) then
         "(" ^ get_params_bools params ^ ": boolean) "

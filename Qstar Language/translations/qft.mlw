@@ -1,0 +1,60 @@
+module Qft
+
+use export binary.Bit_vector
+use wired_circuits.Circuit_c
+use export p_int.Int_comp
+use ref.Ref
+use qbricks.Circuit_macros
+use int.Int
+use reversion.Circuit_reverse
+use wired_circuits.Qbricks_prim
+use qbricks.Circuit_semantics
+use int_expo.Int_Exponentiation
+use unit_circle.Angle
+
+let qft (qr n:int) : circuit
+requires{0<n}
+requires{qr=n}
+requires{true}
+=
+begin
+let qr_index = ref (0: int) in 
+let c0 = ref (m_skip n) in
+let c1 = ref (m_skip n) in
+for q = 0 to (qr - 1) do
+variant{qr - 1 - q}
+invariant{0 <= q <= qr - 1}
+invariant{width !c0=n}
+invariant{width !c1=n}
+invariant{range !c1 = q}
+invariant{forall x y i. 0<= i < n -> basis_ket !c1 x y i = if 0<= i < q then y i else x i}
+invariant{forall x y. ang_ind !c1 x y = (ind_isum(fun k -> (ind_isum (fun l -> x l * y k * power 2 (n-l - 1+k)) k n))0 q) /./ n}
+let c2 = ref (m_skip n) in
+for i = (!qr_index + q + 1) to ((!qr_index + qr - 1)) do
+variant{(!qr_index + qr - 1) - i}
+invariant{(!qr_index + q + 1) <= i <= (!qr_index + qr - 1)}
+invariant{width !c2=n}
+invariant{range !c2 = 0}
+invariant{forall x y i. 0<= i < n -> basis_ket !c2 x y i = x i}
+invariant{forall x y. ang_ind !c2 x y = (ind_isum (fun l -> x l * x q * power 2 (n- l -1+ q)) (q+1) i) /./n}
+c2 := !c2 -- (crz ((!qr_index + i + 1)) ((!qr_index + q)) (i - q) n);
+
+done;
+c2 := (place_hadamard (!qr_index + q) n) -- !c2;
+assert{width !c2 = n};
+assert{forall x y: int->int. forall i:int. 0<=i<n ->basis_ket !c2 x y i = if i = q then y 0 else x i};
+assert{forall x y. ang_ind !c2 x y = (ind_isum (fun l -> x l * y 0 * power 2 (n-l - 1+ q)) q n) /./ n};
+c1 := !c1 -- !c2;
+c2 := m_skip n;
+c0 := !c0 -- !c1;
+c1 := m_skip n;
+
+done;
+return !c0;
+ensures{width result = n}
+ensures{range result = n}
+ensures{forall x y i. 0<= i < n -> basis_ket result x y i = y i}
+ensures{forall x y. ang_ind result x y  = (ind_isum(fun k -> (ind_isum (fun l -> x l * y k * power 2 (n-l - 1+k)) k n))0 n) /./ n}
+end
+
+end

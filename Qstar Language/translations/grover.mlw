@@ -1,0 +1,123 @@
+module Grover
+
+use export binary.Bit_vector
+use wired_circuits.Circuit_c
+use export p_int.Int_comp
+use ref.Ref
+use qbricks.Circuit_macros
+use int.Int
+use reversion.Circuit_reverse
+use wired_circuits.Qbricks_prim
+use qbricks.Circuit_semantics
+use int_expo.Int_Exponentiation
+use unit_circle.Angle
+
+let diffusor (qr aux n:int) : circuit
+requires{0<n}
+requires{qr+aux=n}
+requires{true}
+=
+begin
+let qr_index = ref (0: int) in 
+let aux_index = ref (0+qr: int) in 
+let c0 = ref (m_skip n) in
+let c1 = ref (m_skip n) in
+let c2 = ref (m_skip n) in
+let circ_aux = ref (m_skip n) in
+for ctl= (!qr_index + 0) to (!qr_index + qr - 2) do
+invariant{width !c2=n}
+circ_aux := !circ_aux -- (cont  zz  ctl (!qr_index + qr - 1) n);
+done;
+c2 := !c2 -- !circ_aux;
+assert{true};
+let circ_aux = ref (m_skip n) in
+for i= (!qr_index + 0) to (!qr_index + qr - 1) do
+invariant{width !c1=n}
+circ_aux := !circ_aux -- (place xx  i n);
+done;
+c1 := !c1 -- !circ_aux -- !c2 -- reverse (!circ_aux);
+let circ_aux = ref (m_skip n) in
+for i= (!qr_index + 0) to (!qr_index + qr - 1) do
+invariant{width !c0=n}
+circ_aux := !circ_aux -- (place_hadamard  i n);
+done;
+c0 := !c0 -- !circ_aux -- !c1 -- reverse (!circ_aux);
+return !c0;
+ensures{true}
+end
+
+let grover_iter(oracle : int -> circuit)  (qr aux n:int) : circuit
+requires{0<n}
+requires{qr+aux=n}
+requires{true}
+=
+begin
+let qr_index = ref (0: int) in 
+let aux_index = ref (0+qr: int) in 
+let c0 = ref (m_skip n) in
+c0 := !c0 -- (oracle n);
+c0 := !c0 -- (diffusor qr aux n);
+return !c0;
+ensures{true}
+end
+
+let init (qr aux n:int) : circuit
+requires{0<n}
+requires{qr+aux=n}
+requires{true}
+=
+begin
+let qr_index = ref (0: int) in 
+let aux_index = ref (0+qr: int) in 
+let c0 = ref (m_skip n) in
+let circ_aux = ref (m_skip n) in
+for i= (!qr_index + 0) to (!qr_index + qr - 1) do
+invariant{width !c0=n}
+circ_aux := !circ_aux -- (place_hadamard  i n);
+done;
+c0 := !c0 -- !circ_aux;
+let circ_aux = ref (m_skip n) in
+for i= (!aux_index + 0) to (!aux_index + aux - 1) do
+invariant{width !c0=n}
+circ_aux := !circ_aux -- (place xx  i n);
+done;
+c0 := !c0 -- !circ_aux;
+assert{true};
+let circ_aux = ref (m_skip n) in
+for i= (!aux_index + 0) to (!aux_index + aux - 1) do
+invariant{width !c0=n}
+circ_aux := !circ_aux -- (place_hadamard  i n);
+done;
+c0 := !c0 -- !circ_aux;
+assert{true};
+return !c0;
+ensures{true}
+end
+
+let grover(oracle : int -> circuit)  (qr aux iters n:int) : circuit
+requires{0<n}
+requires{qr+aux=n}
+requires{true}
+=
+begin
+let qr_index = ref (0: int) in 
+let aux_index = ref (0+qr: int) in 
+let c0 = ref (m_skip n) in
+let c1 = ref (m_skip n) in
+for i = 0 to (iters) do
+variant{iters - i}
+invariant{0 <= i <= iters}
+invariant{width !c0=n}
+invariant{width !c1=n}
+invariant{true}
+c1 := !c1 -- (grover_iter oracle qr aux n);
+c0 := !c0 -- !c1;
+c1 := m_skip n;
+
+done;
+c0 :=(init qr aux n) -- !c0;
+return !c0;
+ensures{true}
+end
+
+end

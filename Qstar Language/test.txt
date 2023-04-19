@@ -1,53 +1,21 @@
-|| qft ||
-#inicio-def fun
-    #cabec de fun
-	circ qreg ->
-        #body0 do circ qft
-        #assert nulo
-        #instr1 -- if
-		if len(qreg) == 0 :
-            #body de then1 da forma assert instr
-			assert { |qreg> = |qreg'> }
-			return;
-            #fim-body de then1
-		else
-            #body de else1 da forma assert(nulo) instr+
-            #instr1 do else1
-			H(qreg[-1])
-			assert { |qreg> = ps_had |qreg'> (len(qreg')-1)}
-            #instr2 do else1 - for assert
-			for q in qreg:
-                #invariant do for1
-				invariant { inv1 , inv2 }
-                #assert do for1
-				assert { formula2 }
-                #instr1 do for1 -- control assert
-				control(qreg[-1],
-                        circ qreg -> apply (rot(pi/2^(n-q)), qreg[q])
-                       ):
-                    #body do control da forma assert(nulo) instr(Apply,com Assert) instr(Apply,com Assert)
-					H(qreg[q])
-					assert { |qreg> = ps_had |qreg'> q}
+|| main || (qreg qr)
+pre {true}
+    circ qr[4] ->
+        with control qr[0] (aux(qr))
+        for i in qr {
+            invariant{true}
+            Y(qr[i])
+            X(qr[i])
+        }
+        Z(qr[0])
+    return
+pos {true}
 
-					apply (rot(pi/2^(n-q)), qreg[q])
-					assert { |qreg> = ps_rot(pi/2**(n-q)) |qreg'> q }
-                    ;
-                    #fim-body do control
-                assert { after the control }
-                #fim-instr1 do for1 -- control assert
-                # assert { some formula { possibly with curly brackets } but {{ well-formed }} }
-            #PENSO QUE O ASSERT ANTERIOR ESTÁ A MAIS, NÃO CREIO QUE FECHE NENHUMA INSTR
-            assert { after the loop }
-            #fim-instr2 do else1 -- for assert
-            #instr3 do else1 - apply assert(nulo)
-            apply (qft, qreg[:-1])
-            #fim-instr3 do else1
-            #instr4 do else1 - return
-            return
-            #fim-instr4 do else1 (não leva assert no fim do return)
-            ;
-            #fim-body de else1
-        #fim-instr1 -- if
-        #assert nulo
-        #fim-body0
-#fim-def fun
+| aux | (qreg qr)
+pre {true}
+circ qr ->
+        X(qr[0])
+        H(qr[0])
+pos {true}
+
+

@@ -62,7 +62,6 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
         node.setParams(pNode);
         node.setPre(pre);
         node.setPos(pos);
-        //node.printID();
         return node;
     }
 
@@ -86,7 +85,6 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
         node.setParams(pNode);
         node.setPre(pre);
         node.setPos(pos);
-        //node.printID();
         return node;
     }
 
@@ -128,13 +126,13 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
     @Override public AST visitFunParams(QbricksParser.FunParamsContext ctx) {
         ParamsNode node = new ParamsNode();
         List<SingleParam> params = new ArrayList<>();
-        List <String> ps = new ArrayList<>();
+        //List <String> ps = new ArrayList<>();
         for (int c=0; c < ctx.param().size(); ++c){
             params.add((SingleParam) visit(ctx.param(c)));
-            ps.add(ctx.param(c).getChild(0).getText()+" "+ctx.param(c).getChild(1).getText());
+          //  ps.add(ctx.param(c).getChild(0).getText()+" "+ctx.param(c).getChild(1).getText());
         }
 
-        node.setPs(params); // list of strings is being used (works!!)
+        node.setPs(params); // list of strings is being used
 
         return node;
     }
@@ -147,42 +145,42 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
 
 
     @Override public AST visitPreSpec(QbricksParser.PreSpecContext ctx) {
-        PreNode pre = new PreNode();
+        PreNode node = new PreNode();
         List<String> preconds = new ArrayList<>(); //list of preconds
 
         for (int c = 0; c < ctx.FORMULA().size(); c++){
             preconds.add(ctx.FORMULA(c).getText());
         }
-        pre.set(preconds);
+        node.set(preconds);
        // pre.printPre();
 
-        return pre;
+        return node;
     }
 
     @Override public AST visitPosSpec(QbricksParser.PosSpecContext ctx) {
-        PosNode pos = new PosNode();
+        PosNode node = new PosNode();
         List<String> posconds = new ArrayList<>(); //list of posconds
 
         for (int c = 0; c < ctx.FORMULA().size(); c++){
             posconds.add(ctx.FORMULA(c).getText());
         }
-        pos.set(posconds);
+        node.set(posconds);
         //pos.printPos();
 
-        return pos;
+        return node;
     }
 
     @Override public AST visitInvSpec(QbricksParser.InvSpecContext ctx) {
-        InvariantNode pos = new InvariantNode();
+        InvariantNode node = new InvariantNode();
         List<String> invariants = new ArrayList<>(); //list of invariants
 
         for (int c = 0; c < ctx.FORMULA().size(); c++){
             invariants.add(ctx.FORMULA(c).getText());
         }
-        pos.set(invariants);
+        node.set(invariants);
         //pos.printPos();
 
-        return pos;
+        return node;
     }
 
     @Override public AST visitQr(QbricksParser.QrContext ctx) {
@@ -497,13 +495,13 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
         WithCtlNode node = new WithCtlNode();
         //System.out.println("Here: "+ctx.getParent().getChild(1).getText());
         node.setAssertion((AssertNode) visit(ctx.getParent().getChild(1)));
-        ApplyNode apply = (ApplyNode) visit(ctx.ctlgate);
+        ApplyNode gate = (ApplyNode) visit(ctx.ctlgate);
         ParseTree ctls = ctx.ctlqrs;
         QregNode qr = (QregNode) visit(ctls.getChild(0));
         List<QregNode> ctlNodes = new ArrayList<>(); //list of control qubits
 
         ctlNodes.add(qr);
-        node.setCtlGate(apply);
+        node.setCtlGate(gate);
         if (ctls.getChildCount() > 1) {
             for (int c = 2; c < ctls.getChildCount(); c += 2) {
                 qr = (QregNode) visit(ctls.getChild(c));
@@ -517,14 +515,14 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
     @Override public AST visitMultiControl(QbricksParser.MultiControlContext ctx) {
         WithCtlNode node = new WithCtlNode();
         node.setAssertion((AssertNode) visit(ctx.getParent().getChild(1)));
-        CtlNode apply = (CtlNode) visit(ctx.ctlgate);
+        CtlNode gate = (CtlNode) visit(ctx.ctlgate);
         ParseTree ctls = ctx.ctlqrs;
         QregNode qr = (QregNode) visit(ctls.getChild(0));
 
         List<QregNode> ctlNodes = new ArrayList<>(); //list of control qubits
 
         ctlNodes.add(qr);
-        node.setCtlMulti(apply);
+        node.setCtlMulti(gate);
         if (ctls.getChildCount() > 1) {
             for (int c = 2; c < ctls.getChildCount(); c += 2) {
                 qr = (QregNode) visit(ctls.getChild(c));

@@ -113,10 +113,10 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         t.append("""
             let () =
                    let run = run_program p in
-                   let oc = open_out "translation.mlw" in
+                   let oc = open_out (p.id ^ ".mlw") in
                      Printf.fprintf oc "%s" run;
                      close_out oc;
-                     print_endline "translation.mlw generated";""");
+                     print_endline "translation generated successfully";""");
         //return r+"end";
         return t.toString();
     }
@@ -132,8 +132,6 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
 
     @Override
     public String Visit(MainNode node) {
-        CircNode circ = node.getCirc();
-        String qregs = Visit(circ.getIds());
         String r = "main = {\n id = \"" + node.getID() + "\";\n" +
                 "circ = {\n" + Visit(node.getCirc()) + "}; \n"
                 + "params = [";
@@ -147,10 +145,6 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
 
     @Override
     public String Visit(AuxNode node) {
-        //circs.push("c");
-        CircNode circ = node.getCirc();
-        String qregs = Visit(circ.getIds());
-        String s;
         if (!auxIds.contains(node.getID())) auxIds.add(node.getID());
         String r = "{\nid = \"" + node.getID() + "\";\n" +
                 "circ = {\n" + Visit(node.getCirc()) + "};\n"
@@ -237,7 +231,6 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                     size = Visit(c.getRange());
                 else size = "Num 0";
                 qregs.append("size=").append(size).append("}");
-                //qregs.append("+").append(qr);
                 global_qrs.add(qr);
             }
         }
@@ -277,7 +270,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         circs.push("c"+circs.size());
         s = printUnitaries(unitaries);
 
-        s += "For {\n" + Visit(node.getIter())
+        s += "For {\n" + Visit(iter)
             + Visit(node.getInvariant());
         r = "let "+circs.peek()+" = ref (m_skip n)\nin "
                 + Visit(node.getIter())
@@ -366,17 +359,12 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
 
     @Override
     public String Visit(IfNode node) {
-        String old, r,s;
-        circs.push("c"+circs.size());
+        String body, s;
         s = printUnitaries(unitaries);
-        String body;
         if(!node.getWithElse()) {
             s += "If {\ncond= " + Visit(node.getCond()) + ";\n";
             body = Visit(node.getIfBody());
             s += body + Visit(node.getAssertion()) + "};\n";
-            r = "let " + circs.peek() + " = ref (m_skip n)\nin " +
-                    "if (" + Visit(node.getCond()) + ")\nthen begin\n" +
-                    Visit(node.getAssertion()) + Visit(node.getIfBody()) + "end\n";
         }
         else {
             s += "IfElse {\ncond= " + Visit(node.getCond()) + ";\nif"
@@ -384,15 +372,8 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
                     + "else" + Visit(node.getElseBody())
                     + Visit(node.getAssertion())
                     + "};\n";
-            r = "let " + circs.peek() + " = ref (m_skip n)\nin " +
-                    "if (" + Visit(node.getCond()) + ")\nthen begin\n" +
-                    Visit(node.getAssertion()) + Visit(node.getIfBody()) + "end\n" + "else begin\n" +
-                    Visit(node.getElseBody()) + "end\n";
         }
-        old = circs.pop();
-        r += circs.peek()+":= !"+circs.peek()+" -- !"+old+";\n";
         unitaries.clear();
-        //asserts.clear();
         return s;
     }
 
@@ -971,20 +952,23 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
     }
 
     public String Visit(SwapApply node) {
-        String r,s, id1=node.getLQreg().getId(), id2=node.getRQreg().getId();
-        diag = false;
-        s = "MultiApply {gate=SWAP; " + "regs=[{iterator=\""
-                + id1 + "\"; starts="+
-                Visit(node.getLQreg()) +
-                "; ends=" + Visit(node.getLQreg())
-                +"}; " + "{iterator=\""
-                + id2 + "\"; starts="+
-                Visit(node.getRQreg()) +
-                "; ends=" + Visit(node.getRQreg())
-                +"}]; "
-                +Visit(node.getAssertion())+"}";
+        String s, id1, id2, lqr, rqr;
+        id1 = node.getLQreg().getId();
+        id2 = node.getRQreg().getId();
+        lqr = Visit(node.getLQreg());
+        rqr = Visit(node.getRQreg());
+        if (!(lqr.contains(";") || rqr.contains(";") || global_qrs.contains(lqr) || global_qrs.contains(rqr) )) {
+            s = "MultiApply {gate=SWAP; " +
+                    "regs=[{iterator=\"" + id1 +
+                    "\"; starts=" + lqr +
+                    "; ends=" + lqr
+                    + "}; " + "{iterator=\"" + id2 +
+                    "\"; starts=" + rqr +
+                    "; ends=" + rqr
+                    + "}]; " + Visit(node.getAssertion())+"}";
+        }
+        else return "Can only apply SWAP gate to two specific indexes\n";
         unitaries.add(s);
-        //asserts.add(node.getAssertion().getAssertions());
         return "";
     }
 
@@ -1052,9 +1036,9 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
     public String Visit(WithCtlNode node) {
         List<String> controls = new ArrayList<>();
         String[] limits, ls;
-        String aux,angle,id=null,r,start,end,old,range,qr,target;
+        String aux,angle,id=null,r,start,end,old,range,qr,target,target1,target2;
         StringBuilder s = new StringBuilder("WithControl{ctlgate=");
-        if (node.isMulti){
+        if (node.getIsMulti()){
             Visit(node.getCtlMulti());
             s.append(unitaries.get(unitaries.size() - 1)); // get last unitary in list
             unitaries.remove(unitaries.size() - 1);
@@ -1063,7 +1047,7 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
         }
         else {
             ApplyNode gate = node.getCtlGate();
-            Visit(node.getCtlGate());
+            Visit(gate);
             s.append(unitaries.get(unitaries.size() - 1)); // get last unitary in list
             unitaries.remove(unitaries.size() - 1); // delete it since its not needed anymore
             if (gate instanceof FunApply) {
@@ -1147,7 +1131,20 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
             s.append("; ends=").append(end).append("}; ");
         }
         s.append("]; tg={iterator=\"").append(id).append("\"; ");
-        s.append("starts=").append(target).append("; ends=").append(target).append("}; ");
+        if (global_qrs.contains(target)) {
+            target1 = "Num 0";
+            target2 = "Subtract(Len \""+id+"\", Num 1)";
+        }
+        else if (target.contains(";")) {
+            limits = target.split(";");
+            target1 = limits[0];
+            target2 = limits[1];
+        }
+        else {
+            target1 = target;
+            target2 = target;
+        }
+        s.append("starts=").append(target1).append("; ends=").append(target2).append("}; ");
         s.append(Visit(node.getAssertion())).append("}\n");
 //        if (controls.get(0).contains(";")) {
 //            // this means it's NOT a qreg[term] or qreg
@@ -1215,17 +1212,16 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
     @Override
     public String Visit(CnotNode node) {
         String s,ctl=node.getCtl().getId(),tg=node.getTarget().getId();
-        s = "MultiApply {gate=Cnot; regs=[{iterator=\""
-                + ctl + "\"; starts="+
-                Visit(node.getCtl()) +
-                "; ends=" + Visit(node.getCtl())
-                +"}; {iterator=\""+ tg +
-                "\"; starts="+
-                Visit(node.getTarget()) +
-                "; ends=" + Visit(node.getTarget())
-                +"}]; " +Visit(node.getAssertion())+"}";
+        String ctlqr = Visit(node.getCtl()), tgqr = Visit(node.getTarget());
+        if (!(ctlqr.contains(";") || tgqr.contains(";") || global_qrs.contains(ctlqr) || global_qrs.contains(tgqr) )) {
+            s = "MultiApply {gate=Cnot; regs=[{iterator=\""
+                    + ctl + "\"; starts="+ ctlqr + "; ends=" + ctlqr
+                    +"}; {iterator=\""+
+                    tg + "\"; starts=" + tgqr + "; ends=" + tgqr
+                    +"}]; " + Visit(node.getAssertion())+"}";
+        }
+        else return "Can only apply CNOT gate to two specific indexes\n";
         unitaries.add(s);
-        //asserts.add(node.getAssertion().getAssertions());
         return "";
     }
 
@@ -1233,22 +1229,19 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
     public String Visit(ToffNode node) {
         String s, id1=node.getCtl1().getId(), id2=node.getCtl2().getId();
         String id3=node.getTarget().getId();
-        s = "MultiApply {gate=Toff; " + "regs=[{iterator=\""
-                + id1 + "\"; starts="+
-                Visit(node.getCtl1()) +
-                "; ends=" + Visit(node.getCtl1())
-                +"}; " + "{iterator=\""
-                + id2 + "\"; starts="+
-                Visit(node.getCtl2()) +
-                "; ends=" + Visit(node.getCtl2())
-                +"}; " + "{iterator=\""
-                + id3 + "\"; starts="+
-                Visit(node.getTarget()) +
-                "; ends=" + Visit(node.getTarget())
-                +"}]; "
-                +Visit(node.getAssertion())+"}";
+        String ctlqr1 = Visit(node.getCtl1()), ctlqr2 = Visit(node.getCtl2()), tgqr = Visit(node.getTarget());
+        if (!(ctlqr1.contains(";") || ctlqr2.contains(";") || tgqr.contains(";") || global_qrs.contains(ctlqr1) || global_qrs.contains(ctlqr2) || global_qrs.contains(tgqr) )) {
+            s = "MultiApply {gate=Toff; " + "regs=[{iterator=\""
+                    + id1 + "\"; starts=" + ctlqr1 + "; ends=" + ctlqr1
+                    +"}; " + "{iterator=\""
+                    + id2 + "\"; starts="+ ctlqr2 + "; ends=" + ctlqr2
+                    +"}; " + "{iterator=\""
+                    + id3 + "\"; starts="+ tgqr + "; ends=" + tgqr
+                    +"}]; "
+                    +Visit(node.getAssertion())+"}";
+        }
+        else return "Can only apply Toffoli gate to three specific indexes\n";
         unitaries.add(s);
-        //asserts.add(node.getAssertion().getAssertions());
         return "";
     }
 
@@ -1256,20 +1249,18 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
     public String Visit(FredNode node) {
         String s, id1=node.getCtl1().getId(), id2=node.getCtl2().getId();
         String id3=node.getTarget().getId();
-        s = "MultiApply {gate=Fred; " + "regs=[{iterator=\""
-                + id1 + "\"; starts="+
-                Visit(node.getCtl1()) +
-                "; ends=" + Visit(node.getCtl1())
-                +"}; " + "{iterator=\""
-                + id2 + "\"; starts="+
-                Visit(node.getCtl2()) +
-                "; ends=" + Visit(node.getCtl2())
-                +"}; " + "{iterator=\""
-                + id3 + "\"; starts="+
-                Visit(node.getTarget()) +
-                "; ends=" + Visit(node.getTarget())
-                +"}]; "
-                + Visit(node.getAssertion())+"}";
+        String ctlqr1 = Visit(node.getCtl1()), ctlqr2 = Visit(node.getCtl2()), tgqr = Visit(node.getTarget());
+        if (!(ctlqr1.contains(";") || ctlqr2.contains(";") || tgqr.contains(";") || global_qrs.contains(ctlqr1) || global_qrs.contains(ctlqr2) || global_qrs.contains(tgqr) )) {
+            s = "MultiApply {gate=Fred; " + "regs=[{iterator=\""
+                    + id1 + "\"; starts=" + ctlqr1 + "; ends=" + ctlqr1
+                    +"}; " + "{iterator=\""
+                    + id2 + "\"; starts="+ ctlqr2 + "; ends=" + ctlqr2
+                    +"}; " + "{iterator=\""
+                    + id3 + "\"; starts="+ tgqr + "; ends=" + tgqr
+                    +"}]; "
+                    +Visit(node.getAssertion())+"}";
+        }
+        else return "Can only apply Fredkin gate to three specific indexes\n";
         unitaries.add(s);
         //asserts.add(node.getAssertion().getAssertions());
         return "";
@@ -1386,7 +1377,6 @@ public class EvaluateVisitor extends MyASTVisitor<String>{
     @Override
     public String Visit(LenNode node) {
         return "Subtract (Len \""+Visit(node.getQrTerm())+"\", Num 1)";
-        //return  Visit(node.getQrTerm());
     }
 
     @Override

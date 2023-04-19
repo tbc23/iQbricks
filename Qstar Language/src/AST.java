@@ -91,16 +91,13 @@ class PreNode extends MainNode {
 
 class PosNode extends MainNode {
     private List<String> conds;
-    public List<String> get(){ return conds; }
+    public List<String> get() { return conds; }
     public void set(List<String> newConds){ this.conds = newConds; }
 }
 
 class ParamsNode extends MainNode {
-    private List<String> ps;
     private List<SingleParam> params;
-    //public List<String> getPs() { return ps; }
     public List<SingleParam> getPs() { return params; }
-    //public void setPs(List<String> ps) { this.ps = ps; }
     public void setPs(List<SingleParam> params) {
         this.params = params;
     }
@@ -121,7 +118,7 @@ class SingleParam extends ParamsNode {
     }
 }
 
-class CircNode extends ProgramNode {
+class CircNode extends MainNode {
     private CircIds ids;
     private BodyNode body;
 
@@ -137,9 +134,6 @@ class CircIds extends CircNode {
     public List<QregNode> getRegs (){ return regs; }
     public void setRegs(List<QregNode> newRegs) { this.regs = newRegs; }
 }
-
-// Onde encaixar os bodyNodes de cada instruction? Fazer cada um dos bodies individualmente?
-// e.g. IfBody, ElseBody, ForBody, etc
 
 class BodyNode extends CircNode {
     private List<InstrNode> bodyInstr;
@@ -237,10 +231,10 @@ class InvariantNode extends ForNode {
 }
 
 class IfNode extends InstrNode {
-    public IfCond cond;
-    public BodyNode ifBody;
-    public BodyNode elseBody;
-    public Boolean withElse;
+    private IfCond cond;
+    private BodyNode ifBody;
+    private BodyNode elseBody;
+    private Boolean withElse;
     private AssertNode assertion;
 
     public AssertNode getAssertion() { return assertion; }
@@ -521,14 +515,14 @@ class CtlNode extends InstrNode {}
 
 class WithCtlNode extends CtlNode {
     private List<QregNode> ctlArgs;
-    public ApplyNode ctlGate;
-    public CtlNode ctlMulti;
-    public AssertNode assertion;
-    public Boolean isMulti;
+    private ApplyNode ctlGate;
+    private CtlNode ctlMulti;
+    private AssertNode assertion;
+    private Boolean isMulti;
 
     public AssertNode getAssertion() { return assertion; }
     public void setAssertion(AssertNode assertion) { this.assertion = assertion; }
-
+    public Boolean getIsMulti() { return isMulti; }
     public List<QregNode> getCtlArgs() {
         return ctlArgs;
     }
@@ -641,9 +635,9 @@ class RetNode extends InstrNode {
 
 class ExpressionNode extends AST {}
 
-abstract class InfixExpressionNode extends ExpressionNode {
-    public ExpressionNode Left;
-    public ExpressionNode Right;
+class InfixExpressionNode extends ExpressionNode {
+    private ExpressionNode Left;
+    private ExpressionNode Right;
     public ExpressionNode getLeft () { return Left; }
     public ExpressionNode getRight () { return Right; }
     public void setLeft (ExpressionNode Left) { this.Left = Left; }
@@ -664,9 +658,9 @@ class NEqualNode extends InfixExpressionNode {}
 
 class TermNode extends ExpressionNode {}
 
-abstract class InfixTermNode extends TermNode {
-    public TermNode Left;
-    public TermNode Right;
+class InfixTermNode extends TermNode {
+    private TermNode Left;
+    private TermNode Right;
     public TermNode getLeft () { return Left; }
     public TermNode getRight () { return Right; }
     public void setLeft (TermNode Left) { this.Left = Left; }
@@ -684,32 +678,29 @@ class AddNode extends InfixTermNode {}
 class SubNode extends InfixTermNode {}
 
 class UnOpNode extends TermNode {
-    public TermNode InnerTerm;
-
-    public String op;
+    private TermNode InnerTerm;
+    private String op;
     public TermNode getInnerTerm () { return InnerTerm; }
     public String getOp () { return op; }
     public void setInnerTerm (TermNode Value) { this.InnerTerm = Value; }
-
     public void setOp(String op) { this.op = op; }
 }
 
 class LenNode extends TermNode {
-    public QregNode QrTerm;
+    private QregNode QrTerm;
     public void setQrTerm(QregNode qrTerm) { this.QrTerm = qrTerm; }
-
     public QregNode getQrTerm() { return QrTerm; }
 }
 
 class ParenNode extends TermNode {
-    public TermNode term;
+    private TermNode term;
     public TermNode getTerm() { return term; }
     public void setTerm(TermNode term) { this.term = term; }
 }
 
 class AtomNode extends TermNode {
-    public String Value;
-    public String Type;
+    private String Value;
+    private String Type;
     public String getType() { return Type; }
     public String getValue() { return Value; }
     public void setType(String Type) { this.Type = Type;}
@@ -717,23 +708,23 @@ class AtomNode extends TermNode {
 }
 
 class QregNode extends AST {
-    public RangeNode range;
-    public Boolean c;
-    public String id;
+    private RangeNode range;
+    private Boolean has_range;
+    private String id;
 
     public RangeNode getRange() { return range; }
-    public Boolean hasRange() { return c; }
+    public Boolean hasRange() { return has_range; }
     public String getId() { return id; }
 
     public void setId(String id) { this.id = id; }
-    public void setHasRange(Boolean b) { this.c = b;}
+    public void setHasRange(Boolean b) { this.has_range = b;}
     public void setRange(RangeNode range) { this.range = range; }
 }
 
 class RangeNode extends QregNode {
-    public String iterator;
-    public TermNode start;
-    public TermNode end;
+    private String iterator;
+    private TermNode start;
+    private TermNode end;
 
     public String getIterator() { return iterator; }
 
