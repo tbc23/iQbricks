@@ -1,9 +1,5 @@
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import javax.swing.*;
-import java.io.IOException;
-import java.io.NotActiveException;
-import java.rmi.NotBoundException;
 import java.util.*;
 
 public class ASTBuilder extends QbricksBaseVisitor<AST>{
@@ -119,17 +115,14 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
             ret.setArgs(null);
             ret.setArgBool(false);
         }
-        //ret.printRet();
         return ret;
     }
 
     @Override public AST visitFunParams(QbricksParser.FunParamsContext ctx) {
         ParamsNode node = new ParamsNode();
         List<SingleParam> params = new ArrayList<>();
-        //List <String> ps = new ArrayList<>();
         for (int c=0; c < ctx.param().size(); ++c){
             params.add((SingleParam) visit(ctx.param(c)));
-          //  ps.add(ctx.param(c).getChild(0).getText()+" "+ctx.param(c).getChild(1).getText());
         }
 
         node.setPs(params); // list of strings is being used
@@ -152,7 +145,6 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
             preconds.add(ctx.FORMULA(c).getText());
         }
         node.set(preconds);
-       // pre.printPre();
 
         return node;
     }
@@ -165,7 +157,6 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
             posconds.add(ctx.FORMULA(c).getText());
         }
         node.set(posconds);
-        //pos.printPos();
 
         return node;
     }
@@ -178,7 +169,6 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
             invariants.add(ctx.FORMULA(c).getText());
         }
         node.set(invariants);
-        //pos.printPos();
 
         return node;
     }
@@ -248,7 +238,6 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
         InvariantNode invariant = (InvariantNode) visit(ctx.inv);
         BodyNode body = (BodyNode) visit(ctx.forbody);
         ParseTree iterable = ctx.iteration;
-        //System.out.println("For cycle:");
         iter.setIterator(ctx.var.getText());
         if(iterable.getChildCount() > 1) {
             iter.setIterable(visit(iterable.getChild(2)));
@@ -347,7 +336,6 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
             hadApply.setAssertion((AssertNode) visit(ctx.getParent().getParent().getChild(1)));
         QregNode qr = (QregNode) visit(ctx.qr);
         hadApply.setQreg(qr);
-        //hadApply.print();
         return hadApply;
     }
 
@@ -362,7 +350,6 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
         TermNode angle = (TermNode) visit(ctx.angle);
         rzApply.setQreg(qr);
         rzApply.setAngle(angle);
-        //rzApply.print();
         return rzApply;
     }
 
@@ -377,7 +364,6 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
         TermNode angle = (TermNode) visit(ctx.angle);
         rxApply.setQreg(qr);
         rxApply.setAngle(angle);
-        //rxApply.print();
         return rxApply;
     }
 
@@ -392,7 +378,6 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
         TermNode angle = (TermNode) visit(ctx.angle);
         ryApply.setQreg(qr);
         ryApply.setAngle(angle);
-        //ryApply.print();
         return ryApply;
     }
 
@@ -405,7 +390,6 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
             xApply.setAssertion((AssertNode) visit(ctx.getParent().getParent().getChild(1)));
         QregNode qr = (QregNode) visit(ctx.qr);
         xApply.setQreg(qr);
-        //xApply.print();
         return xApply;
     }
 
@@ -418,7 +402,6 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
             yApply.setAssertion((AssertNode) visit(ctx.getParent().getParent().getChild(1)));
         QregNode qr = (QregNode) visit(ctx.qr);
         yApply.setQreg(qr);
-        //yApply.print();
         return yApply;
     }
 
@@ -431,7 +414,6 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
             zApply.setAssertion((AssertNode) visit(ctx.getParent().getParent().getChild(1)));
         QregNode qr = (QregNode) visit(ctx.qr);
         zApply.setQreg(qr);
-        //zApply.print();
         return zApply;
     }
 
@@ -444,7 +426,6 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
             sApply.setAssertion((AssertNode) visit(ctx.getParent().getParent().getChild(1)));
         QregNode qr = (QregNode) visit(ctx.qr);
         sApply.setQreg(qr);
-        //zApply.print();
         return sApply;
     }
 
@@ -457,7 +438,6 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
             tApply.setAssertion((AssertNode) visit(ctx.getParent().getParent().getChild(1)));
         QregNode qr = (QregNode) visit(ctx.qr);
         tApply.setQreg(qr);
-        //zApply.print();
         return tApply;
     }
 
@@ -471,13 +451,11 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
         QregNode left = (QregNode) visit(ctx.qrL);
         QregNode right = (QregNode) visit(ctx.qrR);
         swap.setQregs(left,right);
-        //swap.print();
         return swap;
     }
 
     @Override public AST visitPhApply(QbricksParser.PhApplyContext ctx) {
         PhApply phApply = new PhApply();
-        //System.out.println("?? "+ctx.getParent().getParent().getChild(1).getText());
         if(!ctx.getParent().getClass().getSimpleName().equals("ApplyControlContext")) {
             phApply.setAssertion((AssertNode) visit(ctx.getParent().getChild(1)));
         }
@@ -487,13 +465,11 @@ public class ASTBuilder extends QbricksBaseVisitor<AST>{
         TermNode angle = (TermNode) visit(ctx.angle);
         phApply.setQreg(qr);
         phApply.setAngle(angle);
-        //phApply.print();
         return phApply;
     }
 
     @Override public AST visitApplyControl(QbricksParser.ApplyControlContext ctx) {
         WithCtlNode node = new WithCtlNode();
-        //System.out.println("Here: "+ctx.getParent().getChild(1).getText());
         node.setAssertion((AssertNode) visit(ctx.getParent().getChild(1)));
         ApplyNode gate = (ApplyNode) visit(ctx.ctlgate);
         ParseTree ctls = ctx.ctlqrs;

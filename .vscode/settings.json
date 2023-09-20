@@ -1,0 +1,6 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "/home/tbc23/Downloads/antlr4-4.9.2-complete.jar"
+    ]
+}

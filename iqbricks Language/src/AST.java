@@ -3,9 +3,9 @@ import java.util.*;
 public abstract class AST {}
 
 class ProgramNode extends AST {
-    public ImportsNode imports;
-    public MainNode main;
-    public List<AuxNode> auxList;
+    private ImportsNode imports;
+    private MainNode main;
+    private List<AuxNode> auxList;
 
     public ImportsNode getImports() { return imports; }
     public void setImports(ImportsNode imports) { this.imports = imports; }
@@ -36,10 +36,10 @@ class ImportsNode extends ProgramNode {
 
 class MainNode extends ProgramNode {
     private String id;
-    public CircNode circ;
-    public ParamsNode params;
-    public PreNode pre;
-    public PosNode pos;
+    private CircNode circ;
+    private ParamsNode params;
+    private PreNode pre;
+    private PosNode pos;
     public Boolean hasParams;
 
     public String getID() { return id; }
@@ -60,10 +60,10 @@ class MainNode extends ProgramNode {
 
 class AuxNode extends ProgramNode {
     private String id;
-    public CircNode circ;
-    public ParamsNode params;
-    public PreNode pre;
-    public PosNode pos;
+    private CircNode circ;
+    private ParamsNode params;
+    private PreNode pre;
+    private PosNode pos;
     public Boolean hasParams;
 
     public String getID() { return id; }
@@ -268,7 +268,7 @@ class ApplyNode extends InstrNode {}
 
 class FunApply extends ApplyNode {
     private String funID;
-    public List<TermNode> termArgs;
+    private List<TermNode> termArgs;
     private AssertNode assertion;
 
     public AssertNode getAssertion() { return assertion; }
@@ -291,7 +291,7 @@ class FunApply extends ApplyNode {
 
 class RevApply extends ApplyNode {
     private String funID;
-    public List<TermNode> termArgs;
+    private List<TermNode> termArgs;
     private AssertNode assertion;
 
     public AssertNode getAssertion() { return assertion; }
